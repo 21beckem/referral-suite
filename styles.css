@@ -1,0 +1,26 @@
+.w3-area-blue {
+    background-color: #1e3b6e;
+}
+
+.w3-dot {
+    background-color: #ffa514;
+}
+
+.w3-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.w3-text-area-blue {
+    color: #1e3b6e;
+}
+
+.w3-notification-dot {
+    width: 10px;
+    height: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    transform: translate(7px, -31px);    
+}
