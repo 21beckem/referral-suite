@@ -1,4 +1,9 @@
 function redirectAfterFunction(el) {
-    alert("doing functiony things");
-    window.location.href = el.getAttribute('href');
+    alert("doing functiony stuff")
+    safeRedirect(el.getAttribute('href'));
+}
+function safeRedirect(ref) {
+    var link = document.createElement("a");
+    link.href = ref;
+    link.click();
 }
