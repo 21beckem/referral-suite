@@ -13,16 +13,10 @@ function safeRedirect(ref) {
         data: ref,
     }), '*');
 }
-document.addEventListener(`click`, e => {
-    const origin = e.target.closest(`a`);
-    
+document.addEventListener('click', e => {
+    const origin = e.target.closest('a');
     if (origin) {
         e.preventDefault();
-        //console.log(origin.href);
-        homeURL = origin.href.substring(0,document.URL.lastIndexOf('/'));         
-        if (origin.href == "") {
-            homeURL = RealHome;
-        }
         safeRedirect(origin.href);
     }
 });
