@@ -28,15 +28,15 @@
      
    <!-- List of items -->
    <div class="w3-container">
-    <ul class="w3-ul">
-      <a href="contact_info.html">
+    <ul id="yourreferrals" class="w3-ul">
+      <a onclick="redirectAfterFunction(this)" href="contact_info.html">
       <li class="w3-bar" style="display: flex">
         <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
           <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
         </div>
         <div class="w3-bar-item">
-          <span class="w3-large w3-ellipsis">Ulla-Britt Borg Edström</span><br>
-          <span>1/29/2023</span>
+          <span id="name" class="w3-large w3-ellipsis">Ulla-Britt Borg Edström</span><br>
+          <span id="date">1/29/2023</span>
         </div>
       </li>
       </a>
@@ -75,7 +75,7 @@
          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
        </a>
        <div style="height: 0; width: 100%;">
-         <div class="w3-circle w3-red w3-notification-dot"></div>
+         <div id="reddot" class="w3-circle w3-red w3-notification-dot"></div>
        </div>
      </div>
 
