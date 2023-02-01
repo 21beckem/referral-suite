@@ -19,7 +19,7 @@ document.addEventListener('click', e => {
     if (origin) {
         alert("redirecting");
         e.preventDefault();
-        alert(origin.href
+        alert(origin.href);
         safeRedirect(origin.href);
     }
 });
