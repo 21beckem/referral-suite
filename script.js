@@ -4,7 +4,7 @@ function redirectAfterFunction(el) {
     safeRedirect(el.getAttribute('href'));
 }
 function safeRedirect(ref) {
-    if (inIframe()) {
+    if (!inIframe()) {
         window.location.href = ref;
         return;
     }
