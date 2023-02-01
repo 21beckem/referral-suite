@@ -56,34 +56,42 @@ a {
     font-size: 200px;
 }
 
-.w3-team1 {
+#arealoginbuttons div:nth-child(1) button {
     background-color: #ea9999;
 }
 
-.w3-team2 {
+#arealoginbuttons div:nth-child(2) button {
     background-color: #f9cb9c;
 }
 
-.w3-team3 {
+#arealoginbuttons div:nth-child(3) button {
     background-color: #ffe599;
 }
 
-.w3-team4 {
+#arealoginbuttons div:nth-child(4) button {
     background-color: #b6d7a8;
 }
 
-.w3-team5 {
+#arealoginbuttons div:nth-child(5) button {
     background-color: #a4c2f4;
 }
 
-.w3-team6 {
+#arealoginbuttons div:nth-child(6) button {
     background-color: #b4a7d6;
 }
 
-.w3-team7 {
+#arealoginbuttons div:nth-child(7) button {
     background-color: #d5a6bd;
 }
 
-.w3-team8 {
+#arealoginbuttons div:nth-child(8) button {
     background-color: #c5ff8a;
+}
+
+#arealoginbuttons div:nth-child(9) button {
+    background-color: #a2c4c9;
+}
+
+#arealoginbuttons div:nth-child(10) button {
+    background-color: #ff42ec;
 }
