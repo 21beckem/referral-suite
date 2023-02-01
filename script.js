@@ -1,6 +1,6 @@
 function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
 function redirectAfterFunction(el) {
-    alert("doing functiony stuff")
+    alert("doing functiony stuff");
     safeRedirect(el.getAttribute('href'));
 }
 function safeRedirect(ref) {
@@ -15,11 +15,8 @@ function safeRedirect(ref) {
 }
 document.addEventListener('click', e => {
     const origin = e.target.closest('a');
-    alert("click recieved");
     if (origin) {
-        alert("redirecting");
         e.preventDefault();
-        alert(origin.href);
         safeRedirect(origin.href);
     }
 });
