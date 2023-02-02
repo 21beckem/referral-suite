@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
   </head>
   <body>
     <!-- Top Bar -->
@@ -53,8 +52,31 @@
             <button onclick="signInAsArea(this)" href="index.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">SMOEs</button>
         </div>
     </div>
-
-
-   
+    <script>
+function signInAsArea(el) {
+    setCookie('areaUser', el.innerHTML);
+    safeRedirect(el.getAttribute('href'));
+}
+function safeRedirect(ref) {
+    if (!inIframe()) {
+        window.location.href = ref;
+        return;
+    }
+    window.parent.postMessage(JSON.stringify({
+        type: 'redirect',
+        data: ref,
+    }), '*');
+}
+function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
+function setCookie(cname, cvalue, exdays='') {
+    let expires = '';
+    if (exdays != '') {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        expires = ";expires="+d.toUTCString();
+    }
+    document.cookie = cname + "=" + cvalue + expires + ";SameSite=Lax;path=/";
+}
+    </script>
   </body>
 </html>
