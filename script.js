@@ -82,7 +82,7 @@ function makeListUNclaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        output += `<a onclick="saveBeforeInfoPage(data.overall_data.new_referrals[` + i + `])" href="claim_the_referral.html">
+        output += `<a onclick="saveBeforeInfoPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
           <li class="w3-bar" style="display: flex">
             <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
               <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
@@ -101,7 +101,7 @@ function makeListClaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        output += `<a onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `])" href="contact_info.html">
+        output += `<a onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
         <li class="w3-bar" style="display: flex">
           <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
             <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
