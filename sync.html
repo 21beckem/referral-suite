@@ -27,14 +27,14 @@
     </div>
     
     <!-- Sync and claim area -->
-    <div class="w3 container w3-large w3-left-align w3-sync-claim w3-text-white" style="padding-top: 40px;padding-left: 10px;padding-bottom: 20px;">Sundsvall
-        <div class="w3-opacity">Last sync:</div>
+    <div id="infobox" class="w3 container w3-large w3-left-align w3-sync-claim w3-text-white" style="padding-top: 40px;padding-left: 10px;padding-bottom: 20px;">
+        Sundsvall<div class="w3-opacity">Last sync:</div>
     </div>
     
 
     <!-- Claim button -->
     <div class="w3-container w3-center" style="margin-top:90px">
-        <button onclick="redirectAfterFunction(this)" href="index.html" class="w3-button w3-jumbo w3-round-large w3-blue" style="width: 80%;" >Sync</button>
+        <button onclick="syncButton(this)" href="index.html" class="w3-button w3-jumbo w3-round-large w3-blue" style="width: 80%;" >Sync</button>
     </div>
 
     <!-- Bottom Nav Bar -->
@@ -80,6 +80,6 @@
       </div>
 
     </div>
-
+    <script>syncPageFillIn()</script>
   </body>
 </html>
