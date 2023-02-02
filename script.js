@@ -38,6 +38,7 @@ function setCookieJSON(x, y) {
 }
 function saveBeforeInfoPage(person) {
     setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
 }
 function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
