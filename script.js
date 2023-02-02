@@ -36,7 +36,7 @@ function getCookieJSON(x) {
 function setCookieJSON(x, y) {
     return setCookie(x, JSON.stringify(y));
 }
-function saveBeforeInfoPage(person) {
+function saveBeforeInfoPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
@@ -139,10 +139,6 @@ function syncButton(el) {
         safeRedirect(el.getAttribute('href'));
     });
 }
-
-
-
-
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
