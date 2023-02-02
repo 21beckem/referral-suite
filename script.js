@@ -63,6 +63,10 @@ function _(x) { return document.getElementById(x); }
 let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
 
+if (area == null) {
+    safeRedirect('login.html');
+}
+
 
 async function SYNC(print=true, justRead=false) {
     if (area == null) {
@@ -150,10 +154,6 @@ function syncButton(el) {
     SYNC().then(() => {
         safeRedirect(el.getAttribute('href'));
     });
-}
-function signInAsArea(el) {
-    setCookie('areaUser', el.innerHTML);
-    safeRedirect('index.html');
 }
 
 
