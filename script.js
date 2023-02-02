@@ -151,6 +151,10 @@ function syncButton(el) {
         safeRedirect(el.getAttribute('href'));
     });
 }
+function signInAsArea(el) {
+    setCookie('areaUser', el.innerHTML);
+    safeRedirect('index.html');
+}
 
 
 
