@@ -83,7 +83,7 @@
   </div>
 
   <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
-    <button onclick="" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;" >Send</button>
+    <button onclick="sendToAnotherArea()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Send</button>
   </div>
 
     <!-- Bottom Nav Bar -->
@@ -137,7 +137,6 @@
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
-
 
   </script>
 
