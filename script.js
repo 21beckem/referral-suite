@@ -66,7 +66,7 @@ async function SYNC(print=true, justRead=false) {
     }
     let fetchURL = 'https://script.google.com/macros/s/AKfycbz5sdUaBw3uIK-TdMwxRgPcTTwDTT3PlVqlJZMVgqm8XIiraTtZRp_RySREpgx6aY4R/exec?area=';
     fetchURL += area;
-    fetchURL += (data == null || justRead) ? '' : '&data=' + JSON.stringify(data);
+    fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
