@@ -143,6 +143,36 @@ function syncButton(el) {
         safeRedirect(el.getAttribute('href'));
     });
 }
+function sendToAnotherArea() {
+    const person = getCookieJSON('linkPages') || null;
+    if (person == null) {
+        alert('something went wrong. Try again');
+        safeRedirect('index.html');
+    }
+    const newArea = document.getElementById('areadropdown').value;
+
+    // set new area in data and save to cookie
+    person[3] = 'Sent';
+    person[4] = newArea;
+
+    // overwrite old person
+    let found = false;
+    for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
+        const oldPer = data.area_specific_data.my_referrals[i];
+        if (oldPer[1] == person[1]) {
+            found = true;
+            data.area_specific_data.my_referrals[i] = person;
+            setCookieJSON('dataSync', data);
+            break;
+        }
+    }
+    if (!found) {
+        alert("something went wrong, we couldn't find this person. Try again");
+        safeRedirect('index.html');
+    }
+    // send to force-sync.html
+    safeRedirect('force-sync.html');
+}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
