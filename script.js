@@ -101,8 +101,7 @@ function makeListUNclaimedPeople() {
     }
     _('unclaimedlist').innerHTML = output;
 }
-function makeListClaimedPeople() {
-    const arr = data.area_specific_data.my_referrals;
+function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
