@@ -14,8 +14,11 @@
   <body>
     <!-- Top Bar -->
     <div class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-        <a id="contactname">#</a>
+      <div class="w3-container w3-cell w3-left-align w3-xlarge w3-padding-16 w3-text-white">
+        <div id="contactname">Johan Samuelsson</div>
+      </div>
+      <div onclick="deceasePerson()" class="w3-container w3-cell w3-right-align">
+        <i class="fa fa-trash-o w3-text-white w3-xlarge" style="position: relative; margin-top: 50%; transform: translateY(-30%);"></i>
       </div>
     </div>
     <div style="height: 80px;"></div>
@@ -29,19 +32,25 @@
         <div class="w3-cell-row w3-padding-16">
             <div class="w3-container w3-cell w3-xxlarge w3-center">
                 <a id="telnumber" href="tel:+46737194707" target="_parent">
-                    <i class="fa fa-phone-square w3-text-green"></i>
+                    <i class="fa fa-phone-square w3-text-green">
+                      <div class="w3-tiny w3-opacity" style="height: 0;">Call</div>
+                    </i>
                 </a>
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
                 <a id="smsnumber" href="sms:+46737194707" target="_parent">
-                    <i class="fa fa-comment w3-text-blue"></i>
+                    <i class="fa fa-comment w3-text-blue">
+                      <div class="w3-tiny w3-opacity" style="height: 0;">SMS</div>
+                    </i>
                 </a>
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
                 <a id="emailcontact" href="https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=mbecker@missionary.org&entry.873933093=nikolai.morgan@missionary.org" target="_blank">
-                    <i class="fa fa-envelope w3-text-dark-gray"></i>
+                    <i class="fa fa-envelope w3-text-dark-gray">
+                      <div class="w3-tiny w3-opacity" style="height: 0;">Email</div>
+                    </i>
                 </a>
             </div>
         </div>
@@ -70,14 +79,10 @@
             </a>
         </div>
     </div>
-    <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Referral Location</div>
-        <div class="w3-left-align w3-large">Referral Management</div>
-        <div class="w3-container w3-cell w3-right-align">
-            <a onclick="redirectAfterFunction(this)" href="referral_edit.html">
-                <i class="fa fa-pencil w3-text-dark-gray w3-xlarge" style="margin-top: 5px;"></i>
-            </a>
-        </div>
+    <div class="w3-container w3-cell-row" style="margin-top: 64px;">
+      <div class="w3-container w3-cell w3-center">
+        <button class="w3-button w3-xlarge w3-round-large w3-blue" onclick="redirectAfterFunction(this)" href="referral_edit.html">Send referral</button>            
+      </div>
     </div>
     
 

@@ -20,6 +20,72 @@
     <div style="height: 80px;"></div>
 
 
+  <!--table style="height:50%">
+    <tr>
+      <td style="padding: 5px">
+        
+      </td>
+      <td style="padding: 5px">
+        
+      </td>
+    </tr>
+  </table>-->
+
+
+  <div class="w3-center" style="padding-top: 100px;">Which area have you sent the referral to?</div>
+  <div style="height:20px"></div>
+  <div class="w3-center">  
+    <select onchange="areaOptionChanged(this)" id="areadropdown">
+      <option></option>
+      <option>Alingsås</option>
+      <option>Borås</option>
+      <option>Borlänge</option>
+      <option>Eskilstuna</option>
+      <option>Gävle</option>
+      <option>Gubbängen</option>
+      <option>Halmstad</option>
+      <option>Handen</option>
+      <option>Helsingborg</option>
+      <option>Hägersten</option>
+      <option>Jakobsberg</option>
+      <option>Jönköping</option>
+      <option>Kalmar</option>
+      <option>Karlskrona</option>
+      <option>Karlstad</option>
+      <option>Katrineholm</option>
+      <option>Kristianstad</option>
+      <option>Kungsbacka</option>
+      <option>Linköping</option>
+      <option>Luleå</option>
+      <option>Lund</option>
+      <option>Malmö</option>
+      <option>Norrköping</option>
+      <option>Örebro</option>
+      <option>Örnsköldsvik</option>
+      <option>Östersund</option>
+      <option>Skellefteå</option>
+      <option>Skövde</option>
+      <option>Stockholm</option>
+      <option>Sundsvall</option>
+      <option>Södertälje</option>
+      <option>Trollhättan</option>
+      <option>Täby</option>
+      <option>Umeå</option>
+      <option>Uppsala</option>
+      <option>Utby</option>
+      <option>Vendelsö</option>
+      <option>Visby</option>
+      <option>Västerås</option>
+      <option>Västerhaninge</option>
+      <option>Västra Frölunda</option>
+      <option>Växjö</option>
+    </select>
+  </div>
+
+  <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
+    <button onclick="" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;" >Send</button>
+  </div>
+
     <!-- Bottom Nav Bar -->
     <div style="height: 80px;"></div>
     <div class="w3-bottom w3-cell-row w3-light-gray w3-padding-16">
@@ -63,6 +129,17 @@
       </div>
 
     </div>
+
+
+
+  <script>
+
+function areaOptionChanged(el) {
+  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
+}
+
+
+  </script>
 
   </body>
 </html>
