@@ -21,7 +21,7 @@
         <div style="height: 10px;"></div>
         <!-- Search bar -->
         <div class="w3-container">
-            <input class="w3-input" type="text" placeholder="Search">
+            <input oninput="Search()" id="Search" class="w3-input" type="text" placeholder="Search">
         </div>
     </div>
     <div style="height: 115px;"></div>
@@ -89,6 +89,28 @@
    </div>
 
    </div>
-   <script>makeListClaimedPeople()</script>
+   <script>
+
+
+makeListClaimedPeople(data.area_specific_data.my_referrals);
+
+function Search() {
+  let referrals = data.area_specific_data.my_referrals;
+  let letters = document.getElementById("Search").value.toLowerCase();
+
+  let output = Array();
+  for (let i = 0; i < referrals.length; i++) {
+    const person = referrals[i];
+    const fullname = person[4];
+    const number = person[7];
+    
+    if (fullname.toLowerCase().includes(letters) || String(number).toLowerCase().includes(letters)) {
+      output.push(person);
+    }
+  }
+  makeListClaimedPeople(output);
+}
+
+    </script>
 </body>
 </html>
