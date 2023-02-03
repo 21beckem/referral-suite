@@ -18,7 +18,7 @@
                 <a>Your Referrals</a>
             </div>
         </div>
-        <div style="height: 10px;"></div>
+        <div style="height: 1px;"></div>
         <!-- Search bar -->
         <div class="w3-container">
             <input oninput="Search()" id="Search" class="w3-input" type="text" placeholder="Search">
@@ -101,8 +101,8 @@ function Search() {
   let output = Array();
   for (let i = 0; i < referrals.length; i++) {
     const person = referrals[i];
-    const fullname = person[4];
-    const number = person[7];
+    const fullname = person[5];
+    const number = person[8];
     
     if (fullname.toLowerCase().includes(letters) || String(number).toLowerCase().includes(letters)) {
       output.push(person);
