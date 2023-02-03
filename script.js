@@ -16,7 +16,8 @@ function safeRedirect(ref) {
 document.addEventListener('click', e => {
     const origin = e.target.closest('a');
     if (origin) {
-        if (e.hasAttribute("target")) {
+        console.log(origin);
+        if (origin.hasAttribute("target")) {
             alert('has target');
             return;
         }
