@@ -16,7 +16,8 @@ function safeRedirect(ref) {
 document.addEventListener('click', e => {
     const origin = e.target.closest('a');
     if (origin) {
-        if (e.hasAttribute("standalone-url")) {
+        if (e.hasAttribute("target")) {
+            alert('has target');
             return;
         }
         e.preventDefault();
