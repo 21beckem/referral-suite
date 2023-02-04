@@ -208,6 +208,13 @@ function deceasePerson() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+function doubleCheckSignOut(el) {
+    let youSure = confirm("Are you sure you want to log out? All unsynced changes will be lost");
+    if (!youSure) {
+        return;
+    }
+    safeRedirect(el.getAttribute('href'));
+}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
