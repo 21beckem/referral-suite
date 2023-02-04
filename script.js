@@ -64,7 +64,7 @@ async function SYNC(print=true, justRead=false) {
     if (print) {
         _('loadingcover').style.display = '';
     }
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbzsJCmPlOzMtlJFyiUry-lW5CPYbmC6Id_n8dET2Z1YYYjA5nDldgcDM0c-4scRGfM/exec?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbxQV8_WgnNUdTTz-02YCVezKG3J1E_vPN5zxyYvKB-aPxvYs5RupKvJvRjJJN4AO56_/exec?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
