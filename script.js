@@ -174,6 +174,7 @@ function sendToAnotherArea() {
     safeRedirect('force-sync.html');
 }
 function deceasePerson() {
+    const person = getCookieJSON('linkPages') || null;
     let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
     if (!youSure) {
         return;
