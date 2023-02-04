@@ -208,6 +208,38 @@ function deceasePerson() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+function claimPerson() {
+    const person = getCookieJSON('linkPages') || null;
+    let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
+    if (!youSure) {
+        return;
+    }
+    if (person == null) {
+        alert('something went wrong. Try again');
+        safeRedirect('index.html');
+    }
+
+    // set new area in data and save to cookie
+    person[2] = area;
+
+    // overwrite old person
+    let found = false;
+    for (let i = 0; i < data.overall_data.new_referrals.length; i++) {
+        const oldPer = data.overall_data.new_referrals[i];
+        if (oldPer[1] == person[1]) {
+            found = true;
+            data.changed_people.push(person);;
+            setCookieJSON('dataSync', data);
+            break;
+        }
+    }
+    if (!found) {
+        alert("something went wrong, we couldn't find this person. Try again");
+        safeRedirect('index.html');
+    }
+    // send to force-sync.html
+    safeRedirect('force-sync.html');
+}
 function doubleCheckSignOut(el) {
     let youSure = confirm("Are you sure you want to log out? All unsynced changes will be lost");
     if (!youSure) {
