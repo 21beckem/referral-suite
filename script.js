@@ -64,7 +64,7 @@ async function SYNC(print=true, justRead=false) {
     if (print) {
         _('loadingcover').style.display = '';
     }
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbz5sdUaBw3uIK-TdMwxRgPcTTwDTT3PlVqlJZMVgqm8XIiraTtZRp_RySREpgx6aY4R/exec?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbzsJCmPlOzMtlJFyiUry-lW5CPYbmC6Id_n8dET2Z1YYYjA5nDldgcDM0c-4scRGfM/exec?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
@@ -161,7 +161,7 @@ function sendToAnotherArea() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
-            data.area_specific_data.my_referrals[i] = person;
+            data.changed_people.push(person);
             setCookieJSON('dataSync', data);
             break;
         }
@@ -193,7 +193,7 @@ function deceasePerson() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
-            data.area_specific_data.my_referrals[i] = person;
+            data.changed_people.push(person);;
             setCookieJSON('dataSync', data);
             break;
         }
