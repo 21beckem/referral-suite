@@ -138,6 +138,9 @@ function syncPageFillIn() {
     let syncDate = new Date(data.area_specific_data.last_sync);
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
+function FORCEsyncPageFillIn() {
+    _('infobox').innerHTML = area;
+}
 function syncButton(el) {
     SYNC().then(() => {
         safeRedirect(el.getAttribute('href'));
