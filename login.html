@@ -53,6 +53,8 @@
         </div>
     </div>
     <script>
+setCookieJSON('dataSync', null);
+setCookie('areaUser', '');
 function signInAsArea(el) {
     setCookie('areaUser', el.innerHTML);
     safeRedirect(el.getAttribute('href'));
