@@ -183,7 +183,6 @@ function deceasePerson() {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
-    const newArea = document.getElementById('areadropdown').value;
 
     // set new area in data and save to cookie
     person[3] = 'Not interested';
