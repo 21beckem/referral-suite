@@ -223,6 +223,7 @@ function claimPerson() {
         data['claim_these'] = Array();
     }
     data['claim_these'].push(person);
+    setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
