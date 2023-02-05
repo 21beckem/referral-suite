@@ -19,18 +19,33 @@
     </div>
     <div style="height: 80px;"></div>
 
-    
-    <table style="width: 100%;">
-      <tr>
-        <td style="width: 80%; padding-left: 10px;">
-          <div class="w3-light-gray w3-round-medium">
-            <div class="w3-red w3-round-medium" style="height: 24px; width: 25%;"></div>
-          </div>
-        </td>
-        <td class="w3-center" style="width: 20px; padding: 10px;">5</td>
-      </tr>
-    </table>
-    
+    <div class="w3-border-bottom">
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 80%; padding-left: 10px;">
+            <div class="w3-light-gray w3-round-medium">
+              <div id="totReferralsBar" class="w3-red w3-round-medium" style="height: 24px; width: 0;"></div>
+            </div>
+          </td>
+          <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
+        </tr>
+      </table>
+      <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Claimed referrals</div>
+    </div>
+
+    <div class="w3-border-bottom" style="padding-top: 10px">
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 80%; padding-left: 10px;">
+            <div class="w3-light-gray w3-round-medium">
+              <div id="oldReferralBar" class="w3-red w3-round-medium" style="height: 24px; width: 0;"></div>
+            </div>
+          </td>
+          <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
+        </tr>
+      </table>
+      <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
+    </div>
     
     
     <div class="">
@@ -84,6 +99,39 @@
 
     </div>
 
+
+    <script>
+
+let maxRefsAllowed = 10;
+const currentRefCount = data.area_specific_data.my_referrals.length;
+
+
+let totReferralsBar = document.getElementById("totReferralsBar");
+let totReferrals = document.getElementById("totReferrals");
+
+totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
+
+totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
+
+if (currentRefCount >= maxRefsAllowed) {
+  totReferrals.style.color = "red";
+}
+
+let maxRefAge = 10;
+let oldReferralBar = document.getElementById("oldReferralBar");
+let agebyday = document.getElementById("agebyday");
+let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][1];
+let today = new Date();
+let oldDate = new Date(oldReferral);
+let dayDifference = Math.round((today.getTime()-oldDate.getTime()) / (1000 * 60 * 60 * 24));
+oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
+
+agebyday.innerHTML = dayDifference + '/' + maxRefAge;
+
+if (dayDifference >= maxRefAge) {
+  agebyday.style.color = "red";
+}
+    </script>
     
   </body>
 </html>
