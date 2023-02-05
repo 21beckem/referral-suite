@@ -220,7 +220,7 @@ function claimPerson() {
         return;
     }
     if ( !("claim_these" in data) ) {
-        data.['claim_these'] = Array();
+        data['claim_these'] = Array();
     }
     data['claim_these'].push(person);
     // send to force-sync.html
