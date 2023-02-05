@@ -45,6 +45,10 @@ function saveBeforeInfoPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
+function saveBeforeClaimPage(person, el) {
+    setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
+}
 function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 /////  above functions make everything function with basic navigation between pages. No Touch!
@@ -87,7 +91,7 @@ function makeListUNclaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        output += `<aa onclick="saveBeforeInfoPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
+        output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
           <li class="w3-bar" style="display: flex">
             <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
               <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
