@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral Updates</title>
+    <title>Schedule</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -14,66 +14,11 @@
     <!-- Top Bar -->
     <div class="w3-top w3-cell-row w3-area-blue">
       <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-        <a>Updating Referral</a>
+        <a>Schedule</a>
       </div>
     </div>
     <div style="height: 80px;"></div>
 
-
-
-  <div class="w3-center" style="padding-top: 100px;">Which area have you sent the referral to?</div>
-  <div style="height:20px"></div>
-  <div class="w3-center">  
-    <select onchange="areaOptionChanged(this)" id="areadropdown">
-      <option></option>
-      <option>Alingsås</option>
-      <option>Borås</option>
-      <option>Borlänge</option>
-      <option>Eskilstuna</option>
-      <option>Gävle</option>
-      <option>Gubbängen</option>
-      <option>Halmstad</option>
-      <option>Handen</option>
-      <option>Helsingborg</option>
-      <option>Hägersten</option>
-      <option>Jakobsberg</option>
-      <option>Jönköping</option>
-      <option>Kalmar</option>
-      <option>Karlskrona</option>
-      <option>Karlstad</option>
-      <option>Katrineholm</option>
-      <option>Kristianstad</option>
-      <option>Kungsbacka</option>
-      <option>Linköping</option>
-      <option>Luleå</option>
-      <option>Lund</option>
-      <option>Malmö</option>
-      <option>Norrköping</option>
-      <option>Örebro</option>
-      <option>Örnsköldsvik</option>
-      <option>Östersund</option>
-      <option>Skellefteå</option>
-      <option>Skövde</option>
-      <option>Stockholm</option>
-      <option>Sundsvall</option>
-      <option>Södertälje</option>
-      <option>Trollhättan</option>
-      <option>Täby</option>
-      <option>Umeå</option>
-      <option>Uppsala</option>
-      <option>Utby</option>
-      <option>Vendelsö</option>
-      <option>Visby</option>
-      <option>Västerås</option>
-      <option>Västerhaninge</option>
-      <option>Västra Frölunda</option>
-      <option>Växjö</option>
-    </select>
-  </div>
-
-  <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
-    <button onclick="sendToAnotherArea()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Send</button>
-  </div>
 
     <!-- Bottom Nav Bar -->
     <div style="height: 80px;"></div>
@@ -118,16 +63,6 @@
       </div>
 
     </div>
-
-
-
-  <script>
-
-function areaOptionChanged(el) {
-  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
-}
-
-  </script>
 
   </body>
 </html>
