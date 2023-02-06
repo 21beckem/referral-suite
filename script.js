@@ -92,16 +92,17 @@ function makeListUNclaimedPeople() {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
-          <li class="w3-bar" style="display: flex">
-            <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
-              <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
+          <div class="w3-bar" style="display: flex;">
+            <div class="w3-bar-item w3-circle">
+              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large w3-ellipsis">` + per[2] + `</span><br>
-              <span>` + new Date(per[1]).toLocaleString() + `</span>
+              <span class="w3-large">` + per[2]  + `</span><br>
+              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + per[0] + `</span>
             </div>
-          </li>
-          </aa>`;
+          </div>
+        </aa>`;
     }
     _('unclaimedlist').innerHTML = output;
 }
@@ -110,15 +111,16 @@ function makeListClaimedPeople(arr) {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
-        <li class="w3-bar" style="display: flex">
-          <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
-            <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
+          <div class="w3-bar" style="display: flex;">
+            <div class="w3-bar-item w3-circle">
+              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+            </div>
+            <div class="w3-bar-item">
+              <span class="w3-large">` + per[5]  + `</span><br>
+              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + per[0] + `</span>
+            </div>
           </div>
-          <div class="w3-bar-item">
-            <span class="w3-large w3-ellipsis">` + per[5]  + `</span><br>
-            <span>` + new Date(per[1]).toLocaleString() + `</span>
-          </div>
-        </li>
         </aa>`;
     }
     _('yourreferrals').innerHTML = output;
