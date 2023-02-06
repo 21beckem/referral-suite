@@ -27,20 +27,21 @@
     <div style="height: 115px;"></div>
      
    <!-- List of items -->
-   <div class="w3-container">
-    <ul id="yourreferrals" class="w3-ul">
+  <div class="w3-container">
+    <div id="yourreferrals">
       <a onclick="redirectAfterFunction(this)" href="contact_info.html">
-      <li class="w3-bar" style="display: flex">
-        <div class="w3-bar-item w3-circle" style="width:65px;height:65px">
-          <div class="w3-margin-top w3-left-align w3-dot w3-circle" style="width:20px;height:20px"></div>
+        <div class="w3-bar" style="display: flex;">
+          <div class="w3-bar-item w3-circle">
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+          </div>
+          <div class="w3-bar-item">
+            <span class="w3-large"></span><br>
+            <span></span><br>
+            <span></span>
+          </div>
         </div>
-        <div class="w3-bar-item">
-          <span id="name" class="w3-large w3-ellipsis"></span><br>
-          <span id="date"></span>
-        </div>
-      </li>
       </a>
-    </ul>
+    </div>
   </div>
 
 
@@ -75,7 +76,7 @@
          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
        </a>
        <div style="height: 0; width: 100%;">
-         <div id="reddot" class="w3-circle w3-red w3-notification-dot w3-hide"></div>
+         <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
        </div>
      </div>
 
