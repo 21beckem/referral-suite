@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <style>
+#differentContactsTable {
+    width: 100%;
+    height: 400px;
+    position: relative;
+}
+#differentContactsTable tr td {
+    padding: 5px;
+    width: 50%;
+    height: 25%;
+}
+.contactOption {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: #007aaf;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 1px 3px 14px -10px black;
+}
+.contactOption i {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(calc(-50% - 52px), -50%);
+    font-size: 80px;
+}
+.contactOption .caption {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <div class="w3-top w3-cell-row w3-area-blue">
+      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+        <a>Contact</a>
+      </div>
+    </div>
+    <div style="height: 90px;"></div>
+
+    <div class="w3-center w3-xlarge" style="margin-bottom: 70px;">Prewitten Messages</div>
+    
+    <table id="differentContactsTable">
+        <tr>
+            <td>
+                <div class="contactOption">
+                    <i class="fa fa-plus"></i>
+                    <div class="caption">Blank Text</div>
+                </div>
+            </td>
+            <td>
+                <div class="contactOption">
+                    <i class="fa fa-plus"></i>
+                    <div class="caption">Blank Text</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="contactOption">
+                    <i class="fa fa-plus"></i>
+                    <div class="caption">Blank Text</div>
+                </div>
+            </td>
+            <td>
+                <div class="contactOption">
+                    <i class="fa fa-plus"></i>
+                    <div class="caption">Blank Text</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+    <!-- Bottom Nav Bar -->
+    <!--<div style="height: 80px;"></div>-->
+    <div class="w3-bottom w3-cell-row w3-light-gray w3-padding-16">
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="index.html">
+          <i class="fa fa-home"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="schedule.html">
+          <i class="fa fa-calendar-o"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="contact_book.html">
+          <i class="fa fa-address-book"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="unclaimed_referrals.html">
+          <i class="fa fa-bell w3-text-area-blue"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
+        </a>
+        <div style="height: 0; width: 100%;">
+          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="sync.html">
+          <i class="fa fa-refresh"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Sync</div>
+        </a>
+      </div>
+
+    </div>
+
+  </body>
+</html>
