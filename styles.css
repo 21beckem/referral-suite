@@ -56,6 +56,14 @@ a {
     font-size: 200px;
 }
 
+.w3-icon-shadow {
+    box-shadow: 1px 1px 7px -3px;
+}
+
+tr.spaceUnder>td {
+    padding-bottom: 1em;
+  }
+
 #arealoginbuttons div:nth-child(1) button {
     background-color: #ea9999;
 }
