@@ -128,7 +128,7 @@ function makeListClaimedPeople(arr) {
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[5];
-    //_('telnumber').href = 'tel:+' + person[8];
+    _('telnumber').href = 'tel:+' + person[8];
     //_('smsnumber').href = 'sms:+' + person[8];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
