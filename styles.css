@@ -41,6 +41,9 @@ a:not(.uline) {
 a.uline {
     color: #0000EE;
 }
+.w3-card-subtle {
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%);
+}
 
 .w3-gray-opacity {
     background-color:rgb(79, 77, 77);opacity:0.6;
