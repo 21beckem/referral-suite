@@ -11,8 +11,8 @@ Referral Suite is broken up into 2 big parts: The site and the Client. The clien
 ## How to Edit! 😁
 There are tutorial videos for each step which can be found in the mission drive.
 
-* [Add or remove area that will be inboxing](###Add-or-remove-area-that-will-be-inboxing)
-* [Add or remove area to the whole mission](###Add-or-remove-area-to-the-whole-mission)
+* [Add or remove area that will be inboxing](#Add-or-remove-area-that-will-be-inboxing)
+* [Add or remove area to the whole mission](#Add-or-remove-area-to-the-whole-mission)
 
 ### Add or remove area that will be inboxing
 
