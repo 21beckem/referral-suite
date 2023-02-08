@@ -1,9 +1,17 @@
-Hey, I'm Michael I just called because I want to give you a free book. It's all about Jesus Christ and I really want you to read it because of how happy it makes me! Is there a time we could have a fika or something like that? :)
+Hej {Name}! Tack så mycket för att du svarade vår annons om en gratis Mormons bok: Ännu ett Jesu Kristi testamente. Vi har några representanter i {Area} som kan berätta lite om hur den kan bli till glädje i ditt liv. När är en bra tid för de att komma och leverera boken och prata med dig om den?
 
 
 
-Hejsan igen, I just wanted to reach out one more time because I never got an answer to my text from yesterday which kinda made me a little upset not gonna lie but its fine haha. So, I'd still like to give you that book! When can I give it to you?
+Hej {Name}! Tack så mycket för att du svarade vår annons om en gratis Mormons bok. Vi har några representanter i {Area} som kan lära dig hur de har kommit närmare Jesus Kristus genom Mormons bok. Finns det en tid de kan komma för att ge dig boken och lära dig lite mer om den?
 
 
 
-WHY HAVE YOU NOT RESPONDED TO ME?! I JUST WANT TO SHARE A MESSAGE ABOUT HOPE AND PEACE IN LIFE!!! DONT YOU WANT HOPE AND PEACE???!!
+Hej {Name}! Tack så mycket för att du är intresserad av en Mormons bok: Ännu ett Jesu Kristi testamente. Vi kommer att skicka den genom posten så fort som möjligt. Kan du bekräfta att det här är din adress?
+
+{Insert address}
+
+
+
+{Follow up to previous message}
+
+Underbart! Tack så mycket! Som en del av den här beställningen berättar våra representanter om Mormons bok och hur de har hittat hopp och frid tack vare Mormons bok. Vi har några representanter i {Area} som har ansvar för området där du bor. När kan de kontakta dig för att berätta om detta?
