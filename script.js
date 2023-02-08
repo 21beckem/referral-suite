@@ -13,6 +13,14 @@ function safeRedirect(ref) {
         data: ref,
     }), '*');
 }
+async function safeFetch(ref) {
+    if (!inIframe()) {
+        return await fetch(ref);
+    }
+    ref = window.parent.makeSafeLink(ref);
+    // make link safe
+    return await fetch(ref);
+}
 document.addEventListener('click', e => {
     const origin = e.target.closest('a');
     if (origin) {
@@ -142,8 +150,8 @@ function fillInContactInfo() {
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     const person = getCookieJSON('linkPages') || null;
 	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
-	console.log(reqMssgUrl);
-	const rawFetch = await fetch(reqMssgUrl);
+	//console.log(reqMssgUrl);
+	const rawFetch = await safeFetch(reqMssgUrl);
 	const rawTxt = await rawFetch.text();
 
 	text = rawTxt;
