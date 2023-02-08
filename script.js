@@ -139,7 +139,28 @@ function fillInContactInfo() {
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
 }
+async function fillMessageExamples(requestType, folderName, pasteBox) {
+    const person = getCookieJSON('linkPages') || null;
+	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
+	//console.log(reqMssgUrl);
+	const rawFetch = await fetch(reqMssgUrl);
+	const rawTxt = await rawFetch.text();
 
+	text = rawTxt;
+	const Messages = text.split(/\n{4,}/gm);
+	console.log(Messages);
+	let output = "";
+	for (let i = 0; i < Messages.length; i++) {
+		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="send_' + folderName + '(\'hi\', \'' + person[8] + '\')" class="useThisTemplateBtn">Use This Template</button></div>';
+	}
+	pasteBox.innerHTML = output;
+}
+function send_sms(text, number) {
+    console.log(number);
+    console.log(text);
+    const url = 'sms:' + String(number) + '?body=' + encodeURI(text);
+    console.log()
+}
 function syncPageFillIn() {
     let syncDate = new Date(data.area_specific_data.last_sync);
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';

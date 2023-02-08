@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Template</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="styles.css">
+        <script src="script.js"></script>
+        <style>
 #selectRefType {
     width: 100%;
     padding: 5px;
     border-radius: 3px;
+}
+#messageExamples {
+	width: 100%;
+	padding: 0px 10px;
 }
 .googleMessage {
     width: 100%;
     background-color: rgb(111, 221, 255);
     padding: 10px 15px;
     border-radius: 20px;
+	white-space: pre-line;
 }
 .useThisTemplateBtn {
     padding: 5px 20px;
@@ -36,14 +41,14 @@
     <div class="w3-top">
         <div class="w3-cell-row w3-area-blue">
             <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-                <a>Your Referrals</a>
+                <a>Create SMS</a>
             </div>
         </div>
         <!-- Search bar -->
         <div class="w3-container w3-white w3-padding w3-card-subtle">
             <button class="w3-button w3-blue w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</button>OR
             <hr style="margin: 10px;">
-            <select id="selectRefType">
+            <select id="selectRefType" onchange="fillMessageExamples(this.value, 'sms', messageExamples)">
                 <option>MB Request</option>
                 <option>Missionary Visit Request</option>
                 <option>Vägen Till Hopp och Frid</option>
@@ -52,30 +57,13 @@
         </div>
     </div>
     <div style="height: 180px;"></div>
+
+	<div id="editor_holder"></div>
     
-    <div id="listOfTextExamples">
-
-        <div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16">
-            <div class="googleMessage w3-card-subtle">
-Hey, I'm Michael I just called because I want to give you a free book. It's all about Jesus Christ and I really want you to read it because of how happy it makes me! Is there a time we could have a fika or something like that? :)
-            </div>
-            <button class="useThisTemplateBtn">Use This Template</button>
-        </div>
-
-        <div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16">
-            <div class="googleMessage">
-Hejsan igen, I just wanted to reach out one more time because I never got an answer to my text from yesterday which kinda made me a little upset not gonna lie but its fine haha. So, I'd still like to give you that book! When can I give it to you?
-            </div>
-            <button class="useThisTemplateBtn">Use This Template</button>
-        </div>
-
-        <div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16">
-            <div class="googleMessage">
-WHY HAVE YOU NOT RESPONDED TO ME?! I JUST WANT TO SHARE A MESSAGE ABOUT HOPE AND PEACE IN LIFE!!! DONT YOU WANT HOPE AND PEACE???!!
-            </div>
-            <button class="useThisTemplateBtn">Use This Template</button>
-        </div>
-
+    <div id="messageExamples">
+		<div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+			<div class="lds-dual-ring"></div>
+		</div>
     </div>
 
 
@@ -122,6 +110,12 @@ WHY HAVE YOU NOT RESPONDED TO ME?! I JUST WANT TO SHARE A MESSAGE ABOUT HOPE AND
       </div>
 
     </div>
+	<script>
+const messageExamples = _('messageExamples');
+const selectRefType = _('selectRefType');
+
+fillMessageExamples(selectRefType.value, 'sms', messageExamples);	
+	</script>
 
   </body>
 </html>
