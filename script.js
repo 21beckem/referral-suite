@@ -142,7 +142,7 @@ function fillInContactInfo() {
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     const person = getCookieJSON('linkPages') || null;
 	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
-	//console.log(reqMssgUrl);
+	console.log(reqMssgUrl);
 	const rawFetch = await fetch(reqMssgUrl);
 	const rawTxt = await rawFetch.text();
 
