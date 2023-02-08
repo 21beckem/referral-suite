@@ -15,3 +15,9 @@ Hej {Name}! Tack så mycket för att du är intresserad av en Mormons bok: Ännu
 {Follow up to previous message}
 
 Underbart! Tack så mycket! Som en del av den här beställningen berättar våra representanter om Mormons bok och hur de har hittat hopp och frid tack vare Mormons bok. Vi har några representanter i {Area} som har ansvar för området där du bor. När kan de kontakta dig för att berätta om detta?
+
+
+
+Hej {Name}! Tack så mycket för att du svarade vår annons förra vecka. Det finns många som beställer Mormons böcker och vi vill gärna dela med oss av det budskapet som vi har om hur Jesus Kristi kyrka har återställts och finns på jorden idag och att vi har en levande profet som vägleds av Gud. Om du är fortfarande intresserad kan du svara detta meddelande eller komma på vår gudstjänst som är söndagar kl {insert time} på denna adress {insert your church address}.
+
+Hoppas allt går bra med dig i framtiden!
