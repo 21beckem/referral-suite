@@ -149,7 +149,8 @@ function fillInContactInfo() {
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     const person = getCookieJSON('linkPages') || null;
-    _('startBlankBtn').onclick = "window.location.href = sms:" + person[8];
+    _('startBlankBtn').setAttribute("onclick", 'window.location.href = "sms:' + person[8] + '"');
+    //_('startBlankBtn').onclick = "window.location.href = 'sms:" + person[8] + "'";
 	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
 	//console.log(reqMssgUrl);
 	const rawFetch = await safeFetch(reqMssgUrl);
