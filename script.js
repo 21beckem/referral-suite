@@ -151,15 +151,19 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 	console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
-		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="send_' + folderName + '(\'hi\', \'' + person[8] + '\')" class="useThisTemplateBtn">Use This Template</button></div>';
+		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="send_' + folderName + '(this.previousSibling.innerHTML, \'' + person[8] + '\')" class="useThisTemplateBtn">Use This Template</button></div>';
 	}
 	pasteBox.innerHTML = output;
 }
 function send_sms(text, number) {
-    console.log(number);
-    console.log(text);
-    const url = 'sms:' + String(number) + '?body=' + encodeURI(text);
-    console.log()
+    const url = 'sms:' + encodeURI(String(number)) + '?body=' + encodeURI(text);
+    console.log(url);
+    safeRedirect(url);
+}
+function send_email(text, number) {
+    const url = 'sms:' + encodeURI(String(number)) + '?body=' + encodeURI(text);
+    console.log(url);
+    safeRedirect(url);
 }
 function syncPageFillIn() {
     let syncDate = new Date(data.area_specific_data.last_sync);
