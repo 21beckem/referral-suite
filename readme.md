@@ -13,6 +13,7 @@ There are tutorial videos for each step which can be found in the mission drive.
 
 * [Add or remove area that will be inboxing](#Add-or-remove-area-that-will-be-inboxing)
 * [Add or remove area to the whole mission](#Add-or-remove-area-to-the-whole-mission)
+* [Edit Pre-written Template Messages](#Edit-Pre-written-Template-Messages)
 
 ### Add or remove area that will be inboxing
 
@@ -49,5 +50,35 @@ There are tutorial videos for each step which can be found in the mission drive.
 ```
 * To add an area, copy the code above and paste it in with the list of areas. __*keep areas in alphabetical order PLEASE*__
 * OR To remove an area, find the codeblock for that area and remove it
+
+* Link to video tutorial [here](link)
+
+
+### Edit Pre-written Template Messages
+
+1. Navigate to the `templates` folder
+2. Open the `email` or `sms` folder, whichever you'd like to edit
+3. Open the file for which you'd like to edit the prewritten templates
+4. Edit/Paste-in/delete whichever you'd like.
+5. __Keep In Mind:__ Referral Suite will separate each of these into individual texts __When there is at least 3 line breaks in between messages!__ For instance:
+
+* This creates 1 message:
+```txt
+1| Hejsan jag heter Michael! Jag såg att du frågade efter en gratis Mormons Bok
+2|
+3|
+4| Hur är det med dig?
+```
+<br>
+
+* This creates 2 messages:
+```txt
+1| Hejsan jag heter Michael! Jag såg att du frågade efter en gratis Mormons Bok
+2|
+3|
+4|
+5| Hur är det med dig?
+```
+
 
 * Link to video tutorial [here](link)
