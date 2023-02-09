@@ -15,6 +15,7 @@ There are tutorial videos for each step which can be found in the mission drive.
 * [Add or remove area to the whole mission](#Add-or-remove-area-to-the-whole-mission)
 * [Edit Pre-written Template Messages](#Edit-Pre-written-Template-Messages)
 
+____
 ### Add or remove area that will be inboxing
 
 1. Open `login.html`
@@ -35,7 +36,7 @@ There are tutorial videos for each step which can be found in the mission drive.
 
 * Link to video tutorial [here](link)
 
-
+____
 ### Add or remove area to the whole mission
 
 1. Open `referral_edit.html`
@@ -53,7 +54,7 @@ There are tutorial videos for each step which can be found in the mission drive.
 
 * Link to video tutorial [here](link)
 
-
+____
 ### Edit Pre-written Template Messages
 
 1. Navigate to the `templates` folder
