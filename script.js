@@ -149,8 +149,10 @@ function fillInContactInfo() {
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     const person = getCookieJSON('linkPages') || null;
-    _('startBlankBtn').href = "sms:" + person[8];
-    //_('startBlankBtn').onclick = "window.location.href = 'sms:" + person[8] + "'";
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.1947536680=';
+    const _destination = (folderName == 'sms') ? '_parent' : '_blank';
+    _('startBlankBtn').href = link_beginning;
+    _('startBlankBtn').target = _destination;
 	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
 	//console.log(reqMssgUrl);
 	const rawFetch = await safeFetch(reqMssgUrl);
@@ -158,11 +160,11 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 
 	text = rawTxt;
 	const Messages = text.split(/\n{4,}/gm);
-	console.log(Messages);
+	//console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
-        const sms_url = 'sms:' + encodeURI(String(person[8])) + '?body=' + encodeURI(Messages[i]);
-		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + sms_url + '" target="_parent"><div class="useThisTemplateBtn">Use This Template</div></a></div>';
+        const this_url = link_beginning + encodeURI(Messages[i]);
+		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '" target="' + _destination + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>';
 	}
 	pasteBox.innerHTML = output;
 }

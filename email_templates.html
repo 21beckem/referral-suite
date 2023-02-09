@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SMS Templates</title>
+        <title>Email Templates</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="styles.css">
@@ -21,9 +21,9 @@
 }
 .googleMessage {
     width: 100%;
-    background-color: rgb(111, 221, 255);
+    background-color: white;
     padding: 10px 15px;
-    border-radius: 20px;
+    /* border-radius: 20px; */
 	white-space: pre-line;
 }
 .useThisTemplateBtn {
@@ -31,7 +31,7 @@
     border-radius: 3px;
     margin-top: 10px;
     border: 0;
-    background-color: #2196F3;
+    background-color: #ff6a6a;
     color: white;
     width: max-content;
 }
@@ -42,14 +42,14 @@
     <div class="w3-top">
         <div class="w3-cell-row w3-area-blue">
             <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-                <a>Create SMS</a>
+                <a>Create Email</a>
             </div>
         </div>
         <!-- Search bar -->
         <div class="w3-container w3-white w3-padding w3-card-subtle">
-            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-blue w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
+            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-light-red w3-large w3-round" style="margin-right: 10px;">Start a Blank Email</a>OR
             <hr style="margin: 10px;">
-            <select id="selectRefType" onchange="fillMessageExamples(this.value, 'sms', messageExamples)">
+            <select id="selectRefType" onchange="fillMessageExamples(this.value, 'email', messageExamples)">
                 <option>MB Request</option>
                 <option>Missionary Visit Request</option>
                 <option>Vägen Till Hopp och Frid</option>
@@ -115,7 +115,7 @@
 const messageExamples = _('messageExamples');
 const selectRefType = _('selectRefType');
 
-fillMessageExamples(selectRefType.value, 'sms', messageExamples);	
+fillMessageExamples(selectRefType.value, 'email', messageExamples);
 	</script>
 
   </body>

@@ -15,6 +15,13 @@
 .w3-text-area-blue {
     color: #1e3b6e;
 }
+.w3-light-red {
+    color: white;
+    background-color: #ff6a6a;
+}
+.w3-text-light-red {
+    color: #ff6a6a;
+}
 
 .w3-notification-dot {
     width: 10px;
