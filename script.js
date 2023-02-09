@@ -1,7 +1,9 @@
 function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
-function redirectAfterFunction(el) {
-    alert("doing functiony stuff");
-    safeRedirect(el.getAttribute('href'));
+function verifySentInSMOEsAB(el) {
+    const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
+    if (yesno) {
+        safeRedirect(el.getAttribute('href'));
+    }
 }
 function safeRedirect(ref) {
     if (!inIframe()) {
@@ -141,7 +143,7 @@ function fillInContactInfo() {
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
     _('referraltype').innerHTML = person[0];
-    _('phonenumber').innerHTML = '+' + person[8];
+    _('phonenumber').innerHTML = person[8];
     _('email').innerHTML = person[9];
     let addStr = person[10] + ' ' + person[11] + ' ' + person[12];
     _('address').innerHTML = addStr;
@@ -149,8 +151,10 @@ function fillInContactInfo() {
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     const person = getCookieJSON('linkPages') || null;
-    _('startBlankBtn').setAttribute("onclick", 'window.location.href = "sms:' + person[8] + '"');
-    //_('startBlankBtn').onclick = "window.location.href = 'sms:" + person[8] + "'";
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.1947536680=';
+    const _destination = (folderName == 'sms') ? '_parent' : '_blank';
+    _('startBlankBtn').href = link_beginning;
+    _('startBlankBtn').target = _destination;
 	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
 	//console.log(reqMssgUrl);
 	const rawFetch = await safeFetch(reqMssgUrl);
@@ -158,22 +162,13 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 
 	text = rawTxt;
 	const Messages = text.split(/\n{4,}/gm);
-	console.log(Messages);
+	//console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
-		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="send_' + folderName + '(this.previousSibling.innerHTML, \'' + person[8] + '\')" class="useThisTemplateBtn">Use This Template</button></div>';
+        const this_url = link_beginning + encodeURI(Messages[i]);
+		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '" target="' + _destination + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>';
 	}
 	pasteBox.innerHTML = output;
-}
-function send_sms(text, number) {
-    const url = 'sms:' + encodeURI(String(number)) + '?body=' + encodeURI(text);
-    console.log(url);
-    safeRedirect(url);
-}
-function send_email(text, number) {
-    const url = 'sms:' + encodeURI(String(number)) + '?body=' + encodeURI(text);
-    console.log(url);
-    safeRedirect(url);
 }
 function syncPageFillIn() {
     let syncDate = new Date(data.area_specific_data.last_sync);
