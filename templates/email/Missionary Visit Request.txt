@@ -1,1 +1,17 @@
-test Visit
+Hej {Name}!
+
+Tack så mycket för att du svarade får annons om {insert ad theme}! Vi har försökt att kontakta dig på din mobil som du gav oss {insert their number}. Vi har några representanter i {Area} som kan svara dina frågor om {insert ad theme}. Finns det en tid de kan besöka dig för att prata med dig om detta? Om hembesök funkar inte kan de träffa dig för en fika någon gång.
+
+Mvh
+
+Vandra i tro
+
+
+
+Hej {Name}!
+
+Tack så mycket för att du svarade får annons om {insert ad theme}! Vi har försökt att kontakta dig på din mobil som du gav oss {insert their number}. De närmaste representanterna vi har i ditt område bor i {Area} och de skulle gärna svara dina frågor om {insert ad theme}! Skulle du vara villig att träffa och prata med de genom Zoom någon gång?
+
+Mvh
+
+Vandra i tro
