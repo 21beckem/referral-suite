@@ -21,15 +21,13 @@ ____
 1. Open `login.html`
 2. Find where it says:
 ```html
-<!-- Claim button -->
-<div id="arealoginbuttons" style="padding: 10%;">
+<!-- Login Buttons -->
+<div id="arealoginbuttons">
 ...
 ```
 3. Inside of this there's a list of areas. Each area is listed like this:
 ```html
-<div class="w3-container w3-center" style="margin-top: 12.5%;">
-    <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Area Name</button>
-</div>
+<button onclick="signInAsArea(this)">Sundsvall</button>
 ```
 * To add an area, copy the code above and paste it in with the list of areas
 * OR To remove an area, find the codeblock for that area and remove it

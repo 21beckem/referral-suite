@@ -101,39 +101,55 @@ tr.spaceUnder>td {
     }
 }
 
-#arealoginbuttons div:nth-child(1) button {
+#arealoginbuttons { padding: 15%; }
+#arealoginbuttons button {
+    width: 100%;
+    font-size: 24px;
+    border-radius: 8px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 30px;
+}
+
+#arealoginbuttons button:nth-child(1) {
     background-color: #ea9999;
 }
 
-#arealoginbuttons div:nth-child(2) button {
+#arealoginbuttons button:nth-child(2) {
     background-color: #f9cb9c;
 }
 
-#arealoginbuttons div:nth-child(3) button {
+#arealoginbuttons button:nth-child(3) {
     background-color: #ffe599;
 }
 
-#arealoginbuttons div:nth-child(4) button {
+#arealoginbuttons button:nth-child(4) {
     background-color: #b6d7a8;
 }
 
-#arealoginbuttons div:nth-child(5) button {
+#arealoginbuttons button:nth-child(5) {
     background-color: #a4c2f4;
 }
 
-#arealoginbuttons div:nth-child(6) button {
+#arealoginbuttons button:nth-child(6) {
     background-color: #b4a7d6;
 }
 
-#arealoginbuttons div:nth-child(7) button {
+#arealoginbuttons button:nth-child(7) {
     background-color: #d5a6bd;
 }
 
-#arealoginbuttons div:nth-child(8) button {
+#arealoginbuttons button:nth-child(8) {
     background-color: #c5ff8a;
 }
 
-#arealoginbuttons div:nth-child(9) button {
+#arealoginbuttons button:nth-child(9) {
     background-color: #a2c4c9;
 }
 
