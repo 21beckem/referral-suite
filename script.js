@@ -78,7 +78,7 @@ async function SYNC(print=true, justRead=false) {
     if (print) {
         _('loadingcover').style.display = '';
     }
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbxpzwbrmmhSO9rsMX10pVYPhFwKjYjhtlOarZZI9UnKTNx-u9fajBJNVkfBq3J-kvT7/exec?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbzHGg8hNcvm0KvQ1lBxse4IZ2Xnb5iIq5FfBRddixxIwBQzEgeySuUwxHxp_7KIPQWm/exec' + '?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
