@@ -18,46 +18,23 @@
     </div>
     <div style="height: 35px;"></div>
 
-    <!-- Claim button -->
-    <div id="arealoginbuttons" style="padding: 10%;">
-        <div class="w3-container w3-center" style="margin-top: 12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Sundsvall</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Kristianstad</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Eskilstuna</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Trollhättan</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Kungsbacka</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Örnsköldsvik</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">Skellefteå</button>
-        </div>
-
-        <div class="w3-container w3-center" style="margin-top:12.5%;">
-            <button onclick="signInAsArea(this)" href="force-sync.html" class="w3-button w3-xlarge w3-round-large" style="width: 80%">SMOEs</button>
-        </div>
+    <!-- Login Buttons -->
+    <div id="arealoginbuttons">
+        <button onclick="signInAsArea(this)">Sundsvall</button>
+        <button onclick="signInAsArea(this)">Kristianstad</button>
+        <button onclick="signInAsArea(this)">Eskilstuna</button>
+        <button onclick="signInAsArea(this)">Trollhättan</button>
+        <button onclick="signInAsArea(this)">Kungsbacka</button>
+        <button onclick="signInAsArea(this)">Örnsköldsvik</button>
+        <button onclick="signInAsArea(this)">Skellefteå</button>
+        <button onclick="signInAsArea(this)">SMOEs</button>
     </div>
     <script>
 setCookie('dataSync', null);
 setCookie('areaUser', '');
 function signInAsArea(el) {
     setCookie('areaUser', el.innerHTML);
-    safeRedirect(el.getAttribute('href'));
+    safeRedirect('force-sync.html');
 }
 function safeRedirect(ref) {
     if (!inIframe()) {
