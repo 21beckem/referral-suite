@@ -29,6 +29,9 @@ function anyReferrals(claimedCol, rowsToSearch, unclaimedData) {
   return out.length > 0;
 }
 function makeRaw(x) {
+  if (x == '#N/A') {
+    return '[]';
+  }
   return JSON.stringify(x);
 }
 ////////
@@ -48,7 +51,16 @@ function doGet(e) {
   ///////// save all the provided data
   if (dataRaw != null) {
     data = JSON.parse(dataRaw);
-    SETPeopleData(data.area_specific_data.my_referrals);
+    if ("changed_people" in data) {
+      if (data.changed_people.length > 0) {
+        SETPeopleData(data.changed_people);
+      }
+    }
+    if ("claim_these" in data) {
+      if (data.claim_these.length > 0) {
+        ClaimPeople(area, data.claim_these);
+      }
+    }
   }
 
   ///////// get all new data
@@ -69,6 +81,37 @@ function doGet(e) {
   ///////// ship it off
   const output = JSON.stringify(newSyncData);
   return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.JSON);
+}
+function ClaimPeople(area, peopleList) {
+  var ss = SpreadsheetApp.getActive();
+  var sheet = null;
+
+  const stupidPages = {
+    "Mormons Bok Request" : ["", 1, 3, 2, 6, 12, 13, 14, 15, 16, 17, 18, 19, 21],
+    "Missionary Visit Requests" : ["", 2, 14, 13, 15, 3, 4, 5, 8, 9, "", 6, 7, 10],
+    "VTHOF leads" : ["", 2, 14, 13, 15, 3, 4, 5, 8, 9, "", 6, 7, 10]
+  }
+
+  //// switch to all inbox referrals sorted page
+  
+  // find each of the people
+  for (let i = 0; i < peopleList.length; i++) {
+    let thisPerson = peopleList[i];
+    sheet = ss.getSheetByName(thisPerson[0]);
+
+    // find the person
+    const uniqueColInMainSheet = columnToLetter(stupidPages[thisPerson[0]][1]);
+    const persRowNum = getPersonRow(sheet, uniqueColInMainSheet, thisPerson[1]);
+    const rowLoc = String(persRowNum)+':'+String(persRowNum);
+
+    // send off 1 at a time if unchanged
+    const thisStupidList = stupidPages[thisPerson[0]];
+    const thisCol = thisStupidList[2];
+
+    if (sheet.getRange(persRowNum, thisCol).getValue() == "Unclaimed") {
+      sheet.getRange(persRowNum, thisCol).setValue(area);
+    }
+  }
 }
 function SETPeopleData(peopleList) {
   var ss = SpreadsheetApp.getActive();
@@ -97,13 +140,17 @@ function SETPeopleData(peopleList) {
     const thisStupidList = stupidPages[thisPerson[0]];
     for(var k = 2; k < thisStupidList.length; k++){
       const ki = thisStupidList[k];
-      if ( !(persRow[ki-1] == thisPerson[k] || persRow[ki-1] == null || persRow[ki-1] == "") ) {
+      const pos1 = persRow[ki-1];
+      const c1 = pos1 == thisPerson[k];
+      const c2 = pos1 == null;
+      const c3 = pos1 == "";
+      const shouldChange = !c1;
+      if ( shouldChange ) {
         // set new data
         //return [k, persRow[ki-1], thisPerson[k], thisPerson];
         sheet.getRange(persRowNum, ki).setValue(thisPerson[k]);
       }
     }
-    return "made it to end";
   }
 }
 function GETavailableRefs() {
@@ -198,10 +245,20 @@ function getPersonRow(sheet, col, toSearch) {
   return data.length - data.indexOf2d([toSearch]);
 }
 
-/*
-Working URL:
-https://script.google.com/macros/s/AKfycbz5sdUaBw3uIK-TdMwxRgPcTTwDTT3PlVqlJZMVgqm8XIiraTtZRp_RySREpgx6aY4R/exec?area=Kristianstad&data={"overall_data":{"referrals_available":true,"new_referrals":[["Missionary Visit Requests","2023-01-29T09:24:02.000Z","Ulla Liinanki"],["Mormons Bok Request","2023-01-28T11:22:59.000Z","Barbro Karlsson"],["Mormons Bok Request","2023-01-28T09:28:40.000Z","Anders Tell"],["Mormons Bok Request","2023-01-27T22:31:24.000Z","Enita Parra"],["Missionary Visit Requests","2023-01-26T22:35:20.000Z","Kalle Henriksson"],["Missionary Visit Requests","2023-01-26T08:20:41.000Z","Annelie Strandberg"],["Missionary Visit Requests","2023-01-26T03:47:44.000Z","Dushyant Dwivedi"],["Missionary Visit Requests","2023-01-25T18:59:32.000Z","Thomas Grundwall"]]},"area_specific_data":{"my_referrals":[["Missionary Visit Requests","2023-01-24T09:55:33.000Z","Kristianstad","Not sent","Halmstad","Ewelina Opara","Ewelina","Opara",46735713445,"Laura.ch95@hotmsil.com","","Markaryd","","fb"]],"last_sync":"2023-01-31T12:29:56.994Z"}}
-
-Working url that only reads:
-https://script.google.com/macros/s/AKfycbydFKAmR2gzTtPswE9OWc43UbbTv8o4FxquxFmqmQkWQRY6C421VYjZYHA-nBFLSXeT/exec?area=Kristianstad
-*/
+function fakeGet() {
+  var eventObject = 
+    {
+      "parameter": {
+        "area": "Kristianstad",
+        "data": '{"claim_these":[["Missionary Visit Requests","2023-01-29T09:24:02.000Z","Ulla Liinanki"]], "overall_data":{"referrals_available":true,"new_referrals":[["Missionary Visit Requests","2023-01-26T22:35:20.000Z","Kalle Henriksson"],["Missionary Visit Requests","2023-01-26T08:20:41.000Z","Annelie Strandberg"],["Missionary Visit Requests","2023-01-26T03:47:44.000Z","Dushyant Dwivedi"],["Missionary Visit Requests","2023-01-25T18:59:32.000Z","Thomas Grundwall"]]},"area_specific_data":{"my_referrals":[["Mormons Bok Request","2023-01-28T11:22:59.000Z","Kristianstad","Sent","Trollhättan","Barbro Karlsson","Barbro","Karlsson",46705851415,"barbro.suderbys@hotmail.com","atlingbo suderbys 314","Gotland",62240,"fb"],["Mormons Bok Request","2023-01-28T09:28:40.000Z","Kristianstad","Not interested","","Anders Tell","Anders","Tell",46766107396,"anderstell51@gmail.com","Västra Derome 51","Varberg","432 95","ig"],["Mormons Bok Request","2023-01-27T22:31:24.000Z","Kristianstad","Sent","Gävle","Enita Parra","Enita","Parra",46763401896,"Enitaparra@hotmail.se","Korslötsv 20","Svartsjö",17996,"fb"]],"last_sync":"2023-02-03T16:55:28.284Z"}}'
+      },
+      "contextPath": "",
+      "contentLength": -1,
+      "queryString": "action=view&page=3",
+      "parameters": {
+        "action": ["view"],
+        "page": ["3"]
+      }
+    }
+  doGet(eventObject);
+}
