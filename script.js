@@ -200,6 +200,7 @@ function sendToAnotherArea() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
+            data.changed_people = Array();
             data.changed_people.push(person);
             setCookieJSON('dataSync', data);
             break;
@@ -232,6 +233,7 @@ function deceasePerson() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
+            data.changed_people = Array();
             data.changed_people.push(person);;
             setCookieJSON('dataSync', data);
             break;
