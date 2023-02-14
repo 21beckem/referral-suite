@@ -311,7 +311,7 @@ function timeSince_formatted(date) {
         timeStr = Math.floor(interval) + " minutes";
         color = 'var(--all-good-green)';
     }
-    return '<a style="color:' + color + '">🛈 ' + timeStr + '</a>';
+    return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
