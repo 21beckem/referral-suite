@@ -16,22 +16,22 @@
     border-radius: 3px;
 }
 #messageExamples {
-	width: 100%;
-	padding: 0px 10px;
+    width: 100%;
+    padding: 0px 10px;
 }
 .googleMessage {
     width: 100%;
     background-color: white;
     padding: 10px 15px;
     /* border-radius: 20px; */
-	white-space: pre-line;
+	  white-space: pre-line;
 }
 .useThisTemplateBtn {
     padding: 5px 20px;
     border-radius: 3px;
     margin-top: 10px;
     border: 0;
-    background-color: #ff6a6a;
+    background-color: var(--email-color);
     color: white;
     width: max-content;
 }
@@ -47,7 +47,7 @@
         </div>
         <!-- Search bar -->
         <div class="w3-container w3-white w3-padding w3-card-subtle">
-            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-light-red w3-large w3-round" style="margin-right: 10px;">Start a Blank Email</a>OR
+            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-email-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Email</a>OR
             <hr style="margin: 10px;">
             <select id="selectRefType" onchange="fillMessageExamples(this.value, 'email', messageExamples)">
                 <option>MB Request</option>

@@ -31,7 +31,7 @@
     border-radius: 3px;
     margin-top: 10px;
     border: 0;
-    background-color: #2196F3;
+    background-color: var(--sms-color);
     color: white;
     width: max-content;
 }
@@ -47,7 +47,7 @@
         </div>
         <!-- Search bar -->
         <div class="w3-container w3-white w3-padding w3-card-subtle">
-            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-blue w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
+            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-sms-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
             <hr style="margin: 10px;">
             <select id="selectRefType" onchange="fillMessageExamples(this.value, 'sms', messageExamples)">
                 <option>MB Request</option>

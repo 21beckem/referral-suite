@@ -101,6 +101,7 @@ function makeListUNclaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[1]));
         output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -108,7 +109,7 @@ function makeListUNclaimedPeople() {
             </div>
             <div class="w3-bar-item">
               <span class="w3-large">` + per[2]  + `</span><br>
-              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
           </div>
@@ -120,6 +121,7 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[1]));
         output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -127,7 +129,7 @@ function makeListClaimedPeople(arr) {
             </div>
             <div class="w3-bar-item">
               <span class="w3-large">` + per[5]  + `</span><br>
-              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
           </div>
@@ -267,6 +269,49 @@ function doubleCheckSignOut(el) {
         return;
     }
     safeRedirect(el.getAttribute('href'));
+}
+function timeSince_formatted(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = seconds / 31536000;
+    let color = 'var(--all-good-green)';
+    let timeStr = Math.floor(seconds) + " seconds";
+    let found = false;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " years";
+        color = 'var(--warning-red)';
+    }
+    interval = seconds / 2592000;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " months";
+        color = 'var(--warning-red)';
+    }
+    interval = seconds / 86400;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " days";
+        if (interval > 10.0) {
+            color = 'var(--warning-red)';
+        } else if (interval < 4.0) {
+            color = 'var(--all-good-green)';
+        } else {
+            color = 'var(--warning-orange)';
+        }
+    }
+    interval = seconds / 3600;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " hours";
+        color = 'var(--all-good-green)';
+    }
+    interval = seconds / 60;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " minutes";
+        color = 'var(--all-good-green)';
+    }
+    return '<a style="color:' + color + '">🛈 ' + timeStr + '</a>';
 }
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page

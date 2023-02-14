@@ -1,26 +1,56 @@
-.w3-area-blue {
-    background-color: #1e3b6e;
+:root {
+    --mainColor: #54357f;
+    --white: white;
+    --red: rgb(158,0,0);
+    --warning-red: #d42121;
+    --warning-orange: #d87300;
+    --all-good-green: #058d00;
+    --light-blue: #462c6a;
+    --dul-accent: #bca7da;
+    --email-color: #ff6a6a;
+    --sms-color: #2196F3;
+    --call-color: #4CAF50;
+}
+.w3-email-color {
+    color: var(--white);
+    background-color: var(--email-color) !important;
+}
+.w3-text-email-color {
+    color: var(--email-color) !important;
+}
+.w3-sms-color {
+    color: var(--white);
+    background-color: var(--sms-color) !important;
+}
+.w3-text-sms-color {
+    color: var(--sms-color) !important;
+}
+.w3-call-color {
+    color: var(--white);
+    background-color: var(--call-color) !important;
+}
+.w3-text-call-color {
+    color: var(--call-color) !important;
+}
+.w3-blue {
+    background-color: var(--light-blue) !important;
+}
+.w3-red {
+    background-color: var(--red) !important;
+}
+.w3-text-red {
+    color: var(--red) !important;
 }
 
 .w3-dot {
     background-color: #ffa514;
 }
 
-.w3-ellipsis {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+.w3-area-blue {
+    background-color: var(--mainColor);
 }
-
 .w3-text-area-blue {
-    color: #1e3b6e;
-}
-.w3-light-red {
-    color: white;
-    background-color: #ff6a6a;
-}
-.w3-text-light-red {
-    color: #ff6a6a;
+    color: var(--mainColor);
 }
 
 .w3-notification-dot {
@@ -33,7 +63,7 @@
 }
 
 .w3-sync-claim {
-    background-color: #09687d;
+    background-color: var(--dul-accent);
 }
 
 html, body {

@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
+    <style>
+#totReferralsBar, #oldReferralBar {
+  background: linear-gradient(90deg, rgb(94 215 74) 50%, rgba(158,0,0,1) 100%);
+  background-size: 80vw;
+  background-repeat: no-repeat;
+  background-color: rgba(158,0,0,1);
+}
+    </style>
   </head>
   <body>
     <!-- Top Bar -->
@@ -25,7 +33,7 @@
         <tr>
           <td style="width: 80%; padding-left: 10px;">
             <div class="w3-light-gray w3-round-medium">
-              <div id="totReferralsBar" class="w3-red w3-round-medium" style="height: 24px; width: 0;"></div>
+              <div id="totReferralsBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
             </div>
           </td>
           <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
@@ -39,7 +47,7 @@
         <tr>
           <td style="width: 80%; padding-left: 10px;">
             <div class="w3-light-gray w3-round-medium">
-              <div id="oldReferralBar" class="w3-red w3-round-medium" style="height: 24px; width: 0;"></div>
+              <div id="oldReferralBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
             </div>
           </td>
           <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
@@ -111,8 +119,8 @@
     <div class="w3-center w3-xlarge" style="margin-top: 15px;">Usefull Links</div>
     <ul class="w3-large">
       <li><a class="uline" target="_blank" href="https://forms.gle/UH2vA9VrdA2jswpZ9">Book of Mormon Delivery Form</a></li>
-      <li><a class="uline" href="#">FAQs for This App</a></li>
-      <li><a class="uline" href="#">FAQs for Business Suite</a></li>
+      <li><a class="uline" href="coming_soon.html">FAQs for This App</a></li>
+      <li><a class="uline" href="coming_soon.html">FAQs for Business Suite</a></li>
     </ul>
 
     <!-- Sign Out Button -->
@@ -180,7 +188,7 @@ totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 1
 totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
 
 if (currentRefCount >= maxRefsAllowed) {
-  totReferrals.style.color = "red";
+  totReferrals.classList.add('w3-text-red');
 }
 
 let maxRefAge = 10;
@@ -195,7 +203,7 @@ oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%
 agebyday.innerHTML = dayDifference + '/' + maxRefAge;
 
 if (dayDifference >= maxRefAge) {
-  agebyday.style.color = "red";
+  agebyday.classList.add('w3-text-red');
 }
     </script>
     
