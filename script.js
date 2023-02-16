@@ -90,6 +90,21 @@ async function SYNC(print=true, justRead=false) {
     //save to cookie
     setCookieJSON('dataSync', syncRes);
 
+    //also get area email
+    let areaEmail = getCookie('areaUserEmail') || null;
+    if (areaEmail == null) {
+        await safeFetch('login.html').then(res => res.text()).then(txt => {
+            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+            for (const match of matches) {
+                if (match[4] == area) {
+                    areaEmail = match[2];
+                    break;
+                }
+            }
+        });
+    }
+    setCookie('areaUserEmail', areaEmail);
+
     //take away overlay
     if (print) {
         _('loadingcover').style.display = 'none';
@@ -152,8 +167,21 @@ function fillInContactInfo() {
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
+    let areaEmail = getCookie('areaUserEmail') || null;
+    if (areaEmail == null) {
+        await safeFetch('login.html').then(res => res.text()).then(txt => {
+            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+            for (const match of matches) {
+                if (match[4] == area) {
+                    areaEmail = match[2];
+                    break;
+                }
+            }
+        });
+    }
     const person = getCookieJSON('linkPages') || null;
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.1947536680=';
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;

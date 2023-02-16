@@ -20,35 +20,43 @@
 
     <!-- Login Buttons -->
     <div id="arealoginbuttons">
-        <button onclick="signInAsArea(this)">Sundsvall</button>
-        <button onclick="signInAsArea(this)">Kristianstad</button>
-        <button onclick="signInAsArea(this)">Eskilstuna</button>
-        <button onclick="signInAsArea(this)">Trollhättan</button>
-        <button onclick="signInAsArea(this)">Kungsbacka</button>
-        <button onclick="signInAsArea(this)">Örnsköldsvik</button>
-        <button onclick="signInAsArea(this)">Skellefteå</button>
-        <button onclick="signInAsArea(this)">SMOEs</button>
+      <button email="161469655@missionary.org">Sundsvall</button>
+      <button email="49896900@missionary.org">Kristianstad</button>
+      <button email="8868609@missionary.org">Eskilstuna</button>
+      <button email="8868627@missionary.org">Trollhättan</button>
+      <button email="500365898@missionary.org">Kungsbacka</button>
+      <button email="8868624@missionary.org">Örnsköldsvik</button>
+      <button email="8868621@missionary.org">Skellefteå</button>
+      <button email="141877743@missionary.org">SMOEs</button>
     </div>
     <script>
 setCookie('dataSync', null);
 setCookie('areaUser', '');
+setCookie('areaUserEmail', '');
 function signInAsArea(el) {
-    setCookie('areaUser', el.innerHTML);
-    safeRedirect('force-sync.html');
+  setCookie('areaUserEmail', el.getAttribute('email'));
+  setCookie('areaUser', el.innerHTML);
+  safeRedirect('force-sync.html');
 }
 function safeRedirect(ref) {
-    if (!inIframe()) {
-        window.location.href = ref;
-        return;
-    }
-    window.parent.postMessage(JSON.stringify({
-        type: 'redirect',
-        data: ref,
-    }), '*');
+  if (!inIframe()) {
+    window.location.href = ref;
+    return;
+  }
+  window.parent.postMessage(JSON.stringify({
+    type: 'redirect',
+    data: ref,
+  }), '*');
 }
 function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
 function setCookie(cname, cvalue) {
-    localStorage.setItem(cname, cvalue);
+  localStorage.setItem(cname, cvalue);
+}
+// set onclick values
+const arealoginbuttons = document.getElementById('arealoginbuttons');
+for (let i = 0; i < arealoginbuttons.children.length; i++) {
+  const btn = arealoginbuttons.children[i];
+  btn.setAttribute('onclick','signInAsArea(this)');
 }
     </script>
   </body>
