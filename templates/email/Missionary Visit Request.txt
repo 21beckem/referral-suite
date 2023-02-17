@@ -20,7 +20,7 @@ Vandra i tro
 
 Hej {Name}!
 
-Tack så mycket för att du svarade en av våra tjänster på vår webbsida. Vi ser att du efterfrågade att träffa några våra missionärer. Vi har några missionärer i {Area} som kan prata med dig om dina frågor. Finns det en tid som funkar bäst för dig då de kan komma förbi? Om hembesök inte funkar kan de träffa dig för en fika och prata med dig då också.
+Tack så mycket för att du svarade en av våra tjänster på vår webbsida. Vi ser att du efterfrågade att träffa några våra missionärer. Vi har försökt att kontakta dig på din mobil som du gav oss {insert their number}. Vi har några missionärer i {Area} som kan prata med dig om dina frågor. Finns det en tid som funkar bäst för dig då de kan komma förbi? Om hembesök inte funkar kan de träffa dig för en fika och prata med dig då också.
 
 Mvh
 
