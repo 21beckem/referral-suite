@@ -18,6 +18,21 @@ Underbart! Tack så mycket! Som en del av den här beställningen berättar vår
 
 
 
+Hej {Name}! Jag jobbar med Vandra i tro och ser att du svarade en av våra tjänster på vår webbsida. Tack så mycket! Vi ser att du efterfrågade en gratis Mormons bok. Vi har några representanter i {Area} som kan lära dig hur de har kommit närmare Jesus Kristus genom Mormons bok. Finns det en tid de kan komma för att ge dig boken och lära dig lite mer om den?
+
+
+
+Hej <Name>! Jag jobbar med Vandra i tro och ser att du svarade en av våra tjänster på vår webbsida. Tack så mycket för att du är intresserad av en Mormons bok: ännu ett Jesu Kristi testamente. Vi kommer att skicka den genom posten så fort som möjligt. Kan du bekräfta att det här är din adress?
+
+{Insert address}
+
+
+
+{Follow up to previous message}
+Underbart! Tack så mycket! Som en del av den här beställningen berättar våra representanter om Mormons bok och hur de har hittat hopp och frid tack vare Mormons bok. Vi har några representanter i {Area} som har ansvar för området där du bor. När kan de kontakta dig för att berätta om detta?
+
+
+
 Hej {Name}! Tack så mycket för att du svarade vår annons förra vecka. Det finns många som beställer Mormons böcker och vi vill gärna dela med oss av det budskapet som vi har om hur Jesus Kristi kyrka har återställts och finns på jorden idag och att vi har en levande profet som vägleds av Gud. Om du är fortfarande intresserad kan du svara detta meddelande eller komma på vår gudstjänst som är söndagar kl {insert time} på denna adress {insert your church address}.
 
 Hoppas allt går bra med dig i framtiden!
