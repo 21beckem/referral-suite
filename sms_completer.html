@@ -66,17 +66,7 @@ input[type="text"] {
 	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_parent"></a>
 
     <script>
-function _(x) { return document.getElementById(x); }
-
-const templateMssg = `Hej {Name}!
-
-This is your area: {Area}
-
-Tack så mycket för att du svarade vår annons om en gratis Mormons bok: Ännu ett Jesu Kristi testamente! Vi har försökt att kontakta dig för att bekräfta din adress! Är det här din adress? {insert address}
-
-Mvh
-
-Vandra i tro`;
+const templateMssg = (getCookie('completeThisMessage'));
 
 const ThingsToComplete = templateMssg.match(/{[^}]*}/gm);
 const MessageOutput = _('MessageOutput');
@@ -113,7 +103,7 @@ function updateField(el) {
 
 function sendTheMessage() {
 	const person = getCookieJSON('linkPages') || null;
-    const emailLink = 'sms:' + encodeURI(String(person[8])) + '?body=' + encodeURI(MessageOutput.innerText);
+  const emailLink = 'sms:' + encodeURI(String(person[8])) + '?body=' + encodeURI(MessageOutput.innerText);
 	_('fakeLinkToClickToSend').href = emailLink;
 	let listOfIns = _('completerItemsParent').querySelectorAll('INPUT');
 	let send = true;
@@ -128,27 +118,6 @@ function sendTheMessage() {
 		alert('Please fill out the required info 🙃');
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
 
     <!-- Bottom Nav Bar -->

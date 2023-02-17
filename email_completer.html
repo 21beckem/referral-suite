@@ -65,17 +65,7 @@ input[type="text"] {
 	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_blank"></a>
 
     <script>
-function _(x) { return document.getElementById(x); }
-
-const templateMssg = `Hej {Name}!
-
-This is your area: {Area}
-
-Tack så mycket för att du svarade vår annons om en gratis Mormons bok: Ännu ett Jesu Kristi testamente! Vi har försökt att kontakta dig för att bekräfta din adress! Är det här din adress? {insert address}
-
-Mvh
-
-Vandra i tro`;
+const templateMssg = (getCookie('completeThisMessage'));
 
 const ThingsToComplete = templateMssg.match(/{[^}]*}/gm);
 const MessageOutput = _('MessageOutput');
