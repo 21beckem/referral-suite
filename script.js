@@ -78,7 +78,7 @@ async function SYNC(print=true, justRead=false) {
     if (print) {
         _('loadingcover').style.display = '';
     }
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbzHGg8hNcvm0KvQ1lBxse4IZ2Xnb5iIq5FfBRddixxIwBQzEgeySuUwxHxp_7KIPQWm/exec' + '?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbwL6HgeEc4EGhEE-bj__ZKxoE9huVx_VPlQT2Ecj53TZ9oDE1koE9-FKc4DEJuftkAc/exec' + '?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
@@ -89,6 +89,21 @@ async function SYNC(print=true, justRead=false) {
 
     //save to cookie
     setCookieJSON('dataSync', syncRes);
+
+    //also get area email
+    let areaEmail = getCookie('areaUserEmail') || null;
+    if (areaEmail == null) {
+        await safeFetch('login.html').then(res => res.text()).then(txt => {
+            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+            for (const match of matches) {
+                if (match[4] == area) {
+                    areaEmail = match[2];
+                    break;
+                }
+            }
+        });
+    }
+    setCookie('areaUserEmail', areaEmail);
 
     //take away overlay
     if (print) {
@@ -101,6 +116,7 @@ function makeListUNclaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[1]));
         output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -108,7 +124,7 @@ function makeListUNclaimedPeople() {
             </div>
             <div class="w3-bar-item">
               <span class="w3-large">` + per[2]  + `</span><br>
-              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
           </div>
@@ -120,6 +136,7 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[1]));
         output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -127,7 +144,7 @@ function makeListClaimedPeople(arr) {
             </div>
             <div class="w3-bar-item">
               <span class="w3-large">` + per[5]  + `</span><br>
-              <span>` + new Date(per[1]).toLocaleString() + `</span><br>
+              <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
           </div>
@@ -150,8 +167,21 @@ function fillInContactInfo() {
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
+    let areaEmail = getCookie('areaUserEmail') || null;
+    if (areaEmail == null) {
+        await safeFetch('login.html').then(res => res.text()).then(txt => {
+            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+            for (const match of matches) {
+                if (match[4] == area) {
+                    areaEmail = match[2];
+                    break;
+                }
+            }
+        });
+    }
     const person = getCookieJSON('linkPages') || null;
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.1947536680=';
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;
@@ -200,6 +230,7 @@ function sendToAnotherArea() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
+            data.changed_people = Array();
             data.changed_people.push(person);
             setCookieJSON('dataSync', data);
             break;
@@ -232,6 +263,7 @@ function deceasePerson() {
         const oldPer = data.area_specific_data.my_referrals[i];
         if (oldPer[1] == person[1]) {
             found = true;
+            data.changed_people = Array();
             data.changed_people.push(person);;
             setCookieJSON('dataSync', data);
             break;
@@ -265,6 +297,49 @@ function doubleCheckSignOut(el) {
         return;
     }
     safeRedirect(el.getAttribute('href'));
+}
+function timeSince_formatted(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = seconds / 31536000;
+    let color = 'var(--all-good-green)';
+    let timeStr = Math.floor(seconds) + " seconds";
+    let found = false;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " years";
+        color = 'var(--warning-red)';
+    }
+    interval = seconds / 2592000;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " months";
+        color = 'var(--warning-red)';
+    }
+    interval = seconds / 86400;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " days";
+        if (interval > 10.0) {
+            color = 'var(--warning-red)';
+        } else if (interval < 4.0) {
+            color = 'var(--all-good-green)';
+        } else {
+            color = 'var(--warning-orange)';
+        }
+    }
+    interval = seconds / 3600;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " hours";
+        color = 'var(--all-good-green)';
+    }
+    interval = seconds / 60;
+    if (interval > 1 && !found) {
+        found = true;
+        timeStr = Math.floor(interval) + " minutes";
+        color = 'var(--all-good-green)';
+    }
+    return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
