@@ -143,9 +143,8 @@ function SETPeopleData(peopleList) {
       const pos1 = persRow[ki-1];
       const c1 = pos1 == thisPerson[k];
       const c2 = pos1 == null;
-      const c3 = pos1 == "";
-      const shouldChange = !c1;
-      if ( shouldChange ) {
+      const c3 = ki == "";
+      if ( !c1 && !c3 ) {
         // set new data
         //return [k, persRow[ki-1], thisPerson[k], thisPerson];
         sheet.getRange(persRowNum, ki).setValue(thisPerson[k]);
