@@ -1,4 +1,5 @@
 const current_page = document.currentScript.getAttribute('current-page');
+const person = getCookieJSON('linkPages') || null;
 
 const templateMssg = (getCookie('completeThisMessage'));
 
@@ -36,7 +37,6 @@ function updateField(el) {
 }
 
 function sendTheMessage() {
-	const person = getCookieJSON('linkPages') || null;
 	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[8])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
 	const sendLink = link_beginning + encodeURI(MessageOutput.innerText);
 	_('fakeLinkToClickToSend').href = sendLink;
