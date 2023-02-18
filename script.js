@@ -1,4 +1,7 @@
 function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
+HTMLCollection.prototype.forEach = function(x) {
+    return Array.from(this).forEach(x);
+}
 function verifySentInSMOEsAB(el) {
     const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
     if (yesno) {
