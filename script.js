@@ -117,7 +117,7 @@ function makeListUNclaimedPeople() {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
+        output += `<asdf onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
@@ -128,7 +128,7 @@ function makeListUNclaimedPeople() {
               <span>` + per[0] + `</span>
             </div>
           </div>
-        </aa>`;
+        </asdf>`;
     }
     _('unclaimedlist').innerHTML = output;
 }
@@ -137,7 +137,7 @@ function makeListClaimedPeople(arr) {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
+        output += `<asdf onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
@@ -148,7 +148,7 @@ function makeListClaimedPeople(arr) {
               <span>` + per[0] + `</span>
             </div>
           </div>
-        </aa>`;
+        </asdf>`;
     }
     _('yourreferrals').innerHTML = output;
 }
