@@ -1,5 +1,6 @@
 :root {
     --mainColor: #54357f;
+    --black: black;
     --white: white;
     --red: rgb(158,0,0);
     --warning-red: #d42121;
@@ -10,6 +11,11 @@
     --email-color: #ff6a6a;
     --sms-color: #2196F3;
     --call-color: #4CAF50;
+    --light-grey: #f1f1f1;
+}
+#BottomNavBar {
+    padding-top: 7px;
+    padding-bottom: 16px;
 }
 .w3-email-color {
     color: var(--white);
@@ -89,6 +95,10 @@ a.uline {
 .w3-gray-opacity {
     background-color:rgb(79, 77, 77);opacity:0.6;
 }
+.w3-white {
+    color: var(--black) !important;
+    background-color: var(--white) !important;
+}
 
 .w3-center-absolute {
     position: fixed;
@@ -132,6 +142,35 @@ tr.spaceUnder>td {
     }
     100% {
       transform: rotate(360deg);
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --light-grey: #5f5f5f;
+        --white: rgb(24, 24, 24);
+        --black: white;
+    }
+    body {
+        background-color: rgb(24, 24, 24);
+    }
+    .w3-light-gray {
+        background-color: #4d4d4d !important;
+        color: #e3e3e3 !important;
+    }
+    .w3-text-dark-gray {
+        color: #f5f5f5 !important;
+    }
+    a.uline {
+        color: #0097ee;
+    }
+    .w3-text-area-blue {
+        color: #b989fd;
+    }
+    .w3-sync-claim {
+        background-color: #664b8d;
     }
 }
 

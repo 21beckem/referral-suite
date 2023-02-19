@@ -24,7 +24,13 @@
     background-color: rgb(111, 221, 255);
     padding: 10px 15px;
     border-radius: 20px;
-	white-space: pre-line;
+	  white-space: pre-line;
+    color: var(--black);
+}
+@media (prefers-color-scheme: dark) {
+  .googleMessage {
+    background-color: rgb(23 158 199);
+  }
 }
 .useThisTemplateBtn {
     padding: 5px 20px;
@@ -68,7 +74,7 @@
 
     <!-- Bottom Nav Bar -->
     <div style="height: 80px;"></div>
-    <div class="w3-bottom w3-cell-row w3-light-gray w3-padding-16">
+    <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
 
       <div class="w3-container w3-cell w3-center w3-xlarge">
         <a href="index.html">
