@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SMS Templates</title>
+        <title>Complete Email</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="styles.css">
@@ -16,24 +16,32 @@
     border-radius: 3px;
 }
 #messageExamples {
-	width: 100%;
-	padding: 0px 10px;
+    width: 100%;
+    padding: 0px 10px;
 }
 .googleMessage {
     width: 100%;
-    background-color: rgb(111, 221, 255);
+    background-color: white;
     padding: 10px 15px;
-    border-radius: 20px;
-	white-space: pre-line;
+    /* border-radius: 20px; */
 }
 .useThisTemplateBtn {
     padding: 5px 20px;
     border-radius: 3px;
     margin-top: 10px;
     border: 0;
-    background-color: var(--sms-color);
+    background-color: var(--email-color);
     color: white;
     width: max-content;
+}
+input[type="text"] {
+  width: 100%;
+}
+.ljus {
+	background-color: #ccf0ff;
+}
+.ljus.selected {
+	background-color: #dfc9ff;
 }
     </style>
   </head>
@@ -42,32 +50,24 @@
     <div class="w3-top">
         <div class="w3-cell-row w3-area-blue">
             <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-                <a>Create SMS</a>
+                <a>Complete Email</a>
             </div>
         </div>
-        <!-- Search bar -->
-        <div class="w3-container w3-white w3-padding w3-card-subtle">
-            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-sms-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
-            <hr style="margin: 10px;">
-            <select id="selectRefType" onchange="fillMessageExamples(this.value, 'sms', messageExamples)">
-                <option>MB Request</option>
-                <option>Missionary Visit Request</option>
-                <option>Vägen Till Hopp och Frid</option>
-                <option>Special Item Request</option>
-            </select>
-        </div>
     </div>
-    <div style="height: 180px;"></div>
-    
-    <div id="messageExamples">
-		<div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-			<div class="lds-dual-ring"></div>
-		</div>
+	<div style="height: 70px;"></div>
+	<!-- Search bar -->
+	<div id="completerItemsParent" class="w3-container w3-white w3-padding w3-card-subtle">
+	</div>
+    <div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16">
+		<div id="MessageOutput" class="googleMessage"></div>
+		<button onclick="sendTheMessage()" class="useThisTemplateBtn">Send</button>
     </div>
+	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_blank"></a>
 
+  <script src="message_completer.js" current-page="email"></script>
 
     <!-- Bottom Nav Bar -->
-    <div style="height: 80px;"></div>
+    <div style="height: 60px;"></div>
     <div class="w3-bottom w3-cell-row w3-light-gray w3-padding-16">
 
       <div class="w3-container w3-cell w3-center w3-xlarge">
@@ -109,12 +109,6 @@
       </div>
 
     </div>
-	<script>
-const messageExamples = _('messageExamples');
-const selectRefType = _('selectRefType');
-
-fillMessageExamples(selectRefType.value, 'sms', messageExamples);	
-	</script>
 
   </body>
 </html>

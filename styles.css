@@ -72,6 +72,10 @@ html, body {
     height: 100%;
 }
 
+.person-to-click * {
+    pointer-events: none;
+}
+
 a:not(.uline) {
     text-decoration: none;
 }

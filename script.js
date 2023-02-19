@@ -1,4 +1,7 @@
 function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
+HTMLCollection.prototype.forEach = function(x) {
+    return Array.from(this).forEach(x);
+}
 function verifySentInSMOEsAB(el) {
     const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
     if (yesno) {
@@ -78,7 +81,7 @@ async function SYNC(print=true, justRead=false) {
     if (print) {
         _('loadingcover').style.display = '';
     }
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbwL6HgeEc4EGhEE-bj__ZKxoE9huVx_VPlQT2Ecj53TZ9oDE1koE9-FKc4DEJuftkAc/exec' + '?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbxLve0_szDAhJl4vFwDTNwHNaDpSFuEn0QFy-NR9uX9Z-HjTeL60N0o1jVaTCre8DQ/exec' + '?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
@@ -117,7 +120,7 @@ function makeListUNclaimedPeople() {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html">
+        output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
@@ -137,7 +140,7 @@ function makeListClaimedPeople(arr) {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html">
+        output += `<aa onclick="saveBeforeInfoPage(data.area_specific_data.my_referrals[` + i + `], this)" href="contact_info.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
@@ -195,10 +198,18 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 	//console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
-        const this_url = link_beginning + encodeURI(Messages[i]);
-		output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '" target="' + _destination + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>';
+        if (Messages[i].match(/{[^}]*}/gm) == null) {
+            const this_url = link_beginning + encodeURI(Messages[i]);
+            output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
+        } else {
+            output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
+        }
 	}
 	pasteBox.innerHTML = output;
+}
+function sendToCompletionPage(smsOrEmail, el) {
+    setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
+    safeRedirect(smsOrEmail + '_completer.html');
 }
 function syncPageFillIn() {
     let syncDate = new Date(data.area_specific_data.last_sync);
