@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://21beckem.github.io/SheetMap/sheetmap.css">
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
+    <title>speadsheetAPI1</title>
+</head>
+<body>
+    <div id="myDIV"><div>
+    <script>
+
+const TablePreferences = {
+    url : 'https://script.google.com/macros/s/AKfycbwuavvfPOAIsCXQmcwivpk0TmT_ItuC2szPw_9ARDLKc9M4JLTlvHePQi8XWB0sz6wf/exec',
+    reference_col : 0
+};
+
+const ss = new SheetMap(TablePreferences);
+ss.fetch('Schedule', 'A1:N67', 'myDIV');
+
+    </script>
+</body>
+</html>
