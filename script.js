@@ -163,11 +163,24 @@ function fillInContactInfo() {
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
     _('referraltype').innerHTML = person[0];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[13]);
     _('phonenumber').innerHTML = person[8];
     _('email').innerHTML = person[9];
     let addStr = person[10] + ' ' + person[11] + ' ' + person[12];
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
+}
+function prettyPrintRefOrigin(x) {
+    switch (x.toLowerCase()) {
+        case 'fb':
+            return 'Facebook';
+        case 'web':
+            return 'VandraITro.se';
+        case 'ig':
+            return 'Instagram';
+        default:
+            return x;
+    }
 }
 async function fillMessageExamples(requestType, folderName, pasteBox) {
     let areaEmail = getCookie('areaUserEmail') || null;
@@ -200,9 +213,9 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 	for (let i = 0; i < Messages.length; i++) {
         if (Messages[i].match(/{[^}]*}/gm) == null) {
             const this_url = link_beginning + encodeURI(Messages[i]);
-            output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
+            output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
         } else {
-            output += '<div class="w3-panel w3-card-subtle w3-light-grey w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
+            output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
         }
 	}
 	pasteBox.innerHTML = output;
