@@ -27,9 +27,9 @@ ____
 ```
 3. Inside of this there's a list of areas. Each area is listed like this:
 ```html
-<button onclick="signInAsArea(this)">Sundsvall</button>
+<button email="161469655@missionary.org">Sundsvall</button>
 ```
-* To add an area, copy the code above and paste it in with the list of areas
+* To add an area, copy the code above and paste it in with the list of areas. Make sure to add the new areas area email as well
 * OR To remove an area, find the codeblock for that area and remove it
 
 * Link to video tutorial [here](link)
@@ -78,6 +78,13 @@ ____
 4|
 5| Hur är det med dig?
 ```
+<br>
 
+If you want to add some specific information to the template that you want the team to include when they send a message or email, wrap it in curly brakcets (Ctrl + Alt + 7 or 0). For instance:
+
+```txt
+1| Hejsan {Name}! Jag såg att du frågade efter en gratis Mormons bok
+```
+Now the team will be forced to include a name before Referral Suite opens the messaging app.
 
 * Link to video tutorial [here](link)
