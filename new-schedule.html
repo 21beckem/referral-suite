@@ -7,18 +7,54 @@
     <link rel="stylesheet" href="https://21beckem.github.io/SheetMap/sheetmap.css">
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <title>speadsheetAPI1</title>
+    <style>
+.slider {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; 
+}
+.slide {
+    width: 300px;
+    flex-shrink: 0;
+    height: 100%;
+}
+.slides > div {
+    scroll-snap-align: start;
+}
+    </style>
 </head>
 <body>
+    <div class="slider">
+        <div class="slide" id="slide-1">1</div>
+        <div class="slide" id="slide-2">2</div>
+        <div class="slide" id="slide-3">3</div>
+        <div class="slide" id="slide-4">4</div>
+        <div class="slide" id="slide-5">5</div> 
+    </div>
     <div id="myDIV"><div>
+
+
+
+
+
     <script>
 
 const TablePreferences = {
-    url : 'https://script.google.com/macros/s/AKfycbwuavvfPOAIsCXQmcwivpk0TmT_ItuC2szPw_9ARDLKc9M4JLTlvHePQi8XWB0sz6wf/exec',
-    reference_col : 0
+    url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
+    data_validation : 'B8',
+    fetchStyles : true
 };
 
 const ss = new SheetMap(TablePreferences);
-ss.fetch('Schedule', 'A1:N67', 'myDIV');
+async function main() {
+    //await ss.fetch('test SheetMap', 'B1:8');
+    await ss.makeTableHTML('myDIV');
+}
+main();
 
     </script>
 </body>
