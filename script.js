@@ -93,6 +93,16 @@ async function SYNC(print=true, justRead=false) {
     //save to cookie
     setCookieJSON('dataSync', syncRes);
 
+
+    // sync schedule changes then get updated stuff:
+    const ss = new SheetMap({
+        url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
+        data_validation : 'E8',
+        fetchStyles : true
+    });
+    await SheetMap.syncChanges();
+    await ss.fetch('Schedule', 'C1:8');
+
     //also get area email
     let areaEmail = getCookie('areaUserEmail') || null;
     if (areaEmail == null) {

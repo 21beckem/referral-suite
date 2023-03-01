@@ -1,60 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
     <link rel="stylesheet" href="https://21beckem.github.io/SheetMap/sheetmap.css">
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
-    <title>speadsheetAPI1</title>
-    <style>
-.slider {
-    width: 300px;
-    height: 300px;
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory; 
-}
-.slide {
-    width: 300px;
-    flex-shrink: 0;
-    height: 100%;
-}
-.slides > div {
-    scroll-snap-align: start;
-}
-    </style>
-</head>
-<body>
-    <div class="slider">
-        <div class="slide" id="slide-1">1</div>
-        <div class="slide" id="slide-2">2</div>
-        <div class="slide" id="slide-3">3</div>
-        <div class="slide" id="slide-4">4</div>
-        <div class="slide" id="slide-5">5</div> 
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <div class="w3-top w3-cell-row w3-area-blue" style="z-index: 99999999;">
+      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+        <a>Schedule</a>
+      </div>
     </div>
-    <div id="myDIV"><div>
-
-
-
-
-
+    <div style="height: 68px;"></div>
+    
+    <div id="scheduleParent" style="height: calc(100% - 126px);">
+        <div id="timesContainer"></div>
+    </div>
     <script>
 
 const TablePreferences = {
     url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
-    data_validation : 'B8',
+    data_validation : 'E8',
     fetchStyles : true
 };
 
-const ss = new SheetMap(TablePreferences);
+function scrollToToday(data, win, numberOfHiddenCols) {
+    let niceDate = ["January","February","March","April","May","June","July","August","September","October","November","December"][new Date().getMonth()] + ' ' + String(new Date().getDate());
+    let iOfToday = data[0].indexOf(niceDate) - numberOfHiddenCols;
+    win.scrollTo(win.offsetWidth*iOfToday, 0);
+}
+
 async function main() {
-    //await ss.fetch('test SheetMap', 'B1:8');
-    await ss.makeTableHTML('myDIV');
+    //const ss = new SheetMap(TablePreferences);
+    //await ss.fetch('Schedule', 'C1:8');
+    //SheetMap.makeTableHTML('myDIV');
+    SheetMap.load();
+    const colsToHide = [0,1];
+    _('scheduleParent').innerHTML += SheetMap.makeColDivsHTML(hideC=colsToHide);
+    let timesContainer = _('timesContainer');
+    timesContainer.innerHTML += '<div></div>';
+    for (let i = 1; i < SheetMap.vars.tableDataNOW.length; i++) {
+        timesContainer.innerHTML += '<div>' + SheetMap.vars.tableDataNOW[i][0] + '-' + SheetMap.vars.tableDataNOW[i][1] + '</div>';
+    }
+    scrollToToday(SheetMap.vars.tableDataNOW, _('SheetMapColDivs'), colsToHide.length);
 }
 main();
+// to reset saved data:  localStorage.removeItem('SheetMap_vars');
+
+    </script>
+    <!-- Bottom Nav Bar -->
+    <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
+
+      <div class="w3-container w3-cell w3-center w3-xlarge"><!--https://docs.google.com/spreadsheets/d/e/2PACX-1vTUkS0l6kk5SHJsTC-8HAAjebjs1TdWk-WTLXjREGZeEoWW6gAr4Q7SQgZhHm2fkN3Ji2C2soC4RKOJ/pubhtml?gid=1098063128&single=true&widget=false&chrome=false-->
+        <a href="index.html">
+          <i class="fa fa-home"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
+        <a href="schedule.html">
+          <i class="fa fa-calendar-o"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="contact_book.html">
+          <i class="fa fa-address-book"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="unclaimed_referrals.html">
+          <i class="fa fa-bell"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
+        </a>
+        <div style="height: 0; width: 100%;">
+          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="sync.html">
+          <i class="fa fa-refresh"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Sync</div>
+        </a>
+      </div>
+
+    </div>
+
+  </body>
+</html>
+
+
+<!--
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sheetmap.css">
+    <script src="sheetmap.js"></script>
+    <title>speadsheetAPI1</title>
+</head>
+<body>
+    <div id="scheduleParent">
+        <div id="timesContainer"></div>
+    </div>
+    <script>
+
+function _(x) { return document.getElementById(x); }
+
+const TablePreferences = {
+    url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
+    data_validation : 'E8',
+    fetchStyles : true
+};
+
+function scrollToToday(data, win, numberOfHiddenCols) {
+    let niceDate = ["January","February","March","April","May","June","July","August","September","October","November","December"][new Date().getMonth()] + ' ' + String(new Date().getDate());
+    console.log(niceDate);
+    let iOfToday = data[0].indexOf(niceDate) - numberOfHiddenCols;
+    console.log(iOfToday);
+    win.scrollTo(win.offsetWidth*iOfToday, 0);
+}
+
+async function main() {
+    //const ss = new SheetMap(TablePreferences);
+    //await ss.fetch('Schedule', 'C1:8');
+    //SheetMap.makeTableHTML('myDIV');
+    SheetMap.load();
+    const colsToHide = [0,1];
+    _('scheduleParent').innerHTML += SheetMap.makeColDivsHTML(hideC=colsToHide);
+    let timesContainer = _('timesContainer');
+    timesContainer.innerHTML += '<div></div>';
+    for (let i = 1; i < SheetMap.vars.tableDataNOW.length; i++) {
+        timesContainer.innerHTML += '<div>' + SheetMap.vars.tableDataNOW[i][0] + '-' + SheetMap.vars.tableDataNOW[i][1] + '</div>';
+    }
+    scrollToToday(SheetMap.vars.tableDataNOW, _('SheetMapColDivs'), colsToHide.length);
+}
+main();
+
+// to reset saved data:  localStorage.removeItem('SheetMap_vars');
 
     </script>
 </body>
