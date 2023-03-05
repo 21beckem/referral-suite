@@ -150,7 +150,7 @@ function makeListClaimedPeople(arr) {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeInfoPage(arr[` + i + `], this)" href="contact_info.html" class="person-to-click">
+        output += `<aa onclick="saveBeforeInfoPage(` + encodeURI(JSON.stringify(per)) + `, this)" href="contact_info.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
