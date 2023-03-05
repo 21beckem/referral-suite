@@ -191,42 +191,10 @@ tr.spaceUnder>td {
     margin-top: 30px;
 }
 
-#arealoginbuttons button:nth-child(1) {
-    background-color: #ea9999;
+#arealoginbuttons button:nth-child(even) {
+    background-color: #ddd4ff;
 }
 
-#arealoginbuttons button:nth-child(2) {
-    background-color: #f9cb9c;
-}
-
-#arealoginbuttons button:nth-child(3) {
-    background-color: #ffe599;
-}
-
-#arealoginbuttons button:nth-child(4) {
-    background-color: #b6d7a8;
-}
-
-#arealoginbuttons button:nth-child(5) {
-    background-color: #a4c2f4;
-}
-
-#arealoginbuttons button:nth-child(6) {
-    background-color: #b4a7d6;
-}
-
-#arealoginbuttons button:nth-child(7) {
-    background-color: #d5a6bd;
-}
-
-#arealoginbuttons button:nth-child(8) {
-    background-color: #c5ff8a;
-}
-
-#arealoginbuttons button:nth-child(9) {
-    background-color: #a2c4c9;
-}
-
-#arealoginbuttons div:nth-child(10) button {
-    background-color: #ff42ec;
+#arealoginbuttons button:nth-child(odd) {
+    background-color: #f4c7ff;
 }
