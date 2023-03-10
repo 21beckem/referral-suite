@@ -22,4 +22,4 @@ Hej {Name}! Jag jobbar med Vandra i tro och ser att du svarade en av våra webbt
 
 
 
-Hej {Name}! Tack så mycket för att du svarade vår annons förra veckan. Det finns många som beställer Mormons böcker och vi vill gärna dela med oss av det budskapet som vi har om hur Jesus Kristi kyrka har återställts och finns på jorden idag och att vi har en levande profet som vägleds av Gud. Om du fortfarande är intresserad kan du svara detta meddelande eller komma på vår gudstjänst, söndagar kl {insert time}, på denna adress {insert your church address}. Tack så mycket!
+Hej {Name}! Tack så mycket för att du svarade vår annons förra veckan. Det finns många som beställer Mormons böcker och vi vill gärna dela med oss av det budskapet som vi har om hur Jesus Kristi kyrka har återställts och finns på jorden idag och att vi har en levande profet som vägleds av Gud. Om du fortfarande är intresserad kan du svara detta meddelande eller komma på vår gudstjänst, söndagar kl {insert time}, på denna adress {insert areas church address}. Tack så mycket!
