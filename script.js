@@ -74,13 +74,27 @@ if (area == null) {
 }
 
 
-async function SYNC(print=true, justRead=false) {
+async function SYNC(loadingCover=true) {
     if (area == null) {
         safeRedirect('login.html')
     }
-    if (print) {
+    if (loadingCover) {
         _('loadingcover').style.display = '';
     }
+    let rs_wait = SYNC_referralSuiteStuff();
+    let sm_wait = SYNC_sheetMapStuff();
+    let ar_wait = SYNC_getAreaEmail();
+
+    await rs_wait;
+    await sm_wait;
+    await ar_wait;
+
+    //take away overlay
+    if (loadingCover) {
+        _('loadingcover').style.display = 'none';
+    }
+}
+async function SYNC_referralSuiteStuff() {
     let fetchURL = 'https://script.google.com/macros/s/AKfycbxLve0_szDAhJl4vFwDTNwHNaDpSFuEn0QFy-NR9uX9Z-HjTeL60N0o1jVaTCre8DQ/exec' + '?area=';
     fetchURL += area;
     fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
@@ -92,8 +106,8 @@ async function SYNC(print=true, justRead=false) {
 
     //save to cookie
     setCookieJSON('dataSync', syncRes);
-
-
+}
+async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
     const ss = new SheetMap({
         url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
@@ -102,7 +116,8 @@ async function SYNC(print=true, justRead=false) {
     });
     await SheetMap.syncChanges();
     await ss.fetch('Schedule', 'C1:8');
-
+}
+async function SYNC_getAreaEmail() {
     //also get area email
     let areaEmail = getCookie('areaUserEmail') || null;
     if (areaEmail == null) {
@@ -117,11 +132,6 @@ async function SYNC(print=true, justRead=false) {
         });
     }
     setCookie('areaUserEmail', areaEmail);
-
-    //take away overlay
-    if (print) {
-        _('loadingcover').style.display = 'none';
-    }
 }
 
 function makeListUNclaimedPeople() {
