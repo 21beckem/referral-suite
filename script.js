@@ -97,7 +97,7 @@ async function SYNC(loadingCover=true) {
 async function SYNC_referralSuiteStuff() {
     let fetchURL = 'https://script.google.com/macros/s/AKfycbxLve0_szDAhJl4vFwDTNwHNaDpSFuEn0QFy-NR9uX9Z-HjTeL60N0o1jVaTCre8DQ/exec' + '?area=';
     fetchURL += area;
-    fetchURL += (data == null || justRead) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
+    fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
