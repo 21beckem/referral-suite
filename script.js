@@ -350,19 +350,19 @@ function timeSince_formatted(date) {
     let found = false;
     if (interval > 1 && !found) {
         found = true;
-        timeStr = Math.floor(interval) + " years";
+        timeStr = Math.round(interval) + " years";
         color = 'var(--warning-red)';
     }
     interval = seconds / 2592000;
     if (interval > 1 && !found) {
         found = true;
-        timeStr = Math.floor(interval) + " months";
+        timeStr = Math.round(interval) + " months";
         color = 'var(--warning-red)';
     }
     interval = seconds / 86400;
     if (interval > 1 && !found) {
         found = true;
-        timeStr = Math.floor(interval) + " days";
+        timeStr = Math.round(interval) + " days";
         if (interval > 10.0) {
             color = 'var(--warning-red)';
         } else if (interval < 4.0) {
@@ -374,13 +374,13 @@ function timeSince_formatted(date) {
     interval = seconds / 3600;
     if (interval > 1 && !found) {
         found = true;
-        timeStr = Math.floor(interval) + " hours";
+        timeStr = Math.round(interval) + " hours";
         color = 'var(--all-good-green)';
     }
     interval = seconds / 60;
     if (interval > 1 && !found) {
         found = true;
-        timeStr = Math.floor(interval) + " minutes";
+        timeStr = Math.round(interval) + " minutes";
         color = 'var(--all-good-green)';
     }
     return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
