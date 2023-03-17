@@ -62,6 +62,10 @@ function saveBeforeClaimPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
+function saveBeforeSUPage(person, el) {
+    setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
+}
 function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 /////  above functions make everything function with basic navigation between pages. No Touch!
@@ -95,7 +99,7 @@ async function SYNC(loadingCover=true) {
     }
 }
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbxLve0_szDAhJl4vFwDTNwHNaDpSFuEn0QFy-NR9uX9Z-HjTeL60N0o1jVaTCre8DQ/exec' + '?area=';
+    let fetchURL = 'https://script.google.com/macros/s/AKfycbwTX36P8WsngZTAWkQcgJiKWgBgqpTqPfFJuGjxYTty65IqJOSz05qaOAz6-88L3N-a/exec' + '?area=';
     fetchURL += area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
@@ -133,7 +137,27 @@ async function SYNC_getAreaEmail() {
     }
     setCookie('areaUserEmail', areaEmail);
 }
-
+function makeListSU_people() {
+    const arr = data.overall_data.su_referrals;
+    let output = '';
+    for (let i = 0; i < arr.length; i++) {
+        const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[0]));
+        output += `<aa onclick="saveBeforeSUPage(data.overall_data.su_referrals[` + i + `], this)" href="su_referrals.html" class="person-to-click">
+        <div class="w3-bar" style="display: flex;">
+          <div class="w3-bar-item w3-circle">
+            <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
+          </div>
+          <div class="w3-bar-item">
+            <span class="w3-large"></span><br>
+            <span>` + elapsedTime + `</span><br>
+            <span>` + prettyPrintRefOrigin(per[9]) + `</span>
+          </div>
+        </div>
+      </aa>`;
+    }
+    _('su-referrals').innerHTML = output;
+}
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
     let output = '';
@@ -195,6 +219,8 @@ function prettyPrintRefOrigin(x) {
         case 'fb':
             return 'Facebook';
         case 'web':
+            return 'VandraITro.se';
+        case 'wix':
             return 'VandraITro.se';
         case 'ig':
             return 'Instagram';
