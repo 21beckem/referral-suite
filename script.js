@@ -72,6 +72,7 @@ function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
+let su_data = getCookieJSON('suSync') || null;
 
 if (area == null) {
     safeRedirect('login.html');
@@ -86,10 +87,12 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = '';
     }
     let rs_wait = SYNC_referralSuiteStuff();
+    let su_wait = SYNC_SUStuff();
     let sm_wait = SYNC_sheetMapStuff();
     let ar_wait = SYNC_getAreaEmail();
 
     await rs_wait;
+    await su_wait;
     await sm_wait;
     await ar_wait;
 
@@ -98,8 +101,9 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
+const referralSuiteFetchURL = 'https://script.google.com/macros/s/AKfycbzY9M1UOnfZyDMH7hsubPSgjL9-Rurku_AwDclwpbCWpl5609hhb4XjAz4SwH62xg0_/exec';
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbwTX36P8WsngZTAWkQcgJiKWgBgqpTqPfFJuGjxYTty65IqJOSz05qaOAz6-88L3N-a/exec' + '?area=';
+    let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log(fetchURL);
@@ -110,6 +114,18 @@ async function SYNC_referralSuiteStuff() {
 
     //save to cookie
     setCookieJSON('dataSync', syncRes);
+}
+async function SYNC_SUStuff() {
+    let fetchURL = referralSuiteFetchURL + '?area=SU';
+    fetchURL += (su_data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(su_data) );
+    console.log(fetchURL);
+    const response = await fetch(fetchURL);
+    const syncRes = await response.json();
+    //alert('done');
+    console.log(syncRes);
+
+    //save to cookie
+    setCookieJSON('suSync', syncRes);
 }
 async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
@@ -138,20 +154,20 @@ async function SYNC_getAreaEmail() {
     setCookie('areaUserEmail', areaEmail);
 }
 function makeListSU_people() {
-    const arr = data.overall_data.su_referrals;
+    const arr = su_data;
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[0]));
-        output += `<aa onclick="saveBeforeSUPage(data.overall_data.su_referrals[` + i + `], this)" href="su_referrals.html" class="person-to-click">
+        output += `<aa onclick="saveBeforeSUPage(su_data[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
         <div class="w3-bar" style="display: flex;">
           <div class="w3-bar-item w3-circle">
             <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
           </div>
           <div class="w3-bar-item">
-            <span class="w3-large"></span><br>
+            <span class="w3-large">` + per[1] + ' ' + per[2] + `</span><br>
             <span>` + elapsedTime + `</span><br>
-            <span>` + prettyPrintRefOrigin(per[9]) + `</span>
+            <span>` + prettyPrintRefOrigin(per[7]) + `</span>
           </div>
         </div>
       </aa>`;
@@ -198,6 +214,41 @@ function makeListClaimedPeople(arr) {
         </aa>`;
     }
     _('yourreferrals').innerHTML = output;
+}
+function fillInSUInfo() {
+    const person = getCookieJSON('linkPages') || null;
+    _('contactname').innerHTML = person[1] + ' ' + person[2];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[7]);
+    _('email').innerHTML = person[3];
+    _('address').innerHTML = person[4] + ' ' + person[5];
+    _('helpRequest').innerHTML = person[6];
+}
+function makeSUMessage(per) {
+    if (per[7].toLowerCase().includes('fb')) {
+return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Send an intro text and call ASAP (sometimes you need to add the + sign to the beginning of the phone number). If they don't answer, find them on Facebook, and call again later.
+
+
+You can say something like:
+
+Hej ` + per[1] + `! Det här är representanter från Släkt Upptäckt. Vi såg att du svarade på vår annons om hjälp med (what they asked for help with), kanske vi kan träffas och vi kan hjälpa dig!
+
+
+LYCKA TILL!
+
+
+Their Level of Understanding: 
+
+What they want help with:`;
+    } else {
+        return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Send an intro text and call ASAP (sometimes you need to add the + sign to the beginning of the phone number). If they don't answer, find them on Facebook, and call again later.
+
+You can say something like:
+Hej (your referrals name)! Det här är representanter från Vandraitro.se. Vi såg att du svarade på vår annons om hjälp med (what they asked for help with), kanske vi kan träffas och vi kan hjälpa dig!
+
+LYCKA TILL!
+
+What they want help with:`;
+    }
 }
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;

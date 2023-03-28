@@ -21,21 +21,17 @@
         <div id="contactname">Johan Samuelsson</div>
       </div>
     </div>
-    <div style="height: 120px;"></div>
+    <div style="height: 80px;"></div>
 
     
     <!-- Contact card list -->
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
       <div class="w3-left-align w3-small w3-opacity">Referral type</div>
-      <div id="referraltype" class="w3-left-align w3-large"></div>
+      <div id="referraltype" class="w3-left-align w3-large">Släktupptäckt</div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Referral origin</div>
         <div id="referralorigin" class="w3-left-align w3-large"></div>
-    </div>
-    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Phone Number</div>
-        <div id="phonenumber" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Email</div>
@@ -44,13 +40,12 @@
     <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Address</div>
         <div id="address" class="w3-left-align w3-large"></div>
-        <div class="w3-container w3-cell w3-right-align">
-            <a id="googlemaps" href="http://maps.google.com/?q=your+query" target="_blank">
-                <i class="fa fa-map-marker w3-text-dark-gray w3-xlarge" style="margin-top: 5px;"></i>
-            </a>
-        </div>
     </div>
-    <div class="w3-container w3-cell-row" style="margin-top: 30%;">
+    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+        <div class="w3-left-align w3-small w3-opacity">Help Request</div>
+        <div id="helpRequest" class="w3-left-align w3-large"></div>
+    </div>
+    <div class="w3-container" style="margin-top: 30px">
       <div class="w3-container w3-cell w3-center">
         <button class="w3-button w3-xlarge w3-round-large w3-blue" onclick="verifySentInSMOEsAB(this)" href="referral_edit.html">Dot created and sent?</button>            
       </div>
@@ -78,14 +73,14 @@
        </a>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
+     <div class="w3-container w3-cell w3-center w3-xlarge">
        <a href="contact_book.html">
          <i class="fa fa-address-book"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
        </a>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
+     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
        <a href="unclaimed_referrals.html">
          <i class="fa fa-bell"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
@@ -103,7 +98,7 @@
      </div>
 
    </div>
-   <script>fillInContactInfo()</script>
+   <script>fillInSUInfo()</script>
 
   </body>
 </html>
