@@ -8,6 +8,19 @@ function verifySentInSMOEsAB(el) {
         safeRedirect(el.getAttribute('href'));
     }
 }
+function verifySUhasBeenSent(el) {
+    const yesno = confirm("You sure? This person will disappear from referral suite when you click 'OK'");
+    if (yesno) {
+        const per = getCookieJSON('linkPages') || null;
+        if (per==null) {
+            return;
+        }
+        data['su_created'] = [per[0], per[7]];
+        setCookieJSON('dataSync', data);
+        //alert('syncing now');
+        safeRedirect(el.getAttribute('href'));
+    }
+}
 function safeRedirect(ref) {
     if (!inIframe()) {
         window.location.href = ref;
@@ -221,33 +234,21 @@ function fillInSUInfo() {
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[7]);
     _('email').innerHTML = person[3];
     _('address').innerHTML = person[4] + ' ' + person[5];
-    _('helpRequest').innerHTML = person[6];
+    _('SU_message').innerHTML = makeSUMessage(person);
 }
 function makeSUMessage(per) {
-    if (per[7].toLowerCase().includes('fb')) {
-return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Send an intro text and call ASAP (sometimes you need to add the + sign to the beginning of the phone number). If they don't answer, find them on Facebook, and call again later.
-
-
-You can say something like:
-
-Hej ` + per[1] + `! Det här är representanter från Släkt Upptäckt. Vi såg att du svarade på vår annons om hjälp med (what they asked for help with), kanske vi kan träffas och vi kan hjälpa dig!
-
+    if (per[7].toLowerCase().includes('fb') || per[7].toLowerCase().includes('ig')) {
+return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-
-Their Level of Understanding: 
-
-What they want help with:`;
+What they want help with: ` + per[6];
     } else {
-        return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Send an intro text and call ASAP (sometimes you need to add the + sign to the beginning of the phone number). If they don't answer, find them on Facebook, and call again later.
-
-You can say something like:
-Hej (your referrals name)! Det här är representanter från Vandraitro.se. Vi såg att du svarade på vår annons om hjälp med (what they asked for help with), kanske vi kan träffas och vi kan hjälpa dig!
+        return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with:`;
+What they want help with: ` + per[6];
     }
 }
 function fillInContactInfo() {
@@ -326,7 +327,8 @@ function syncPageFillIn() {
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function FORCEsyncPageFillIn() {
-    _('infobox').innerHTML = area;
+    let syncDate = new Date(data.area_specific_data.last_sync);
+    _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function syncButton(el) {
     SYNC().then(() => {
