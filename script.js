@@ -15,12 +15,8 @@ function verifySUhasBeenSent(el) {
         if (per==null) {
             return;
         }
-        if (data.hasAttribute('su_created')) {
-            data['su_created'].push( [per[0], per[7]] );
-        } else {
-            data['su_created'] = [[per[0], per[7]]];
-        }
-        setCookieJSON('dataSync', data);
+        su_done.push( [per[0], per[7]] );
+        setCookieJSON('suDone', su_done);
         //alert('syncing now');
         safeRedirect(el.getAttribute('href'));
     }
@@ -89,7 +85,8 @@ function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
-let su_data = getCookieJSON('suSync') || null;
+let su_refs = getCookieJSON('suSync') || null;
+let su_done = getCookieJSON('suDone') || [];
 
 if (area == null) {
     safeRedirect('login.html');
@@ -118,12 +115,12 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://script.google.com/macros/s/AKfycbzY9M1UOnfZyDMH7hsubPSgjL9-Rurku_AwDclwpbCWpl5609hhb4XjAz4SwH62xg0_/exec';
+const referralSuiteFetchURL = 'https://script.google.com/macros/s/AKfycbx3wUCh0YPTns_QuTBErgIALIZPd1BAw4FCbetIA-95jp16XfYSKD_RiTCQCgcFmSHC/exec';
 async function SYNC_referralSuiteStuff() {
     let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
-    console.log(fetchURL);
+    console.log('Referrals Fetch:', fetchURL);
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
@@ -134,8 +131,8 @@ async function SYNC_referralSuiteStuff() {
 }
 async function SYNC_SUStuff() {
     let fetchURL = referralSuiteFetchURL + '?area=SU';
-    fetchURL += (su_data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(su_data) );
-    console.log(fetchURL);
+    fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
+    console.log('SU Fetch:', fetchURL);
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
@@ -171,12 +168,12 @@ async function SYNC_getAreaEmail() {
     setCookie('areaUserEmail', areaEmail);
 }
 function makeListSU_people() {
-    const arr = su_data;
+    const arr = su_refs;
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[0]));
-        output += `<aa onclick="saveBeforeSUPage(su_data[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
+        output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
         <div class="w3-bar" style="display: flex;">
           <div class="w3-bar-item w3-circle">
             <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
@@ -473,6 +470,6 @@ function timeSince_formatted(date) {
 /////   #   #   #   #   #   #   #   #
 window.onload = () => {
     try {
-        _('reddot').style.display = (data.overall_data.new_referrals.length > 0) ? 'block' : 'none';
+        _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
     } catch(e) {}
 }
