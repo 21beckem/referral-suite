@@ -15,7 +15,11 @@ function verifySUhasBeenSent(el) {
         if (per==null) {
             return;
         }
-        data['su_created'] = [per[0], per[7]];
+        if (data.hasAttribute('su_created')) {
+            data['su_created'].push( [per[0], per[7]] );
+        } else {
+            data['su_created'] = [[per[0], per[7]]];
+        }
         setCookieJSON('dataSync', data);
         //alert('syncing now');
         safeRedirect(el.getAttribute('href'));
