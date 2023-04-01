@@ -328,8 +328,10 @@ function syncPageFillIn() {
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function FORCEsyncPageFillIn() {
-    let syncDate = new Date(data.area_specific_data.last_sync);
-    _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
+    if (data != null) {
+        let syncDate = new Date(data.area_specific_data.last_sync);
+        _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
+    }
 }
 function syncButton(el) {
     SYNC().then(() => {
