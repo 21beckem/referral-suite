@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Info</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <script src="script.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <meta name="theme-color" content="#462c6a">
+    <style>
+#SU_message {
+  width: calc(100% - 20px);
+  margin: 10px;
+  white-space: pre-line;
+  box-shadow: 1px 1px 7px -3px black;
+  padding: 8px;
+}
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <div class="w3-top w3-cell-row w3-area-blue">
+      <div class="w3-container w3-cell w3-left-align w3-xlarge w3-padding-16 w3-text-white">
+        <div id="contactname"></div>
+      </div>
+    </div>
+    <div style="height: 80px;"></div>
+
+    <!-- Contact message -->
+    <div class="w3-large w3-center" style="padding-top: 10px; padding-left: 10px">Give the area this message:</div><p>
+    <div id="SU_message"><!--This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+      <p>
+      LYCKA TILL!
+      <p>
+      What they want help with: Finding my family
+      <p>
+      if they are from Vandraitro:
+      <p>
+      This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+      <p>
+      LYCKA TILL!
+      <p>
+      What they want help with:
+
+      --></div>
+    <div class="w3-border-bottom"></div>
+
+    <!-- Contact card list -->
+    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+        <div class="w3-left-align w3-small w3-opacity">Referral origin</div>
+        <div id="referralorigin" class="w3-left-align w3-large"></div>
+    </div>
+    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+        <div class="w3-left-align w3-small w3-opacity">Email</div>
+        <div id="email" class="w3-left-align w3-large"></div>
+    </div>
+    <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
+        <div class="w3-left-align w3-small w3-opacity">Address</div>
+        <div id="address" class="w3-left-align w3-large"></div>
+    </div>
+    <div class="w3-container" style="margin-top: 30px">
+      <div class="w3-container w3-cell w3-center">
+        <button class="w3-button w3-xlarge w3-round-large w3-blue" onclick="verifySUhasBeenSent(this)" href="force-sync.html">Dot created and sent?</button>            
+      </div>
+    </div>
+    
+
+
+
+
+   <!-- Bottom Nav Bar -->
+   <div style="height: 80px;"></div>
+   <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
+
+     <div class="w3-container w3-cell w3-center w3-xlarge">
+       <a href="index.html">
+         <i class="fa fa-home"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
+       </a>
+     </div>
+
+     <div class="w3-container w3-cell w3-center w3-xlarge">
+       <a href="schedule.html">
+         <i class="fa fa-calendar-o"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
+       </a>
+     </div>
+
+     <div class="w3-container w3-cell w3-center w3-xlarge">
+       <a href="contact_book.html">
+         <i class="fa fa-address-book"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
+       </a>
+     </div>
+
+     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
+       <a href="unclaimed_referrals.html">
+         <i class="fa fa-bell"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
+       </a>
+       <div style="height: 0; width: 100%;">
+         <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+       </div>
+     </div>
+
+     <div class="w3-container w3-cell w3-center w3-xlarge">
+       <a href="sync.html">
+         <i class="fa fa-refresh"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">Sync</div>
+       </a>
+     </div>
+
+   </div>
+   <script>fillInSUInfo()</script>
+
+  </body>
+</html>

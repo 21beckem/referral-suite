@@ -8,6 +8,19 @@ function verifySentInSMOEsAB(el) {
         safeRedirect(el.getAttribute('href'));
     }
 }
+function verifySUhasBeenSent(el) {
+    const yesno = confirm("You sure? This person will disappear from referral suite when you click 'OK'");
+    if (yesno) {
+        const per = getCookieJSON('linkPages') || null;
+        if (per==null) {
+            return;
+        }
+        su_done.push( [per[0], per[7]] );
+        setCookieJSON('suDone', su_done);
+        //alert('syncing now');
+        safeRedirect(el.getAttribute('href'));
+    }
+}
 function safeRedirect(ref) {
     if (!inIframe()) {
         window.location.href = ref;
@@ -62,12 +75,18 @@ function saveBeforeClaimPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
+function saveBeforeSUPage(person, el) {
+    setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
+}
 function _(x) { return document.getElementById(x); }
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 /////  above functions make everything function with basic navigation between pages. No Touch!
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
+let su_refs = getCookieJSON('suSync') || null;
+let su_done = getCookieJSON('suDone') || [];
 
 if (area == null) {
     safeRedirect('login.html');
@@ -82,10 +101,12 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = '';
     }
     let rs_wait = SYNC_referralSuiteStuff();
+    let su_wait = SYNC_SUStuff();
     let sm_wait = SYNC_sheetMapStuff();
     let ar_wait = SYNC_getAreaEmail();
 
     await rs_wait;
+    await su_wait;
     await sm_wait;
     await ar_wait;
 
@@ -94,11 +115,12 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
+const referralSuiteFetchURL = 'https://script.google.com/macros/s/AKfycbx3wUCh0YPTns_QuTBErgIALIZPd1BAw4FCbetIA-95jp16XfYSKD_RiTCQCgcFmSHC/exec';
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = 'https://script.google.com/macros/s/AKfycbxLve0_szDAhJl4vFwDTNwHNaDpSFuEn0QFy-NR9uX9Z-HjTeL60N0o1jVaTCre8DQ/exec' + '?area=';
+    let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
-    console.log(fetchURL);
+    console.log('Referrals Fetch:', fetchURL);
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
@@ -106,6 +128,18 @@ async function SYNC_referralSuiteStuff() {
 
     //save to cookie
     setCookieJSON('dataSync', syncRes);
+}
+async function SYNC_SUStuff() {
+    let fetchURL = referralSuiteFetchURL + '?area=SU';
+    fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
+    console.log('SU Fetch:', fetchURL);
+    const response = await fetch(fetchURL);
+    const syncRes = await response.json();
+    //alert('done');
+    console.log(syncRes);
+
+    //save to cookie
+    setCookieJSON('suSync', syncRes);
 }
 async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
@@ -133,7 +167,27 @@ async function SYNC_getAreaEmail() {
     }
     setCookie('areaUserEmail', areaEmail);
 }
-
+function makeListSU_people() {
+    const arr = su_refs;
+    let output = '';
+    for (let i = 0; i < arr.length; i++) {
+        const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[0]));
+        output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
+        <div class="w3-bar" style="display: flex;">
+          <div class="w3-bar-item w3-circle">
+            <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
+          </div>
+          <div class="w3-bar-item">
+            <span class="w3-large">` + per[1] + ' ' + per[2] + `</span><br>
+            <span>` + elapsedTime + `</span><br>
+            <span>` + prettyPrintRefOrigin(per[7]) + `</span>
+          </div>
+        </div>
+      </aa>`;
+    }
+    _('su-referrals').innerHTML = output;
+}
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
     let output = '';
@@ -175,6 +229,29 @@ function makeListClaimedPeople(arr) {
     }
     _('yourreferrals').innerHTML = output;
 }
+function fillInSUInfo() {
+    const person = getCookieJSON('linkPages') || null;
+    _('contactname').innerHTML = person[1] + ' ' + person[2];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[7]);
+    _('email').innerHTML = person[3];
+    _('address').innerHTML = person[4] + ' ' + person[5];
+    _('SU_message').innerHTML = makeSUMessage(person);
+}
+function makeSUMessage(per) {
+    if (per[7].toLowerCase().includes('fb') || per[7].toLowerCase().includes('ig')) {
+return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+
+LYCKA TILL!
+
+What they want help with: ` + per[6];
+    } else {
+        return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+
+LYCKA TILL!
+
+What they want help with: ` + per[6];
+    }
+}
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[5];
@@ -195,6 +272,8 @@ function prettyPrintRefOrigin(x) {
         case 'fb':
             return 'Facebook';
         case 'web':
+            return 'VandraITro.se';
+        case 'wix':
             return 'VandraITro.se';
         case 'ig':
             return 'Instagram';
@@ -249,7 +328,10 @@ function syncPageFillIn() {
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function FORCEsyncPageFillIn() {
-    _('infobox').innerHTML = area;
+    if (data != null) {
+        let syncDate = new Date(data.area_specific_data.last_sync);
+        _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
+    }
 }
 function syncButton(el) {
     SYNC().then(() => {
@@ -390,6 +472,6 @@ function timeSince_formatted(date) {
 /////   #   #   #   #   #   #   #   #
 window.onload = () => {
     try {
-        _('reddot').style.display = (data.overall_data.new_referrals.length > 0) ? 'block' : 'none';
+        _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
     } catch(e) {}
 }

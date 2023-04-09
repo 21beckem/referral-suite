@@ -20,8 +20,7 @@
     <div style="height: 68px;"></div>
 
     <!-- Sync and claim area -->
-    <div class="w3 container w3-large w3-left-align w3-sync-claim w3-text-white" style="padding-top: 40px;padding-left: 10px;padding-bottom: 40px;">Sundsvall
-    </div>
+    <div id="claimAsArea" class="w3 container w3-large w3-left-align w3-sync-claim w3-text-white" style="padding-top: 40px;padding-left: 10px;padding-bottom: 40px;"></div>
 
     <!-- Claim text -->
     <div class="w3-container w3-xlarge w3-center" style="margin-top: 40px;">Are you sure you want to claim this referral?</div>
@@ -77,6 +76,7 @@
       </div>
 
     </div>
+    <script>_('claimAsArea').innerHTML = area;</script>
 
   </body>
 </html>
