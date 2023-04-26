@@ -1,21 +1,15 @@
 <?php
-error_reporting(1);
-
-echo('<pre>');
-$arr = readSQL('SELECT * FROM `Mormons_Bok_Request` WHERE `id`>20');
-echo( json_encode($arr) );
-echo('</pre>');
-die();
+//error_reporting(0);
 
 // if no area is defined, just cancel
 if (isset($_GET['area'])) {
     die('error. Missing info');
 }
-$area = $_GET['area'];
+$areaName = $_GET['area'];
 $raw_data = $_GET['data'];
 
 // if area is SU, return just the SU stuff
-if ($area == 'SU') {
+if ($areaName == 'SU') {
     if ($raw_data != NULL) {
         SETSUSent(json_decode($raw_data));
     }
@@ -33,15 +27,26 @@ if ($raw_data != NULL) {
     }
     if (property_exists($received_data, 'claim_these')) {
         if (count($received_data->claim_these) > 0) {
-            ClaimPeople($area, $received_data->claim_these);
+            ClaimPeople($areaName, $received_data->claim_these);
         }
     }
 }
 
 // get current data for this area
+$myObj = new stdClass();
+$myObj->overall_data = new stdClass();
+$myObj->overall_data->new_referrals = GETavailableRefs();
+$myObj->area_specific_data = new stdClass();
+$myObj->area_specific_data->my_referrals = GETPeopleData($areaName);
+date_default_timezone_set("Sweden/Stockholm");
+$myObj->area_specific_data->last_sync = date("D M d, Y G:i");
+
+die( json_encode($myObj) );
 
 
 
+
+// functions!! #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
 function readSQL($sqlStr, $convertRowsToArrays=TRUE) {
     // create SQL connection
@@ -67,10 +72,53 @@ function readSQL($sqlStr, $convertRowsToArrays=TRUE) {
     return $out;
 }
 
+
+function SETSUSent($data) {
+
+}
+
+function GETavailableSURefs() {
+    
+}
+
+function SETPeopleData($changed_people) {
+    
+}
+
+function ClaimPeople($claim_these) {
+    
+}
+
+function GETavailableRefs() {
+    
+}
+
+function GETPeopleData($area) {
+    $mbArr = readSQL('SELECT * FROM `Mormons_Bok_Request` WHERE `Claimed`="'.$area.'"');
+    $vrArr = readSQL('SELECT * FROM `Missionary_Visit_Request` WHERE `Claimed`="'.$area.'"');
+    
+    $out = array();
+    for ($i = 0; $i <= count($mbArr); $i++) {
+        array_unshift($mbArr[$i], 'Mormons Bok Request');
+        array_push($out, $mbArr[$i]);
+    }
+    for ($i = 0; $i <= count($mbArr); $i++) {
+        array_unshift($mbArr[$i], 'Mormons Bok Request');
+        array_push($out, $mbArr[$i]);
+    }
+}
+
+
+
+
+
+
+
+
+
 /*
 {
     "overall_data": {
-        "referrals_available": "",
         "new_referrals": [
             ["Mormons Bok Request", "2023-04-24 12:30:08", "Monica Isaksson"]
         ]
