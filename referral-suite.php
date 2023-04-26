@@ -1,8 +1,7 @@
 <?php
-//error_reporting(0);
 
 // if no area is defined, just cancel
-if (isset($_GET['area'])) {
+if (!isset($_GET['area'])) {
     die('error. Missing info');
 }
 $areaName = $_GET['area'];
@@ -71,41 +70,66 @@ function readSQL($sqlStr, $convertRowsToArrays=TRUE) {
     mysqli_close($conn);
     return $out;
 }
+function writeSQL($sqlStr) {
+    // create SQL connection
+    $conn = mysqli_connect("localhost", "SMOES", "Sannalarjungar9205", "ssm_referrals");
+    if ($conn === false) {
+        die("ERROR: Could not connect. " . mysqli_connect_error());
+    }
+    // send the query and return result
+    $out = mysqli_query($conn, $sql);
+    // close connection
+    mysqli_close($conn);
+}
 
 
-function SETSUSent($data) {
-
+function SETSUSent($people) {
+    foreach ($people as $person) {
+        writeSQL('UPDATE `SU_Referrals` SET `Send Status`="Sent" WHERE `id`='.$person[0]);
+    }
 }
 
 function GETavailableSURefs() {
-    
+    return readSQL('SELECT * FROM `SU_Referrals` WHERE `Send Status`="Ready to send"');
 }
 
 function SETPeopleData($changed_people) {
-    
+    foreach ($changed_people as $person) {
+        if ( !writeSQL('UPDATE `'.$person[0].'` SET `Referral Sent`="'.$person[3].'", `Teaching Area`="'.$person[5].'",  WHERE `id`='.$person[1]) ) {
+            return FALSE;
+        }
+    }
 }
 
-function ClaimPeople($claim_these) {
-    
+function ClaimPeople($area, $claim_these) {
+    foreach ($claim_these as $person) {
+        writeSQL('UPDATE `'.$person[0].'` SET `Claimed`="'.$area.'" WHERE `Date and Time`='.$person[1]);
+    }
 }
 
 function GETavailableRefs() {
-    
+    return GETPeopleData('Unclaimed', '`Date and Time`, `First Name`, `Last Name`');
 }
 
-function GETPeopleData($area) {
-    $mbArr = readSQL('SELECT * FROM `Mormons_Bok_Request` WHERE `Claimed`="'.$area.'"');
-    $vrArr = readSQL('SELECT * FROM `Missionary_Visit_Request` WHERE `Claimed`="'.$area.'"');
+function GETPeopleData($area, $columns='*') {
+    $mbArr = readSQL('SELECT '.$columns.' FROM `Mormons_Bok_Request` WHERE `Claimed`="'.$area.'"');
+    $vrArr = readSQL('SELECT '.$columns.' FROM `Missionary_Visit_Request` WHERE `Claimed`="'.$area.'"');
+    $vagenArr = readSQL('SELECT '.$columns.' FROM `VTHOF_leads` WHERE `Claimed`="'.$area.'"');
     
     $out = array();
-    for ($i = 0; $i <= count($mbArr); $i++) {
-        array_unshift($mbArr[$i], 'Mormons Bok Request');
+    for ($i = 0; $i < count($mbArr); $i++) {
+        array_unshift($mbArr[$i], 'Mormons_Bok_Request');
         array_push($out, $mbArr[$i]);
     }
-    for ($i = 0; $i <= count($mbArr); $i++) {
-        array_unshift($mbArr[$i], 'Mormons Bok Request');
-        array_push($out, $mbArr[$i]);
+    for ($i = 0; $i < count($vrArr); $i++) {
+        array_unshift($vrArr[$i], 'Missionary_Visit_Request');
+        array_push($out, $vrArr[$i]);
     }
+    for ($i = 0; $i < count($vagenArr); $i++) {
+        array_unshift($vagenArr[$i], 'VTHOF_leads');
+        array_push($out, $vagenArr[$i]);
+    }
+    return $out;
 }
 
 
