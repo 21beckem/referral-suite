@@ -77,9 +77,10 @@ function writeSQL($sqlStr) {
         die("ERROR: Could not connect. " . mysqli_connect_error());
     }
     // send the query and return result
-    $out = mysqli_query($conn, $sql);
+    $out = mysqli_query($conn, $sqlStr);
     // close connection
     mysqli_close($conn);
+	return $out;
 }
 
 
@@ -95,7 +96,7 @@ function GETavailableSURefs() {
 
 function SETPeopleData($changed_people) {
     foreach ($changed_people as $person) {
-        if ( !writeSQL('UPDATE `'.$person[0].'` SET `Referral Sent`="'.$person[3].'", `Teaching Area`="'.$person[5].'",  WHERE `id`='.$person[1]) ) {
+        if ( !writeSQL('UPDATE `'.$person[0].'` SET `Referral Sent`="'.$person[3].'", `Teaching Area`="'.$person[5].'"  WHERE `id`='.$person[1]) ) {
             return FALSE;
         }
     }
@@ -103,7 +104,7 @@ function SETPeopleData($changed_people) {
 
 function ClaimPeople($area, $claim_these) {
     foreach ($claim_these as $person) {
-        writeSQL('UPDATE `'.$person[0].'` SET `Claimed`="'.$area.'" WHERE `Date and Time`='.$person[1]);
+        writeSQL('UPDATE `'.$person[0].'` SET `Claimed`="'.$area.'" WHERE `Date and Time`="'.$person[1].'"');
     }
 }
 
@@ -112,9 +113,9 @@ function GETavailableRefs() {
 }
 
 function GETPeopleData($area, $columns='*') {
-    $mbArr = readSQL('SELECT '.$columns.' FROM `Mormons_Bok_Request` WHERE `Claimed`="'.$area.'"');
-    $vrArr = readSQL('SELECT '.$columns.' FROM `Missionary_Visit_Request` WHERE `Claimed`="'.$area.'"');
-    $vagenArr = readSQL('SELECT '.$columns.' FROM `VTHOF_leads` WHERE `Claimed`="'.$area.'"');
+    $mbArr = readSQL('SELECT '.$columns.' FROM `Mormons_Bok_Request` WHERE `Claimed`="'.$area.'" AND `Referral Sent`="Not Sent"');
+    $vrArr = readSQL('SELECT '.$columns.' FROM `Missionary_Visit_Request` WHERE `Claimed`="'.$area.'" AND `Referral Sent`="Not Sent"');
+    $vagenArr = readSQL('SELECT '.$columns.' FROM `VTHOF_leads` WHERE `Claimed`="'.$area.'" AND `Referral Sent`="Not Sent"');
     
     $out = array();
     for ($i = 0; $i < count($mbArr); $i++) {
@@ -131,29 +132,5 @@ function GETPeopleData($area, $columns='*') {
     }
     return $out;
 }
-
-
-
-
-
-
-
-
-
-/*
-{
-    "overall_data": {
-        "new_referrals": [
-            ["Mormons Bok Request", "2023-04-24 12:30:08", "Monica Isaksson"]
-        ]
-    },
-    "area_specific_data": {
-        "my_referrals": [
-            ["Mormons Bok Request", "2023-04-26T10:37:52.000Z", "SMOEs", "Not sent", "", "Ritva Jokinen", "Ritva", "Jokinen", 46708241216, "ritva8.jokinen@hotmail.com", "Syrenvägen 5A.lgh.1002", "Bua", "4326#", "ig"]
-        ],
-        "last_sync": "2023-04-26T11:17:11.707Z"
-    }
-}
-*/
 
 ?>
