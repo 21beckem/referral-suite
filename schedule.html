@@ -36,7 +36,9 @@ const TablePreferences = {
 };
 
 function scrollToToday(data, win, numberOfHiddenCols) {
-    let niceDate = ["January","February","March","April","May","June","July","August","September","October","November","December"][new Date().getMonth()] + ' ' + String(new Date().getDate());
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
     let iOfToday = data[0].indexOf(niceDate) - numberOfHiddenCols;
     win.scrollTo(win.offsetWidth*iOfToday, 0);
 }
