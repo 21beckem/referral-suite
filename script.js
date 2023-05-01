@@ -15,7 +15,7 @@ function verifySUhasBeenSent(el) {
         if (per==null) {
             return;
         }
-        su_done.push( [per[0], per[7]] );
+        su_done.push( [per[0], per[3]] );
         setCookieJSON('suDone', su_done);
         //alert('syncing now');
         safeRedirect(el.getAttribute('href'));
@@ -115,12 +115,16 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://script.google.com/macros/s/AKfycbx3wUCh0YPTns_QuTBErgIALIZPd1BAw4FCbetIA-95jp16XfYSKD_RiTCQCgcFmSHC/exec';
+const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite.php';
 async function SYNC_referralSuiteStuff() {
     let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
+    if (data != null) {
+        delete data.overall_data;
+    }
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log('Referrals Fetch:', fetchURL);
+    console.log('Payload:', JSON.stringify(data));
     const response = await fetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
@@ -172,16 +176,16 @@ function makeListSU_people() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[0]));
+        const elapsedTime = timeSince_formatted(new Date(per[1]));
         output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
         <div class="w3-bar" style="display: flex;">
           <div class="w3-bar-item w3-circle">
             <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
           </div>
           <div class="w3-bar-item">
-            <span class="w3-large">` + per[1] + ' ' + per[2] + `</span><br>
+            <span class="w3-large">` + per[3] + ' ' + per[4] + `</span><br>
             <span>` + elapsedTime + `</span><br>
-            <span>` + prettyPrintRefOrigin(per[7]) + `</span>
+            <span>` + prettyPrintRefOrigin(per[11]) + `</span>
           </div>
         </div>
       </aa>`;
@@ -200,7 +204,7 @@ function makeListUNclaimedPeople() {
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[2]  + `</span><br>
+              <span class="w3-large">` + per[2] + ' ' + per[3] + `</span><br>
               <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
@@ -213,14 +217,14 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[1]));
+        const elapsedTime = timeSince_formatted(new Date(per[2]));
         output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="contact_info.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[5]  + `</span><br>
+              <span class="w3-large">` + per[7] + `</span><br>
               <span>` + elapsedTime + `</span><br>
               <span>` + per[0] + `</span>
             </div>
@@ -231,41 +235,47 @@ function makeListClaimedPeople(arr) {
 }
 function fillInSUInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[1] + ' ' + person[2];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[7]);
-    _('email').innerHTML = person[3];
-    _('address').innerHTML = person[4] + ' ' + person[5];
+    _('contactname').innerHTML = person[4] + ' ' + person[5];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[11]);
+    _('email').innerHTML = person[6];
+    _('address').innerHTML = person[7] + ' ' + person[8];
     _('SU_message').innerHTML = makeSUMessage(person);
 }
 function makeSUMessage(per) {
-    if (per[7].toLowerCase().includes('fb') || per[7].toLowerCase().includes('ig')) {
+    if (per[11].toLowerCase().includes('fb') || per[11].toLowerCase().includes('ig')) {
 return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[6];
+What they want help with: ` + per[9] + `
+
+How experienced they are: ` + per[10];
     } else {
         return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[6];
+What they want help with: ` + per[9] + `
+
+How experienced they are: ` + per[10];
     }
 }
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[5];
-    _('telnumber').href = 'tel:+' + person[8];
+    _('contactname').innerHTML = person[7];
+    _('telnumber').href = 'tel:+' + person[10];
     //_('smsnumber').href = 'sms:+' + person[8];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
     _('referraltype').innerHTML = person[0];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[13]);
-    _('phonenumber').innerHTML = person[8];
-    _('email').innerHTML = person[9];
-    let addStr = person[10] + ' ' + person[11] + ' ' + person[12];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[16]);
+    _('phonenumber').innerHTML = person[10];
+    _('email').innerHTML = person[11];
+    let addStr = person[12] + ' ' + person[13] + ' ' + person[14];
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
+    _('adName').innerHTML = person[17];
+    _('prefSprak').innerHTML = person[15];
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
@@ -295,8 +305,8 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
         });
     }
     const person = getCookieJSON('linkPages') || null;
-    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[8])) + '?body=') : emailLink;
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[11] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[10])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;
@@ -348,13 +358,13 @@ function sendToAnotherArea() {
 
     // set new area in data and save to cookie
     person[3] = 'Sent';
-    person[4] = newArea;
+    person[5] = newArea;
 
     // overwrite old person
     let found = false;
     for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
         const oldPer = data.area_specific_data.my_referrals[i];
-        if (oldPer[1] == person[1]) {
+        if (oldPer[2] == person[2]) {
             found = true;
             data.changed_people = Array();
             data.changed_people.push(person);
@@ -387,7 +397,7 @@ function deceasePerson() {
     let found = false;
     for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
         const oldPer = data.area_specific_data.my_referrals[i];
-        if (oldPer[1] == person[1]) {
+        if (oldPer[2] == person[2]) {
             found = true;
             data.changed_people = Array();
             data.changed_people.push(person);;
