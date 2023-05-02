@@ -183,7 +183,7 @@ function makeListSU_people() {
             <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
           </div>
           <div class="w3-bar-item">
-            <span class="w3-large">` + per[3] + ' ' + per[4] + `</span><br>
+            <span class="w3-large">` + per[4] + ' ' + per[5] + `</span><br>
             <span>` + elapsedTime + `</span><br>
             <span>` + prettyPrintRefOrigin(per[11]) + `</span>
           </div>
@@ -206,7 +206,7 @@ function makeListUNclaimedPeople() {
             <div class="w3-bar-item">
               <span class="w3-large">` + per[2] + ' ' + per[3] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0] + `</span>
+              <span>` + per[0].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -224,9 +224,9 @@ function makeListClaimedPeople(arr) {
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[7] + `</span><br>
+              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0] + `</span>
+              <span>` + per[0].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
