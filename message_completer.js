@@ -64,5 +64,5 @@ function trySetValue(el, val) {
 		updateField(el);
 	} catch (e) {}
 }
-trySetValue(_('completerInputFor_{Name}'), person[6]);
-trySetValue(_('completerInputFor_{insert their number}'), person[8]);
+trySetValue(_('completerInputFor_{Name}'), person[8]);
+trySetValue(_('completerInputFor_{insert their number}'), person[10]);
