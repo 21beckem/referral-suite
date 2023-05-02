@@ -275,7 +275,7 @@ function fillInContactInfo() {
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
     _('adName').innerHTML = person[17];
-    _('prefSprak').innerHTML = person[15];
+    _('prefSprak').innerHTML = (person[15] == "") ? "Undeclared" : person[15];
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
