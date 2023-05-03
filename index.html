@@ -122,6 +122,7 @@
 
     <div class="w3-center w3-xlarge" style="margin-top: 15px;">Useful Links</div>
     <ul class="w3-large">
+      <li id="admin_btn" style="display:none"><a class="uline" href="https://smoe.ssmission.cloud/API/areas_overview.php?key=re7l5yXXdcssI07WK6DK">Admin Panel 🤠</a></li>
       <li><a class="uline" target="_blank" href="https://forms.gle/UH2vA9VrdA2jswpZ9">Book of Mormon Delivery Form</a></li>
       <li><a class="uline" href="coming_soon.html">FAQs for This App</a></li>
       <li><a class="uline" href="coming_soon.html">FAQs for Business Suite</a></li>
@@ -179,6 +180,7 @@
 
 
     <script>
+if (ITLs) { _('admin_btn').style.display = ""; }
 
 let maxRefsAllowed = 15;
 const currentRefCount = data.area_specific_data.my_referrals.length;

@@ -87,6 +87,7 @@ let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
 let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
+let ITLs = (getCookie('areaIsLeaders') == "1");
 
 if (area == null) {
     safeRedirect('login.html');
@@ -157,19 +158,23 @@ async function SYNC_sheetMapStuff() {
 }
 async function SYNC_getAreaEmail() {
     //also get area email
-    let areaEmail = getCookie('areaUserEmail') || null;
-    if (areaEmail == null) {
-        await safeFetch('login.html').then(res => res.text()).then(txt => {
-            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
-            for (const match of matches) {
-                if (match[4] == area) {
-                    areaEmail = match[2];
-                    break;
+    let areaEmail = "";
+    let leaders = "0";
+    await safeFetch('login.html').then(res => res.text()).then(txt => {
+        const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+        for (const match of matches) {
+            if (match[4] == area) {
+                console.log("match",match);
+                areaEmail = match[2];
+                if (match[3].includes('leader')) {
+                    leaders = "1";
                 }
+                break;
             }
-        });
-    }
+        }
+    });
     setCookie('areaUserEmail', areaEmail);
+    setCookie('areaIsLeaders', leaders);
 }
 function makeListSU_people() {
     const arr = su_refs;
