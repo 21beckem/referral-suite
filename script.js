@@ -384,6 +384,31 @@ function sendToAnotherArea() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+function saveFollowUpForm() {
+    const person = getCookieJSON('linkPages') || null;
+    if (person == null) {
+        alert('something went wrong. Try again');
+        safeRedirect('index.html');
+    }
+    const status = document.getElementById('statusdropdown').value;
+
+    // overwrite old person
+    if (!data.hasOwnProperty('follow_up_update')) {
+        data.follow_up_update = Array();
+    }
+
+    // this controls how long until the follow up pops up again based off what answer the missionary gave.
+    // Keep the last one "green", this tells the system to not make any more follow-up reminders
+    //              1         2         3         4
+    let delay = ["3 days", "7 days", "9 days", "green"];
+    
+    let tosend = [person[0], person[1], status, delay[parseInt(status)-1]];
+    data.follow_up_update.push(tosend);
+    setCookieJSON('dataSync', data);
+
+    // send to force-sync.html
+    safeRedirect('force-sync.html');
+}
 function deceasePerson() {
     const person = getCookieJSON('linkPages') || null;
     let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
