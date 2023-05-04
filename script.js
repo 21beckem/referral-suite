@@ -272,7 +272,7 @@ function fillInContactInfo() {
     //_('smsnumber').href = 'sms:+' + person[8];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
-    _('referraltype').innerHTML = person[0];
+    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[16]);
     _('phonenumber').innerHTML = person[10];
     _('email').innerHTML = person[11];
@@ -281,6 +281,14 @@ function fillInContactInfo() {
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
     _('adName').innerHTML = person[17];
     _('prefSprak').innerHTML = (person[15] == "") ? "Undeclared" : person[15];
+}
+function fillInFollowUpInfo() {
+    const person = getCookieJSON('linkPages') || null;
+    _('contactname').innerHTML = person[7];
+    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
+    _('lastAtt').innerHTML = person[7];
+    _('refLoc').innerHTML = person[5];
+    _('refLoc2').innerHTML = person[5];
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
@@ -384,6 +392,13 @@ function sendToAnotherArea() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+
+// this controls how long until the follow up pops up again based off what answer the missionary gave.
+// "green" and "Not interested" tells the system to not make any more follow-up reminders
+//                          0             1         2         3         4
+let followUpDelay = ["Not interested", "3 days", "7 days", "9 days", "green"];
+
+
 function saveFollowUpForm() {
     const person = getCookieJSON('linkPages') || null;
     if (person == null) {
@@ -396,13 +411,8 @@ function saveFollowUpForm() {
     if (!data.hasOwnProperty('follow_up_update')) {
         data.follow_up_update = Array();
     }
-
-    // this controls how long until the follow up pops up again based off what answer the missionary gave.
-    // Keep the last one "green", this tells the system to not make any more follow-up reminders
-    //              1         2         3         4
-    let delay = ["3 days", "7 days", "9 days", "green"];
     
-    let tosend = [person[0], person[1], status, delay[parseInt(status)-1]];
+    let tosend = [person[0], person[1], status, followUpDelay[parseInt(status)]];
     data.follow_up_update.push(tosend);
     setCookieJSON('dataSync', data);
 

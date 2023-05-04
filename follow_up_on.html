@@ -30,11 +30,15 @@
         </div>
         <div class="w3-container w3-margin-top w3-margin-bottom">
             <div class="w3-left-align w3-small w3-opacity">Last Attempt</div>
-            <div id="email" class="w3-left-align w3-large">5/3/2023, 4:53:00 PM</div>
+            <div id="lastAtt" class="w3-left-align w3-large">5/3/2023, 4:53:00 PM</div>
+        </div>
+        <div class="w3-container w3-margin-top w3-margin-bottom">
+          <div class="w3-left-align w3-small w3-opacity">Referral type</div>
+          <div id="referraltype" class="w3-left-align w3-large"></div>
         </div>
         <div class="w3-container w3-margin-top w3-margin-bottom">
           <div class="w3-left-align w3-small w3-opacity">Area they are in</div>
-          <div id="referraltype" class="w3-left-align w3-large w3-margin-bottom">Karlstad</div>
+          <div id="refLoc" class="w3-left-align w3-large w3-margin-bottom">Karlstad</div>
         </div>
     </div>
     <div style="height: 10px;"></div>
@@ -42,7 +46,7 @@
     <!-- Options to follow up -->
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
       <div class="w3-container w3-cell w3-center">
-        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.html">I've Sucessfully <br> Contacted Karlstad</a>
+        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.html">I've Sucessfully <br> Contacted <span id="refLoc2">Karlstad</span></a>
       </div>
     </div>
     
@@ -93,7 +97,7 @@
      </div>
 
    </div>
-   <script>fillInContactInfo()</script>
+   <script>fillInFollowUpInfo()</script>
 
   </body>
 </html>
