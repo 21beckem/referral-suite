@@ -124,6 +124,7 @@
     <ul class="w3-large">
       <li id="admin_btn" style="display:none"><a class="uline" href="https://smoe.ssmission.cloud/API/areas_overview.php?key=re7l5yXXdcssI07WK6DK">Admin Panel 🤠</a></li>
       <li><a class="uline" target="_blank" href="https://forms.gle/UH2vA9VrdA2jswpZ9">Book of Mormon Delivery Form</a></li>
+      <li><a id="reporting_link" class="uline" target="_blank">Inbox Reporting</a></li>
       <li><a class="uline" href="coming_soon.html">FAQs for This App</a></li>
       <li><a class="uline" href="coming_soon.html">FAQs for Business Suite</a></li>
     </ul>
@@ -186,8 +187,8 @@ let maxRefsAllowed = 15;
 const currentRefCount = data.area_specific_data.my_referrals.length;
 
 
-let totReferralsBar = document.getElementById("totReferralsBar");
-let totReferrals = document.getElementById("totReferrals");
+let totReferralsBar = _("totReferralsBar");
+let totReferrals = _("totReferrals");
 
 totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
 
@@ -198,8 +199,8 @@ if (currentRefCount >= maxRefsAllowed) {
 }
 
 let maxRefAge = 10;
-let oldReferralBar = document.getElementById("oldReferralBar");
-let agebyday = document.getElementById("agebyday");
+let oldReferralBar = _("oldReferralBar");
+let agebyday = _("agebyday");
 let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][2];
 let today = new Date();
 let oldDate = new Date(oldReferral);
@@ -211,6 +212,9 @@ agebyday.innerHTML = dayDifference + '/' + maxRefAge;
 if (dayDifference >= maxRefAge) {
   agebyday.classList.add('w3-text-red');
 }
+
+let reporting_link = _('reporting_link');
+reporting_link.href = "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618=" + area;
     </script>
     
   </body>
