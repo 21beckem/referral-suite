@@ -31,20 +31,8 @@
      
    <!-- List of items -->
   <div class="w3-container">
-    <div id="yourreferrals">
-      <!--<a onclick="redirectAfterFunction(this)" href="contact_info.html">
-        <div class="w3-bar" style="display: flex;">
-          <div class="w3-bar-item w3-circle">
-            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-          </div>
-          <div class="w3-bar-item">
-            <span class="w3-large"></span><br>
-            <span></span><br>
-            <span></span>
-          </div>
-        </div>
-      </a>-->
-    </div>
+    <div id="yourreferrals"></div>
+    <div id="yourfollowups"></div>
   </div>
 
 
@@ -71,6 +59,9 @@
          <i class="fa fa-address-book"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
        </a>
+       <div style="height: 0; width: 100%;">
+         <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+       </div>
      </div>
 
      <div class="w3-container w3-cell w3-center w3-xlarge">
@@ -97,6 +88,7 @@
 
 
 makeListClaimedPeople(data.area_specific_data.my_referrals);
+makeListFollowUpPeople(data.area_specific_data.follow_ups);
 
 function Search() {
   let referrals = data.area_specific_data.my_referrals;
