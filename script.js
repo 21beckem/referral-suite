@@ -116,7 +116,7 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite-in-progress.php'; //   < - - SWITCH THIS BACK TO NORMAL!!!!!!
+const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite.php';
 async function SYNC_referralSuiteStuff() {
     let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
@@ -238,6 +238,28 @@ function makeListClaimedPeople(arr) {
     }
     _('yourreferrals').innerHTML = output;
 }
+function makeListFollowUpPeople(arr) {
+    let output = '';
+    for (let i = 0; i < arr.length; i++) {
+        const per = arr[i];
+        const elapsedTime = timeSince_formatted(new Date(per[18]));
+        output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="follow_up_on.html" class="person-to-click">
+          <div class="w3-bar" style="display: flex;">
+            <div class="w3-bar-item w3-circle">
+              <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
+                <i class="fa fa-calendar-check-o" style="color:#1d53b7; font-size:22px"></i>
+              </div>
+            </div>
+            <div class="w3-bar-item">
+              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
+              <span>` + elapsedTime + `</span><br>
+              <span>` + per[0].replaceAll('_', ' ') + `</span>
+            </div>
+          </div>
+        </aa>`;
+    }
+    _('yourfollowups').innerHTML = output;
+}
 function fillInSUInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[4] + ' ' + person[5];
@@ -286,7 +308,7 @@ function fillInFollowUpInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[7];
     _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
-    _('lastAtt').innerHTML = person[7];
+    _('lastAtt').innerHTML = new Date(person[20]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
     _('refLoc').innerHTML = person[5];
     _('refLoc2').innerHTML = person[5];
 }
@@ -396,7 +418,7 @@ function sendToAnotherArea() {
 // this controls how long until the follow up pops up again based off what answer the missionary gave.
 // "green" and "Not interested" tells the system to not make any more follow-up reminders
 //                          0             1         2         3         4
-let followUpDelay = ["Not interested", "3 days", "7 days", "9 days", "green"];
+let followUpDelay = ["Not interested", "3 days", "7 days", "14 days", "green"];
 
 
 function saveFollowUpForm() {
@@ -523,5 +545,8 @@ function timeSince_formatted(date) {
 window.onload = () => {
     try {
         _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
+    } catch(e) {}
+    try {
+        _('followup_reddot').style.display = (data.area_specific_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
 }
