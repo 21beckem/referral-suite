@@ -116,7 +116,7 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite.php';
+const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite-in-progress.php'; //   < - - SWITCH THIS BACK TO NORMAL!!!!!!
 async function SYNC_referralSuiteStuff() {
     let fetchURL = referralSuiteFetchURL + '?area=';
     fetchURL += area;
