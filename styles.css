@@ -13,6 +13,28 @@
     --call-color: #4CAF50;
     --light-grey: #f1f1f1;
 }
+.w3-spin-centered{
+    animation: w3-spin-centered 2s infinite cubic-bezier(0.52, -0.41, 0.45, 1.42);
+}
+@keyframes w3-spin-centered {
+    0%{transform:translate(-50%, -50%) rotate(0deg)}
+    100%{transform:translate(-50%, -50%) rotate(359deg)}
+}
+#loadingcover > div {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 99999999;
+}
+#loadingcover > i {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 200px;
+    z-index: 15;
+}
 #BottomNavBar {
     padding-top: 7px;
     padding-bottom: 16px;
