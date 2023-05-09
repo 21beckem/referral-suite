@@ -200,20 +200,21 @@ totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
 if (currentRefCount >= maxRefsAllowed) {
   totReferrals.classList.add('w3-text-red');
 }
+if (data.area_specific_data.my_referrals.length > 0) {
+  let maxRefAge = 10;
+  let oldReferralBar = _("oldReferralBar");
+  let agebyday = _("agebyday");
+  let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][2];
+  let today = new Date();
+  let oldDate = new Date(oldReferral);
+  let dayDifference = Math.round((today.getTime()-oldDate.getTime()) / (1000 * 60 * 60 * 24));
+  oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
 
-let maxRefAge = 10;
-let oldReferralBar = _("oldReferralBar");
-let agebyday = _("agebyday");
-let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][2];
-let today = new Date();
-let oldDate = new Date(oldReferral);
-let dayDifference = Math.round((today.getTime()-oldDate.getTime()) / (1000 * 60 * 60 * 24));
-oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
+  agebyday.innerHTML = dayDifference + '/' + maxRefAge;
 
-agebyday.innerHTML = dayDifference + '/' + maxRefAge;
-
-if (dayDifference >= maxRefAge) {
-  agebyday.classList.add('w3-text-red');
+  if (dayDifference >= maxRefAge) {
+    agebyday.classList.add('w3-text-red');
+  }
 }
 
 let reporting_link = _('reporting_link');
