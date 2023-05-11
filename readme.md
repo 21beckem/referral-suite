@@ -7,59 +7,7 @@ Manage incoming referrals from social media ads before sending them to the missi
 ## Basic Overview
 Referral Suite is broken up into 2 big parts: The site and the Client. The client technically isn't needed at all if using a computer, but if you want to use it on a Missionary Device which has MaaS360. Here's the link to the [Referral Suite Client](https://github.com/ssmission/referral-suite-client) which just gives you an HTML file which you can open with chrome on your Missionary Device.
 
-Referral suite works a lot like area book in this way: It syncs/grabs a package of data from your system, then allows the users to edit it a bit just by using the app. Then once you sync again, referral suite will send the edited version of the package of data back to your system for your system to save it, then your system returns all the new/up-to-date data back to referral suite.
-
-<hr>
-
-## How to incorpotate this into your system
-
-This is the "package" of data that Referral suite will receive and send: This type of data is called `JSON`
-```json
-{
-  "overall_data": {
-    "new_referrals": []
-  },
-  "area_specific_data": {
-    "my_referrals": [],
-    "follow_ups": [],
-    "last_sync": ""
-  },
-  
-  "changed_people": [],
-  "claim_these": [],
-  "follow_up_update": []
-}
-```
-Here's what everything means:
-
-## `overall_data`
-
-#### `new_referrals`
-this is what it's all about
-
-## `area_specific_data`
-
-#### `my_referrals`
-this is what it's all about
-
-#### `follow_ups`
-this is what it's all about
-
-#### `last_sync`
-this is what it's all about
-
-## The following is ...
-
-#### `changed_people`
-this is what it's all about
-
-#### `claim_these`
-this is what it's all about
-
-#### `follow_up_update`
-this is what it's all about
-
-
+For a detailed overview, click [here](https://google.com) to see a up to date explaination on Google Slides.
 
 <hr>
 
