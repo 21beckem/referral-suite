@@ -19,7 +19,7 @@ This is the "package" of data that Referral suite will receive and send: This ty
 ```
 Here's what everything means:
 
-## First off!
+## First off! `person-array` format
 Whenever it says "person-array format" below, it means an array that could look like this:
 (notes are written to show what each item means)
 ```json
