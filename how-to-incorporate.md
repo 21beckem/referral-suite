@@ -72,7 +72,7 @@ An array of all the people this area needs to follow up on.
 #### `last_sync`
 A string that says when this area last synced their referral suite given as a timestamp.
 
-## The following arrays items always be empty arrays!
+## The following items should always be empty arrays!
 Referral suite will populate these empty arrays with lists of what referrals' info has been changed in any way.
 
 Your system needs to read the following arrays every time the user syncs. And if these arrays are not empty, your system needs to apply the changed info supplied. This changed people info will be in person-array format.
