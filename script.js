@@ -569,4 +569,12 @@ window.onload = () => {
     try {
         _('followup_reddot').style.display = (data.area_specific_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
+    setInterval(CheckRefsAvailable, 30000);
+}
+function CheckRefsAvailable() {
+    safeFetch(referralSuiteFetchURL + "?CheckRefsAvailable=").then(res => res.text()).then(txt => {
+        if (txt.includes('true')) {
+            alert('New Referral!!!');
+        }
+    });
 }
