@@ -574,6 +574,9 @@ window.onload = () => {
 function CheckRefsAvailable() {
     safeFetch(referralSuiteFetchURL + "?CheckRefsAvailable=").then(res => res.text()).then(txt => {
         if (txt.includes('true')) {
+            if ("vibrate" in navigator) {
+                navigator.vibrate([500, 300, 500, 300, 500]);
+            }
             alert('New Referral!!!');
         }
     });
