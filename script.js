@@ -111,6 +111,8 @@ async function SYNC(loadingCover=true) {
     await sm_wait;
     await ar_wait;
 
+    //await SYNC_setCurrentInboxingArea();  // once finding current inboxing area works, uncomment this
+
     //take away overlay
     if (loadingCover) {
         _('loadingcover').style.display = 'none';
@@ -154,27 +156,45 @@ async function SYNC_sheetMapStuff() {
         fetchStyles : true
     });
     await SheetMap.syncChanges();
-    await ss.fetch('Schedule', 'C1:8');
+    await ss.fetch('Schedule', 'C2:BI');
 }
 async function SYNC_getAreaEmail() {
     //also get area email
     let areaEmail = "";
     let leaders = "0";
     await safeFetch('login.html').then(res => res.text()).then(txt => {
-        const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
-        for (const match of matches) {
-            if (match[4] == area) {
-                console.log("match",match);
-                areaEmail = match[2];
-                if (match[3].includes('leader')) {
-                    leaders = "1";
-                }
-                break;
-            }
-        }
+        let r = findAreaEmailFromHTML(txt, area);
+        areaEmail = r[0];
+        leaders = r[1];
     });
     setCookie('areaUserEmail', areaEmail);
     setCookie('areaIsLeaders', leaders);
+}
+function findAreaEmailFromHTML(txt, thisArea) {
+    let areaEmail = "";
+    let leaders = "0";
+    const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
+    for (const match of matches) {
+        if (match[4] == thisArea) {
+            console.log("match",match);
+            areaEmail = match[2];
+            if (match[3].includes('leader')) {
+                leaders = "1";
+            }
+            break;
+        }
+    }
+    return [areaEmail, leaders];
+}
+async function SYNC_setCurrentInboxingArea() {
+    let thisArea = "SMOEs"; // find current inboxing area
+
+
+    let areaEmail = "";
+    await safeFetch('login.html').then(res => res.text()).then(txt => {
+        areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
+    });
+    await safeFetch(referralSuiteFetchURL + '?currentInboxer=' + encodeURI(areaEmail));
 }
 function makeListSU_people() {
     const arr = su_refs;
