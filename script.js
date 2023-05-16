@@ -193,12 +193,15 @@ function GetTodaysSchedule() {
     let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
     SheetMap.load();
     let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
+    alert(iOfToday);
     return SheetMap.vars.tableDataNOW.map(x => x[iOfToday]);
 }
 function getCurrentInboxingArea() {
     SheetMap.load();
     let dagensSchedule = GetTodaysSchedule();
+    alert(JSON.stringify(dagensSchedule));
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
+    alert(JSON.stringify(scheduleTimes));
 
     const dateCheck = new Date();
     for (let i = 0; i < dagensSchedule.length; i++) {
@@ -212,6 +215,7 @@ function getCurrentInboxingArea() {
 }
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
+    alert(thisArea);
 
     let areaEmail = "";
     await safeFetch('login.html').then(res => res.text()).then(txt => {
