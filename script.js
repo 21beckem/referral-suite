@@ -111,7 +111,7 @@ async function SYNC(loadingCover=true) {
     await sm_wait;
     await ar_wait;
 
-    //await SYNC_setCurrentInboxingArea();  // once finding current inboxing area works, uncomment this
+    await SYNC_setCurrentInboxingArea();
 
     //take away overlay
     if (loadingCover) {
@@ -164,6 +164,7 @@ async function SYNC_getAreaEmail() {
     let leaders = "0";
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         let r = findAreaEmailFromHTML(txt, area);
+        console.log(r);
         areaEmail = r[0];
         leaders = r[1];
     });
@@ -176,7 +177,7 @@ function findAreaEmailFromHTML(txt, thisArea) {
     const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
     for (const match of matches) {
         if (match[4] == thisArea) {
-            console.log("match",match);
+            //console.log("match",match);
             areaEmail = match[2];
             if (match[3].includes('leader')) {
                 leaders = "1";
@@ -186,15 +187,38 @@ function findAreaEmailFromHTML(txt, thisArea) {
     }
     return [areaEmail, leaders];
 }
-async function SYNC_setCurrentInboxingArea() {
-    let thisArea = "SMOEs"; // find current inboxing area
+function GetTodaysSchedule() {
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
+    SheetMap.load();
+    let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
+    return SheetMap.vars.tableDataNOW.map(x => x[iOfToday]);
+}
+function getCurrentInboxingArea() {
+    SheetMap.load();
+    let dagensSchedule = GetTodaysSchedule();
+    let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
 
+    const dateCheck = new Date();
+    for (let i = 0; i < dagensSchedule.length; i++) {
+        const dateFrom = new Date(dateCheck.toLocaleDateString() + ' ' + scheduleTimes[i][0]);
+        const dateTo = new Date(dateCheck.toLocaleDateString() + ' ' + scheduleTimes[i][1]);
+        if ( dateCheck.getTime() <= dateTo.getTime() && dateCheck.getTime() >= dateFrom.getTime() ) {
+            return dagensSchedule[i];
+        }
+    }
+    return '';
+}
+async function SYNC_setCurrentInboxingArea() {
+    let thisArea = getCurrentInboxingArea();
 
     let areaEmail = "";
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
-    await safeFetch(referralSuiteFetchURL + '?currentInboxer=' + encodeURI(areaEmail));
+    console.log(areaEmail);
+    await safeFetch( referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail) );
 }
 function makeListSU_people() {
     const arr = su_refs;
