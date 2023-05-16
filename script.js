@@ -217,8 +217,9 @@ async function SYNC_setCurrentInboxingArea() {
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
-    console.log(areaEmail);
-    await safeFetch( referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail) );
+    const reqUrl = referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    alert(reqUrl);
+    await safeFetch( reqUrl );
 }
 function makeListSU_people() {
     const arr = su_refs;
