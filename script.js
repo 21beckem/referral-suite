@@ -201,9 +201,10 @@ function getCurrentInboxingArea() {
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
 
     const d = new Date();
+    const time_beginning = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
     for (let i = 0; i < dagensSchedule.length; i++) {
-        const dateFrom = new Date( d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+scheduleTimes[i][0].trim()+':00.000' );
-        const dateTo = new Date( d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+scheduleTimes[i][1].trim()+':00.000' );
+        const dateFrom = new Date( time_beginning + ' ' + scheduleTimes[i][0].trim() + ':00.000' );
+        const dateTo = new Date( time_beginning + ' ' + scheduleTimes[i][1].trim() + ':00.000' );
         alert(d.getTime()+', '+dateFrom.getTime()+', '+dateTo.getTime());
         if ( d.getTime() <= dateTo.getTime() && d.getTime() >= dateFrom.getTime() ) {
             return dagensSchedule[i];
