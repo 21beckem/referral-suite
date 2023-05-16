@@ -205,7 +205,6 @@ function getCurrentInboxingArea() {
     for (let i = 0; i < dagensSchedule.length; i++) {
         const dateFrom = new Date( time_beginning + ' ' + scheduleTimes[i][0].trim() + ':00.000' );
         const dateTo = new Date( time_beginning + ' ' + scheduleTimes[i][1].trim() + ':00.000' );
-        alert(d.getTime()+', '+dateFrom.getTime()+', '+dateTo.getTime());
         if ( d.getTime() <= dateTo.getTime() && d.getTime() >= dateFrom.getTime() ) {
             return dagensSchedule[i];
         }
@@ -220,7 +219,6 @@ async function SYNC_setCurrentInboxingArea() {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
     const reqUrl = referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
-    alert(reqUrl);
     await safeFetch( reqUrl );
 }
 function makeListSU_people() {
