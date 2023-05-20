@@ -97,8 +97,8 @@ function Search() {
   let output = Array();
   for (let i = 0; i < referrals.length; i++) {
     const person = referrals[i];
-    const fullname = person[5];
-    const number = person[8];
+    const fullname = person[7];
+    const number = person[10];
     
     if (fullname.toLowerCase().includes(letters) || String(number).toLowerCase().includes(letters)) {
       output.push(person);
