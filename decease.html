@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decease Person</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <meta name="theme-color" content="#462c6a">
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <div class="w3-top w3-cell-row w3-area-blue">
+      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+        <a>Decease Person</a>
+      </div>
+    </div>
+    <div style="height: 80px;"></div>
+
+
+
+  <div class="w3-center" style="padding-top: 100px;">Why were they not interested?</div>
+  <div style="height:20px"></div>
+  <div class="w3-center">  
+    <select onchange="areaOptionChanged(this)" id="deceaseDropdown">
+      <option></option>
+      <option value="can't contact">📵 Can't get in contact with them</option>
+      <option value="doesn't remember">🤔 Doesn't remember the ad</option>
+      <option value="mor-mors bok">👵 Thought it was mor-mors bok</option>
+      <option value="not interested anymore">🙅 Not interested anymore</option>
+      <option value="pranked">😡 It was a prank</option>
+    </select>
+  </div>
+
+  <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
+    <button onclick="deceasePerson()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Decease</button>
+  </div>
+
+    <!-- Bottom Nav Bar -->
+    <div style="height: 80px;"></div>
+    <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="index.html">
+          <i class="fa fa-home"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="schedule.html">
+          <i class="fa fa-calendar-o"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
+        </a>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
+        <a href="contact_book.html">
+          <i class="fa fa-address-book"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
+        </a>
+        <div style="height: 0; width: 100%;">
+          <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="unclaimed_referrals.html">
+          <i class="fa fa-bell"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
+        </a>
+        <div style="height: 0; width: 100%;">
+          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-cell w3-center w3-xlarge">
+        <a href="sync.html">
+          <i class="fa fa-refresh"></i>
+          <div class="w3-tiny w3-opacity" style="height: 0;">Sync</div>
+        </a>
+      </div>
+
+    </div>
+
+
+
+  <script>
+
+function areaOptionChanged(el) {
+  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
+}
+
+  </script>
+
+  </body>
+</html>
