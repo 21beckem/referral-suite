@@ -440,22 +440,11 @@ function sendToAnotherArea() {
     person[3] = 'Sent';
     person[5] = newArea;
 
-    // overwrite old person
-    let found = false;
-    for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
-        const oldPer = data.area_specific_data.my_referrals[i];
-        if (oldPer[2] == person[2]) {
-            found = true;
-            data.changed_people = Array();
-            data.changed_people.push(person);
-            setCookieJSON('dataSync', data);
-            break;
-        }
+    if (!("changed_people" in data)) {
+        data.changed_people = Array();
     }
-    if (!found) {
-        alert("something went wrong, we couldn't find this person. Try again");
-        safeRedirect('index.html');
-    }
+    data.changed_people.push(person);
+    setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
@@ -486,12 +475,15 @@ function saveFollowUpForm() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+function sendToDeceasePage(el) {
+    safeRedirect(el.getAttribute('href'));
+}
 function deceasePerson() {
-    const person = getCookieJSON('linkPages') || null;
     let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
     if (!youSure) {
         return;
     }
+    const person = getCookieJSON('linkPages') || null;
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -499,23 +491,13 @@ function deceasePerson() {
 
     // set new area in data and save to cookie
     person[3] = 'Not interested';
+    person[21] = _('deceaseDropdown').value;
 
-    // overwrite old person
-    let found = false;
-    for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
-        const oldPer = data.area_specific_data.my_referrals[i];
-        if (oldPer[2] == person[2]) {
-            found = true;
-            data.changed_people = Array();
-            data.changed_people.push(person);;
-            setCookieJSON('dataSync', data);
-            break;
-        }
+    if (!("changed_people" in data)) {
+        data.changed_people = Array();
     }
-    if (!found) {
-        alert("something went wrong, we couldn't find this person. Try again");
-        safeRedirect('index.html');
-    }
+    data.changed_people.push(person);
+    setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
