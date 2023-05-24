@@ -1,0 +1,37 @@
+{
+    "overall settings" : {
+        "enable FH referrals" : true,
+        "enable follow ups" : true
+    },
+    "referralCols" : {
+        "type" : 0,
+        "id" : 1,
+        "date" : 2,
+        "sent status" : 3,
+        "claimed area" : 4,
+        "teaching area" : 5,
+        "AB status" : 6,
+        "full name" : 7,
+        "first name" : 8,
+        "last name" : 9,
+        "phone" : 10,
+        "email" : 11,
+        "street address" : 12,
+        "city" : 13,
+        "zip" : 14,
+        "lang" : 15,
+        "referral origin" : 16,
+        "ad name" : 17,
+        "next follow up" : 18,
+        "follow up status" : 19,
+        "sent date" : 20,
+        "not interested reason" : 21
+    },
+    "follow up delays" : {
+        "not interested anymore" : null,
+        "hasnt been contacted" : 3,
+        "hasnt responded" : 7,
+        "is in contact" : 14,
+        "appointment is set up" : null
+    }
+}
