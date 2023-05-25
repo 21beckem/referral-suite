@@ -1,9 +1,18 @@
 {
+    "inboxers" : [
+        ["Hägersten", "500367156@missionary.org"],
+        ["Kungsbacka", "500365898@missionary.org"],
+        ["Eskilstuna", "8868609@missionary.org"],
+        ["Trollhättan", "8868627@missionary.org"],
+        ["Örnsköldsvik", "8868624@missionary.org"],
+        ["Gävle", "115495285@missionary.org"],
+        ["SMOEs", "141877743@missionary.org"]
+    ],
     "overall settings" : {
         "enable FH referrals" : true,
         "enable follow ups" : true
     },
-    "referralCols" : {
+    "tableColumns" : {
         "type" : 0,
         "id" : 1,
         "date" : 2,
@@ -33,5 +42,11 @@
         "hasnt responded" : 7,
         "is in contact" : 14,
         "appointment is set up" : null
+    },
+    "default values" : {
+        "sent" : "Sent",
+        "not interested" : "Not interested",
+        "not sent" : "Not sent",
+        "unclaimed" : "Unclaimed"
     }
 }
