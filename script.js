@@ -15,7 +15,8 @@ function verifySUhasBeenSent(el) {
         if (per==null) {
             return;
         }
-        su_done.push( [per[0], per[3]] );
+        per[ CONFIG['FHColumns']['sent status'] ] = "Sent";
+        su_done.push( per );
         setCookieJSON('suDone', su_done);
         //alert('syncing now');
         safeRedirect(el.getAttribute('href'));
@@ -147,34 +148,95 @@ async function SYNC_referralSuiteStuff() {
     }
 }
 async function sortOfSYNC_QueryMyself() {
-    let fetchURL = _CONFIG()['overall settings']['table Query link'];
-    fetchURL += '/gviz/tq?tq=';
+    if (data == null) {
+        return;
+    }
+    let qURL = _CONFIG()['overall settings']['table Query link'];
+    let tabId = _CONFIG()['overall settings']['table tab id']
+    let sURL = _CONFIG()['overall settings']['table scribe link'];
+    sURL += '?area=' + area;
+    sURL += '&tabId=' + tabId;
+    sURL += '&data=' + encodeURIComponent( JSON.stringify(data) );
 
-    // set values with app script
+    if ("changed_people" in data) {
+        if (data.changed_people.length > 0) {
+            console.log('scribe activated', sURL);
+            await safeFetch(sURL);
+        }
+    }
 
+
+    let newSyncData = {
+        "overall_data" : {
+            "new_referrals" : []
+        },
+        "area_specific_data" : {
+            "my_referrals" : [],
+            "follow_ups" : [],
+            "last_sync" : new Date()
+        }
+    }
+    let claimedCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['claimed area'] + 1);
+    let sentStatusCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['sent status'] + 1);
 
     // read unclaimed
-
+    newSyncData.overall_data.new_referrals = await G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = 'Unclaimed'");
 
     // read for this area
-
+    newSyncData.area_specific_data.my_referrals = await G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = '"+area+"' AND "+sentStatusCol+" = 'Not sent'");
 
     if (_CONFIG()['overall settings']['enable follow ups']) {
         
         // read ALL follow ups
-
+        let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
+        let FUs = await G_Sheets_Query(qURL, tabId, "select * where "+nxtFU_Col+" < now() and "+nxtFU_Col+" is not null");
 
         // filter through follow ups. Keep those that don't have a team anymore to the first leader in the list
+        for (let i = 0; i < FUs.length; i++) {
+            const per = FUs[i];
+            let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+            if (per_claimed == area) {
+                newSyncData.area_specific_data.follow_ups.push(per);
+                continue;
+            }
+            let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+            if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+                newSyncData.area_specific_data.follow_ups.push(per);
+                continue;
+            }
+        }
     }
+    setCookieJSON('dataSync', newSyncData);
+}
+function GoogleColumnToLetter(column) {
+    var temp, letter = '';
+    while (column > 0)
+    {
+      temp = (column - 1) % 26;
+      letter = String.fromCharCode(temp + 65) + letter;
+      column = (column - temp - 1) / 26;
+    }
+    return letter;
 }
 async function G_Sheets_Query(mainLink, tabId, query) {
-    return await safeFetch(mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId)
+    let qLink = mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId;
+    console.log(qLink);
+    return await safeFetch(qLink)
     .then((response) => response.text())
     .then((txt) => {
-        return JSON.parse(
+        return getRowsFromQuery(JSON.parse(
             txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
             .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
-        );
+        ));
+    })
+}
+function getRowsFromQuery(bigData) {
+    return bigData.table.rows.map(x => {
+        return x['c'].map(xx => {
+            if (xx == null) { return '' }
+            if ('f' in xx) { return xx['f'] }
+            return xx['v'];
+        })
     })
 }
 async function sortOfSYNC_UseSQL() {
@@ -217,35 +279,6 @@ async function SYNC_sheetMapStuff() {
     await SheetMap.syncChanges();
     await ss.fetch('Schedule', 'C2:BI');
 }
-async function SYNC_getAreaEmail() {
-    //also get area email
-    let areaEmail = "";
-    let leaders = "0";
-    await safeFetch('login.html').then(res => res.text()).then(txt => {
-        let r = findAreaEmailFromHTML(txt, area);
-        console.log(r);
-        areaEmail = r[0];
-        leaders = r[1];
-    });
-    setCookie('areaUserEmail', areaEmail);
-    setCookie('areaIsLeaders', leaders);
-}
-function findAreaEmailFromHTML(txt, thisArea) {
-    let areaEmail = "";
-    let leaders = "0";
-    const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
-    for (const match of matches) {
-        if (match[4] == thisArea) {
-            //console.log("match",match);
-            areaEmail = match[2];
-            if (match[3].includes('leader')) {
-                leaders = "1";
-            }
-            break;
-        }
-    }
-    return [areaEmail, leaders];
-}
 function GetTodaysSchedule() {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -273,11 +306,8 @@ function getCurrentInboxingArea() {
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
 
-    let areaEmail = "";
-    await safeFetch('login.html').then(res => res.text()).then(txt => {
-        areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
-    });
-    const reqUrl = _CONFIG()['overall settings']['SYNC link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    let areaEmail = _CONFIG()['inboxers'][0];
+    const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
 }
 function makeListSU_people() {
@@ -306,16 +336,16 @@ function makeListUNclaimedPeople() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[1]));
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
         output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[2] + ' ' + per[3] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -489,7 +519,7 @@ function syncButton(el) {
     });
 }
 function sendToAnotherArea() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = getCookieJSON('linkPages') || null;
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -497,8 +527,16 @@ function sendToAnotherArea() {
     const newArea = document.getElementById('areadropdown').value;
 
     // set new area in data and save to cookie
-    person[ CONFIG['tableColumns']['send status'] ] = 'Sent';
+    person[ CONFIG['tableColumns']['sent status'] ] = 'Sent';
     person[ CONFIG['tableColumns']['teaching area'] ] = newArea;
+
+    // follow up
+    let nextFU = new Date();
+    person[ CONFIG['tableColumns']['sent date'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+
+    nextFU.setDate(nextFU.getDate() + CONFIG['follow ups']['initial delay after sent']);
+    nextFU.setHours(3,0,0,0);
+    person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
     if (!("changed_people" in data)) {
         data.changed_people = Array();
@@ -509,14 +547,9 @@ function sendToAnotherArea() {
     safeRedirect('force-sync.html');
 }
 
-// this controls how long until the follow up pops up again based off what answer the missionary gave.
-// "green" and "Not interested" tells the system to not make any more follow-up reminders
-//                          0             1         2         3         4
-let followUpDelay = ["Not interested", "3 days", "7 days", "14 days", "green"];
-
 
 function saveFollowUpForm() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = getCookieJSON('linkPages') || null;
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -527,9 +560,25 @@ function saveFollowUpForm() {
     if (!data.hasOwnProperty('follow_up_update')) {
         data.follow_up_update = Array();
     }
+
+    if (status == '0') {
+        person[ CONFIG['tableColumns']['AB status'] ] = "Grey";
+    } else if (status == '4') {
+        person[ CONFIG['tableColumns']['AB status'] ] = "Green";
+    }
     
-    let tosend = [person[ CONFIG['tableColumns']['type'] ], person[ CONFIG['tableColumns']['id'] ], status, followUpDelay[parseInt(status)]];
-    data.follow_up_update.push(tosend);
+    if (status == '0' || status =='4') {
+        person[ CONFIG['tableColumns']['next follow up'] ] = "";
+    } else {
+        let delay = CONFIG['follow ups']['further delays'][ parseInt(status) ];
+        let nextFU = new Date();
+        nextFU.setDate(nextFU.getDate() + delay);
+        person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+    }
+    
+    person[ CONFIG['tableColumns']['follow up status'] ] = status;
+
+    data.follow_up_update.push(person);
     setCookieJSON('dataSync', data);
 
     // send to force-sync.html
@@ -568,10 +617,11 @@ function claimPerson() {
         safeRedirect('index.html');
         return;
     }
-    if ( !("claim_these" in data) ) {
-        data['claim_these'] = Array();
+    if ( !("changed_people" in data) ) {
+        data['changed_people'] = Array();
     }
-    data['claim_these'].push(person);
+    person[ CONFIG['tableColumns']['claimed area'] ] = area;
+    data['changed_people'].push(person);
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
