@@ -243,16 +243,16 @@ function makeListSU_people() {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[1]));
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['FHColumns']['date'] ]));
         output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
         <div class="w3-bar" style="display: flex;">
           <div class="w3-bar-item w3-circle">
             <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
           </div>
           <div class="w3-bar-item">
-            <span class="w3-large">` + per[4] + ' ' + per[5] + `</span><br>
+            <span class="w3-large">` + per[ CONFIG['FHColumns']['first name'] ] + ' ' + per[ CONFIG['FHColumns']['last name'] ] + `</span><br>
             <span>` + elapsedTime + `</span><br>
-            <span>` + prettyPrintRefOrigin(per[11]) + `</span>
+            <span>` + prettyPrintRefOrigin(per[ CONFIG['FHColumns']['referral origin'] ]) + `</span>
           </div>
         </div>
       </aa>`;
@@ -284,16 +284,16 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[2]));
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
         output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="contact_info.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -304,7 +304,7 @@ function makeListFollowUpPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[18]));
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['next follow up'] ]));
         output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="follow_up_on.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -313,9 +313,9 @@ function makeListFollowUpPeople(arr) {
               </div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -324,9 +324,9 @@ function makeListFollowUpPeople(arr) {
 }
 function fillInSUInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[4] + ' ' + person[5];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[11]);
-    _('email').innerHTML = person[6];
+    _('contactname').innerHTML = person[ CONFIG['FHColumns']['first name'] ] + ' ' + person[ CONFIG['FHColumns']['last name'] ];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['FHColumns']['referral origin'] ]);
+    _('email').innerHTML = person[ CONFIG['FHColumns']['email'] ];
     _('address').innerHTML = person[7] + ' ' + person[8];
     _('SU_message').innerHTML = makeSUMessage(person);
 }
