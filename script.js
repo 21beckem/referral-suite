@@ -277,7 +277,7 @@ async function SYNC_setCurrentInboxingArea() {
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
-    const reqUrl = _CONFIG()['overall settings']['table Query link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    const reqUrl = _CONFIG()['overall settings']['SYNC link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
 }
 function makeListSU_people() {
@@ -369,52 +369,53 @@ function fillInSUInfo() {
     _('contactname').innerHTML = person[ CONFIG['FHColumns']['first name'] ] + ' ' + person[ CONFIG['FHColumns']['last name'] ];
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['FHColumns']['referral origin'] ]);
     _('email').innerHTML = person[ CONFIG['FHColumns']['email'] ];
-    _('address').innerHTML = person[7] + ' ' + person[8];
+    _('address').innerHTML = person[ CONFIG['FHColumns']['city'] ] + ' ' + person[ CONFIG['FHColumns']['zip'] ];
     _('SU_message').innerHTML = makeSUMessage(person);
 }
 function makeSUMessage(per) {
-    if (per[11].toLowerCase().includes('fb') || per[11].toLowerCase().includes('ig')) {
+    if (per[ CONFIG['FHColumns']['referral origin'] ].toLowerCase().includes('fb') || per[ CONFIG['FHColumns']['referral origin'] ].toLowerCase().includes('ig')) {
 return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[9] + `
+What they want help with: ` + per[ CONFIG['FHColumns']['help request'] ] + `
 
-How experienced they are: ` + per[10];
+How experienced they are: ` + per[ CONFIG['FHColumns']['experience'] ];
     } else {
         return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[9] + `
+What they want help with: ` + per[ CONFIG['FHColumns']['help request'] ] + `
 
-How experienced they are: ` + per[10];
+How experienced they are: ` + per[ CONFIG['FHColumns']['experience'] ];
     }
 }
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[7];
-    _('telnumber').href = 'tel:+' + person[10];
-    //_('smsnumber').href = 'sms:+' + person[8];
+    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
+    _('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
+    //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
-    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[16]);
-    _('phonenumber').innerHTML = person[10];
-    _('email').innerHTML = person[11];
-    let addStr = person[12] + ' ' + person[13] + ' ' + person[14];
+    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['tableColumns']['referral origin'] ]);
+    _('phonenumber').innerHTML = person[ CONFIG['tableColumns']['phone'] ];
+    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
+    let addStr = person[ CONFIG['tableColumns']['street address'] ] + ' ' + person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
-    _('adName').innerHTML = person[17];
-    _('prefSprak').innerHTML = (person[15] == "") ? "Undeclared" : person[15];
+    _('adName').innerHTML = person[ CONFIG['tableColumns']['ad name'] ];
+    _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
 }
 function fillInFollowUpInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[7];
-    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
-    _('lastAtt').innerHTML = new Date(person[20]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    _('refLoc').innerHTML = person[5];
-    _('refLoc2').innerHTML = person[5];
+    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
+    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
+    _('lastAtt').innerHTML = new Date(person[ CONFIG['tableColumns']['sent date'] ]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    _('refLoc').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
+    _('refLoc2').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
+    _('refSender').innerHTML = person[ CONFIG['tableColumns']['claimed area'] ];
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
@@ -444,8 +445,8 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
         });
     }
     const person = getCookieJSON('linkPages') || null;
-    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[11] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[10])) + '?body=') : emailLink;
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;
@@ -496,8 +497,8 @@ function sendToAnotherArea() {
     const newArea = document.getElementById('areadropdown').value;
 
     // set new area in data and save to cookie
-    person[3] = 'Sent';
-    person[5] = newArea;
+    person[ CONFIG['tableColumns']['send status'] ] = 'Sent';
+    person[ CONFIG['tableColumns']['teaching area'] ] = newArea;
 
     if (!("changed_people" in data)) {
         data.changed_people = Array();
@@ -527,7 +528,7 @@ function saveFollowUpForm() {
         data.follow_up_update = Array();
     }
     
-    let tosend = [person[0], person[1], status, followUpDelay[parseInt(status)]];
+    let tosend = [person[ CONFIG['tableColumns']['type'] ], person[ CONFIG['tableColumns']['id'] ], status, followUpDelay[parseInt(status)]];
     data.follow_up_update.push(tosend);
     setCookieJSON('dataSync', data);
 
@@ -549,8 +550,8 @@ function deceasePerson() {
     }
 
     // set new area in data and save to cookie
-    person[3] = 'Not interested';
-    person[21] = _('deceaseDropdown').value;
+    person[ CONFIG['tableColumns']['sent status'] ] = 'Not interested';
+    person[ CONFIG['tableColumns']['not interested reason'] ] = _('deceaseDropdown').value;
 
     if (!("changed_people" in data)) {
         data.changed_people = Array();
