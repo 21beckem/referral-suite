@@ -38,6 +38,20 @@
         "sent date" : 20,
         "not interested reason" : 21
     },
+    "FHColumns" : {
+        "id" : 0,
+        "date" : 1,
+        "sent status" : 2,
+        "full name" : 3,
+        "first name" : 4,
+        "last name" : 5,
+        "email" : 6,
+        "city" : 7,
+        "zip" : 8,
+        "help request" : 9,
+        "experience" : 10,
+        "referral origin" : 11
+    },
     "follow up delays" : {
         "not interested anymore" : null,
         "hasnt been contacted" : 3,
