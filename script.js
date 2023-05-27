@@ -80,6 +80,9 @@ function saveBeforeSUPage(person, el) {
     safeRedirect(el.getAttribute('href'));
 }
 function _(x) { return document.getElementById(x); }
+function _CONFIG() {
+    return getCookieJSON('CONFIG') || null;
+}
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 /////  above functions make everything function with basic navigation between pages. No Touch!
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
@@ -87,9 +90,10 @@ let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
 let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
+let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
 
-if (area == null) {
+if (( area==null || CONFIG==null)  && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
 }
 
@@ -101,15 +105,16 @@ async function SYNC(loadingCover=true) {
     if (loadingCover) {
         _('loadingcover').style.display = '';
     }
+
+    await SYNC_getConfig();
+
     let rs_wait = SYNC_referralSuiteStuff();
     let su_wait = SYNC_SUStuff();
     let sm_wait = SYNC_sheetMapStuff();
-    let ar_wait = SYNC_getAreaEmail();
 
     await rs_wait;
     await su_wait;
     await sm_wait;
-    await ar_wait;
 
     await SYNC_setCurrentInboxingArea();
 
@@ -118,9 +123,19 @@ async function SYNC(loadingCover=true) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite.php';
+async function SYNC_getConfig() {
+    return await safeFetch('config.json')
+        .then((response) => response.json())
+        .then((json) => {
+            setCookieJSON('CONFIG', json);
+            setCookie('areaUserEmail', CONFIG['inboxers'][area][0]);
+            leaders = (CONFIG['inboxers'][area].length > 1 && CONFIG['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
+            setCookie('areaIsLeaders', leaders);
+            return json;
+        });
+}
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = referralSuiteFetchURL + '?area=';
+    let fetchURL = _CONFIG()['overall settings']['SYNC link'] + '?area=';
     fetchURL += area;
     if (data != null) {
         delete data.overall_data;
@@ -128,7 +143,7 @@ async function SYNC_referralSuiteStuff() {
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     console.log('Referrals Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
-    const response = await fetch(fetchURL);
+    const response = await safeFetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
     console.log(syncRes);
@@ -137,10 +152,10 @@ async function SYNC_referralSuiteStuff() {
     setCookieJSON('dataSync', syncRes);
 }
 async function SYNC_SUStuff() {
-    let fetchURL = referralSuiteFetchURL + '?area=SU';
+    let fetchURL = _CONFIG()['overall settings']['SYNC link'] + '?area=SU';
     fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
     console.log('SU Fetch:', fetchURL);
-    const response = await fetch(fetchURL);
+    const response = await safeFetch(fetchURL);
     const syncRes = await response.json();
     //alert('done');
     console.log(syncRes);
@@ -218,7 +233,7 @@ async function SYNC_setCurrentInboxingArea() {
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
-    const reqUrl = referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    const reqUrl = _CONFIG()['overall settings']['SYNC link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
 }
 function makeListSU_people() {

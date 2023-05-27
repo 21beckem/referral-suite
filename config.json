@@ -1,14 +1,16 @@
 {
-    "inboxers" : [
-        ["Hägersten", "500367156@missionary.org"],
-        ["Kungsbacka", "500365898@missionary.org"],
-        ["Eskilstuna", "8868609@missionary.org"],
-        ["Trollhättan", "8868627@missionary.org"],
-        ["Örnsköldsvik", "8868624@missionary.org"],
-        ["Gävle", "115495285@missionary.org"],
-        ["SMOEs", "141877743@missionary.org"]
-    ],
+    "inboxers" : {
+        "Hägersten" : ["500367156@missionary.org", "leader"],
+        "Kungsbacka" : ["500365898@missionary.org"],
+        "Eskilstuna" : ["8868609@missionary.org"],
+        "Trollhättan" : ["8868627@missionary.org"],
+        "Örnsköldsvik" : ["8868624@missionary.org"],
+        "Gävle" : ["115495285@missionary.org"],
+        "SMOEs" : ["141877743@missionary.org", "leader"]
+    },
     "overall settings" : {
+        "SYNC link" : "https://smoe.ssmission.cloud/API/referral-suite.php",
+        "login pin" : "0852",
         "enable FH referrals" : true,
         "enable follow ups" : true
     },

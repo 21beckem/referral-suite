@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" dont-redirect="true"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -23,18 +24,15 @@
 
     <!-- Login Buttons -->
     <div id="arealoginbuttons">
-      <button email="500367156@missionary.org" leaders>Hägersten</button>
-      <button email="500365898@missionary.org">Kungsbacka</button>
-      <button email="8868609@missionary.org">Eskilstuna</button>
-      <button email="8868627@missionary.org">Trollhättan</button>
-      <button email="8868624@missionary.org">Örnsköldsvik</button>
-      <button email="115495285@missionary.org">Gävle</button>
-      <button email="141877743@missionary.org" leaders>SMOEs</button>
+      <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+        <div class="lds-dual-ring"></div>
+      </div>
     </div>
     <script>
 setCookie('dataSync', null);
 setCookie('areaUser', '');
 setCookie('suSync', null);
+setCookieJSON('CONFIG', [null]);
 setCookie('areaUserEmail', '');
 function signInAsArea(el) {
   setCookie('areaUserEmail', el.getAttribute('email'));
@@ -55,12 +53,17 @@ function inIframe() { try {return window.self !== window.top;} catch(e) {return 
 function setCookie(cname, cvalue) {
   localStorage.setItem(cname, cvalue);
 }
-// set onclick values
-const arealoginbuttons = document.getElementById('arealoginbuttons');
-for (let i = 0; i < arealoginbuttons.children.length; i++) {
-  const btn = arealoginbuttons.children[i];
-  btn.setAttribute('onclick','signInAsArea(this)');
+// get inboxing areas
+async function fillInAreaButtons() {
+  const cfg = await SYNC_getConfig();
+  const arealoginbuttons = _('arealoginbuttons');
+  let output = '';
+  for (const [area, email] of Object.entries(cfg.inboxers)) {
+    output += '<button email="'+email[0]+'" onclick="signInAsArea(this)">'+area+'</button>'
+  }
+  arealoginbuttons.innerHTML = output;
 }
+fillInAreaButtons();
     </script>
   </body>
 </html>
