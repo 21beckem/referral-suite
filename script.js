@@ -128,9 +128,11 @@ async function SYNC_getConfig() {
         .then((response) => response.json())
         .then((json) => {
             setCookieJSON('CONFIG', json);
-            setCookie('areaUserEmail', CONFIG['inboxers'][area][0]);
-            leaders = (CONFIG['inboxers'][area].length > 1 && CONFIG['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
-            setCookie('areaIsLeaders', leaders);
+            if (area != null) {
+                setCookie('areaUserEmail', json['inboxers'][area][0]);
+                leaders = (json['inboxers'][area].length > 1 && json['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
+                setCookie('areaIsLeaders', leaders);
+            }
             return json;
         });
 }
