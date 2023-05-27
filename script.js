@@ -179,7 +179,7 @@ async function G_Sheets_Query(mainLink, tabId, query) {
 }
 async function sortOfSYNC_UseSQL() {
     let fetchURL = _CONFIG()['overall settings']['table Query link'];
-    fetchURL =+ '?area=' + area;
+    fetchURL += '?area=' + area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     
     console.log('Referrals Fetch:', fetchURL);
