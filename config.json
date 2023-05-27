@@ -9,10 +9,14 @@
         "SMOEs" : ["141877743@missionary.org", "leader"]
     },
     "overall settings" : {
-        "SYNC link" : "https://smoe.ssmission.cloud/API/referral-suite.php",
+        "table Query link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc",
+        "table app script link" : "",
+        "table tab id" : "1589745808",
         "table type" : "google sheets",
         "login pin" : "0852",
         "enable FH referrals" : true,
+        "FH Query link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc",
+        "FH apps script link" : "",
         "enable follow ups" : true
     },
     "tableColumns" : {

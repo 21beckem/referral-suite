@@ -137,12 +137,51 @@ async function SYNC_getConfig() {
         });
 }
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = _CONFIG()['overall settings']['SYNC link'] + '?area=';
-    fetchURL += area;
     if (data != null) {
         delete data.overall_data;
     }
+    if (_CONFIG()['overall settings']['table type'].toLowerCase().includes('sql')) {
+        await sortOfSYNC_UseSQL();
+    } else {
+        await sortOfSYNC_QueryMyself();
+    }
+}
+async function sortOfSYNC_QueryMyself() {
+    let fetchURL = _CONFIG()['overall settings']['table Query link'];
+    fetchURL += '/gviz/tq?tq=';
+
+    // set values with app script
+
+
+    // read unclaimed
+
+
+    // read for this area
+
+
+    if (_CONFIG()['overall settings']['enable follow ups']) {
+        
+        // read ALL follow ups
+
+
+        // filter through follow ups. Keep those that don't have a team anymore to the first leader in the list
+    }
+}
+async function G_Sheets_Query(mainLink, tabId, query) {
+    return await safeFetch(mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId)
+    .then((response) => response.text())
+    .then((txt) => {
+        return JSON.parse(
+            txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
+            .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
+        );
+    })
+}
+async function sortOfSYNC_UseSQL() {
+    let fetchURL = _CONFIG()['overall settings']['table Query link'];
+    fetchURL =+ '?area=' + area;
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
+    
     console.log('Referrals Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
     const response = await safeFetch(fetchURL);
@@ -154,7 +193,10 @@ async function SYNC_referralSuiteStuff() {
     setCookieJSON('dataSync', syncRes);
 }
 async function SYNC_SUStuff() {
-    let fetchURL = _CONFIG()['overall settings']['SYNC link'] + '?area=SU';
+    if (!_CONFIG()['overall settings']['enable FH referrals']) {
+        return;
+    }
+    let fetchURL = _CONFIG()['overall settings']['table Query link'] + '?area=SU';
     fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
     console.log('SU Fetch:', fetchURL);
     const response = await safeFetch(fetchURL);
@@ -235,7 +277,7 @@ async function SYNC_setCurrentInboxingArea() {
     await safeFetch('login.html').then(res => res.text()).then(txt => {
         areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
     });
-    const reqUrl = _CONFIG()['overall settings']['SYNC link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    const reqUrl = _CONFIG()['overall settings']['table Query link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
 }
 function makeListSU_people() {
