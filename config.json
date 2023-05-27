@@ -10,6 +10,7 @@
     },
     "overall settings" : {
         "SYNC link" : "https://smoe.ssmission.cloud/API/referral-suite.php",
+        "table type" : "google sheets",
         "login pin" : "0852",
         "enable FH referrals" : true,
         "enable follow ups" : true
