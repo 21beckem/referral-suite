@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Code</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" dont-redirect="true"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <meta name="theme-color" content="#462c6a">
+</head>
+
+<body>
+    <!-- Top Bar -->
+    <div class="w3-top w3-cell-row w3-area-blue">
+        <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+            <a>Verify Pin</a>
+        </div>
+    </div>
+    <div style="height: 80px;"></div>
+
+
+
+    <div class="w3-center" style="padding-top: 100px;">Enter a PIN to continue</div>
+    <div style="height:20px"></div>
+    <div class="w3-center">
+        <input id="pin-code" type="password" inputmode="numeric" maxlength="4" autofocus oninput="validatePinCode(this)">
+    </div>
+
+    <script>
+
+function validatePinCode(el) {
+    if (el.value.length >= 4) {
+        if (el.value == CONFIG['overall settings']['login pin']) {
+            sessionStorage.setItem("logged_in", "1");
+            safeRedirect('index.html');
+        } else {
+            el.classList.add('shake');
+            setTimeout(function(el) {
+                _('pin-code').classList.remove('shake');
+            }, 300);
+        }
+    }
+}
+
+    </script>
+
+</body>
+
+</html>

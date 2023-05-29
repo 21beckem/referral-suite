@@ -96,6 +96,10 @@ let ITLs = (getCookie('areaIsLeaders') == "1");
 
 if (( area==null || CONFIG==null)  && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
+} else {
+    if (sessionStorage.getItem("logged_in")==null && document.currentScript.getAttribute('dont-redirect')==null) {
+        safeRedirect('pin-code.html');
+    }
 }
 
 
@@ -148,9 +152,6 @@ async function SYNC_referralSuiteStuff() {
     }
 }
 async function sortOfSYNC_QueryMyself() {
-    if (data == null) {
-        return;
-    }
     let qURL = _CONFIG()['overall settings']['table Query link'];
     let tabId = _CONFIG()['overall settings']['table tab id']
     let sURL = _CONFIG()['overall settings']['table scribe link'];
@@ -158,7 +159,7 @@ async function sortOfSYNC_QueryMyself() {
     sURL += '&tabId=' + tabId;
     sURL += '&data=' + encodeURIComponent( JSON.stringify(data) );
 
-    if ("changed_people" in data) {
+    if (data != null && "changed_people" in data) {
         if (data.changed_people.length > 0) {
             console.log('scribe activated', sURL);
             await safeFetch(sURL);

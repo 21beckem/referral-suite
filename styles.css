@@ -123,6 +123,36 @@ a.uline {
     background-color: var(--white) !important;
 }
 
+input#pin-code.shake {
+    animation: horizontal-shaking 0.3s ease-in-out infinite;
+}
+input#pin-code {
+    animation: idle-shaking 0.1s linear infinite;
+    position: relative;
+    caret-color: transparent;
+    display: inline-block;
+    transform: translateX(17px);
+    letter-spacing: 30px;
+    width: 180px;
+    overflow-x: hidden;
+    font-size: x-large;
+    background-color: transparent;
+    outline: 0;
+    border-width: 0 0 0;
+    border-color: var(--white);
+}
+input#pin-code:focus {
+    border-color: var(--light-blue);
+}
+@keyframes horizontal-shaking {
+    0% { transform: translateX(17) }
+    25% { transform: translateX(27px) }
+    50% { transform: translateX(10px) }
+    75% { transform: translateX(27px) }
+    100% { transform: translateX(17) }
+}
+@keyframes idle-shaking { 100% {transform: translateX(17)} }
+
 .w3-center-absolute {
     position: fixed;
     margin-left: auto;
