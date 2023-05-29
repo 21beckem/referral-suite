@@ -150,6 +150,7 @@ async function SYNC_referralSuiteStuff() {
     } else {
         await sortOfSYNC_QueryMyself();
     }
+    console.log('done: SYNC_referralSuiteStuff');
 }
 async function sortOfSYNC_QueryMyself() {
     let qURL = _CONFIG()['overall settings']['table Query link'];
@@ -181,17 +182,17 @@ async function sortOfSYNC_QueryMyself() {
     let sentStatusCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['sent status'] + 1);
 
     // read unclaimed
-    newSyncData.overall_data.new_referrals = await G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = 'Unclaimed'");
-
+    let newRefs_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = 'Unclaimed'");
+    
     // read for this area
-    newSyncData.area_specific_data.my_referrals = await G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = '"+area+"' AND "+sentStatusCol+" = 'Not sent'");
-
+    let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = '"+area+"' AND "+sentStatusCol+" = 'Not sent'");
+    
     if (_CONFIG()['overall settings']['enable follow ups']) {
         
         // read ALL follow ups
         let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
         let FUs = await G_Sheets_Query(qURL, tabId, "select * where "+nxtFU_Col+" < now() and "+nxtFU_Col+" is not null");
-
+        
         // filter through follow ups. Keep those that don't have a team anymore to the first leader in the list
         for (let i = 0; i < FUs.length; i++) {
             const per = FUs[i];
@@ -207,6 +208,10 @@ async function sortOfSYNC_QueryMyself() {
             }
         }
     }
+    // wait for all fetches to finish
+    newSyncData.overall_data.new_referrals = await newRefs_wait;
+    newSyncData.area_specific_data.my_referrals = await myFers_wait;
+
     setCookieJSON('dataSync', newSyncData);
 }
 function GoogleColumnToLetter(column) {
@@ -257,6 +262,7 @@ async function sortOfSYNC_UseSQL() {
 }
 async function SYNC_SUStuff() {
     if (!_CONFIG()['overall settings']['enable FH referrals']) {
+        setCookieJSON('suSync', []);
         return;
     }
     let fetchURL = _CONFIG()['overall settings']['table Query link'] + '?area=SU';
