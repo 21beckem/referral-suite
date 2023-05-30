@@ -249,9 +249,10 @@ function getRowsFromQuery(bigData) {
 async function sortOfSYNC_UseSQL() {
     let fetchURL = _CONFIG()['overall settings']['table Query link'];
     fetchURL += '?area=' + area;
+    fetchURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
     
-    console.log('Referrals Fetch:', fetchURL);
+    console.log('SQL Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
     const response = await safeFetch(fetchURL);
     const syncRes = await response.json();
