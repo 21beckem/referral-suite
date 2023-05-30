@@ -94,7 +94,7 @@ let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
 
-if (( area==null || CONFIG==null)  && document.currentScript.getAttribute('dont-redirect')==null) {
+if (( area==null || CONFIG==null) && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
 } else {
     if (sessionStorage.getItem("logged_in")==null && document.currentScript.getAttribute('dont-redirect')==null) {
@@ -158,6 +158,7 @@ async function sortOfSYNC_QueryMyself() {
     let sURL = _CONFIG()['overall settings']['table scribe link'];
     sURL += '?area=' + area;
     sURL += '&tabId=' + tabId;
+    sURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
     sURL += '&data=' + encodeURIComponent( JSON.stringify(data) );
 
     if (data != null && "changed_people" in data) {
