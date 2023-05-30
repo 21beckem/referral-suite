@@ -565,8 +565,8 @@ function saveFollowUpForm() {
     const status = document.getElementById('statusdropdown').value;
 
     // overwrite old person
-    if (!data.hasOwnProperty('follow_up_update')) {
-        data.follow_up_update = Array();
+    if (!data.hasOwnProperty('changed_people')) {
+        data.changed_people = Array();
     }
 
     if (status == '0') {
@@ -581,13 +581,15 @@ function saveFollowUpForm() {
         let delay = CONFIG['follow ups']['further delays'][ parseInt(status) ];
         let nextFU = new Date();
         nextFU.setDate(nextFU.getDate() + delay);
+        nextFU.setHours(3,0,0,0);
         person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
     }
     
     person[ CONFIG['tableColumns']['follow up status'] ] = status;
 
-    data.follow_up_update.push(person);
+    data.changed_people.push(person);
     setCookieJSON('dataSync', data);
+    console.log(data.changed_people);
 
     // send to force-sync.html
     safeRedirect('force-sync.html');
