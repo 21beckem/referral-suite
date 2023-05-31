@@ -577,7 +577,7 @@ function saveFollowUpForm() {
     }
     
     if (status == '0' || status =='4') {
-        person[ CONFIG['tableColumns']['next follow up'] ] = "";
+        person[ CONFIG['tableColumns']['next follow up'] ] = null;
     } else {
         let delay = CONFIG['follow ups']['further delays'][ parseInt(status) ];
         let nextFU = new Date();
