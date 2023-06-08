@@ -34,6 +34,8 @@
 
     <script>
 
+SYNC_getConfig();
+
 function validatePinCode(el) {
     if (el.value.length >= 4) {
         if (el.value == CONFIG['overall settings']['login pin']) {
