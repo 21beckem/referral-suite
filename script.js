@@ -8,20 +8,6 @@ function verifySentInSMOEsAB(el) {
         safeRedirect(el.getAttribute('href'));
     }
 }
-function verifySUhasBeenSent(el) {
-    const yesno = confirm("You sure? This person will disappear from referral suite when you click 'OK'");
-    if (yesno) {
-        const per = getCookieJSON('linkPages') || null;
-        if (per==null) {
-            return;
-        }
-        per[ CONFIG['FHColumns']['sent status'] ] = "Sent";
-        su_done.push( per );
-        setCookieJSON('suDone', su_done);
-        //alert('syncing now');
-        safeRedirect(el.getAttribute('href'));
-    }
-}
 function safeRedirect(ref) {
     if (!inIframe()) {
         window.location.href = ref;
@@ -76,7 +62,7 @@ function saveBeforeClaimPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
-function saveBeforeSUPage(person, el) {
+function saveBeforeFHPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
@@ -114,11 +100,9 @@ async function SYNC(loadingCover=true) {
     await SYNC_getConfig();
 
     let rs_wait = SYNC_referralSuiteStuff();
-    let su_wait = SYNC_SUStuff();
     let sm_wait = SYNC_sheetMapStuff();
 
     await rs_wait;
-    await su_wait;
     await sm_wait;
 
     await SYNC_setCurrentInboxingArea();
@@ -171,11 +155,11 @@ async function sortOfSYNC_QueryMyself() {
 
     let newSyncData = {
         "overall_data" : {
-            "new_referrals" : []
+            "new_referrals" : [],
+            "follow_ups" : []
         },
         "area_specific_data" : {
             "my_referrals" : [],
-            "follow_ups" : [],
             "last_sync" : new Date()
         }
     }
@@ -199,12 +183,12 @@ async function sortOfSYNC_QueryMyself() {
             const per = FUs[i];
             let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
             if (per_claimed == area) {
-                newSyncData.area_specific_data.follow_ups.push(per);
+                newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
             let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
             if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
-                newSyncData.area_specific_data.follow_ups.push(per);
+                newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
         }
@@ -255,28 +239,29 @@ async function sortOfSYNC_UseSQL() {
     console.log('SQL Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
     const response = await safeFetch(fetchURL);
-    const syncRes = await response.json();
+    let syncRes = await response.json();
     //alert('done');
-    console.log(syncRes);
 
+    // sort through which follow ups we should have
+    let newFUs = Array();
+    for (let i = 0; i < syncRes.overall_data.follow_ups.length; i++) {
+        const per = syncRes.overall_data.follow_ups[i];
+        let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+        if (per_claimed == area) {
+            newFUs.push(per);
+            continue;
+        }
+        let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+        if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+            newFUs.push(per);
+            continue;
+        }
+    }
+    syncRes.overall_data.follow_ups = newFUs;
+    
+    console.log(syncRes);
     //save to cookie
     setCookieJSON('dataSync', syncRes);
-}
-async function SYNC_SUStuff() {
-    if (!_CONFIG()['overall settings']['enable FH referrals']) {
-        setCookieJSON('suSync', []);
-        return;
-    }
-    let fetchURL = _CONFIG()['overall settings']['table Query link'] + '?area=SU';
-    fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
-    console.log('SU Fetch:', fetchURL);
-    const response = await safeFetch(fetchURL);
-    const syncRes = await response.json();
-    //alert('done');
-    console.log(syncRes);
-
-    //save to cookie
-    setCookieJSON('suSync', syncRes);
 }
 async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
@@ -319,38 +304,22 @@ async function SYNC_setCurrentInboxingArea() {
     const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
 }
-function makeListSU_people() {
-    const arr = su_refs;
-    let output = '';
-    for (let i = 0; i < arr.length; i++) {
-        const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['FHColumns']['date'] ]));
-        output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
-        <div class="w3-bar" style="display: flex;">
-          <div class="w3-bar-item w3-circle">
-            <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
-          </div>
-          <div class="w3-bar-item">
-            <span class="w3-large">` + per[ CONFIG['FHColumns']['first name'] ] + ' ' + per[ CONFIG['FHColumns']['last name'] ] + `</span><br>
-            <span>` + elapsedTime + `</span><br>
-            <span>` + prettyPrintRefOrigin(per[ CONFIG['FHColumns']['referral origin'] ]) + `</span>
-          </div>
-        </div>
-      </aa>`;
-    }
-    _('su-referrals').innerHTML = output;
-}
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        let dotStyle = `<div class="w3-bar-item w3-circle">
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+        </div>`;
+        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+            dotStyle = `<div class="w3-bar-item w3-circle">
+                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
+            </div>`;
+        }
         const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
         output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html" class="person-to-click">
-          <div class="w3-bar" style="display: flex;">
-            <div class="w3-bar-item w3-circle">
-              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-            </div>
+          <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
               <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
@@ -365,12 +334,19 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
+        let dotStyle = `<div class="w3-bar-item w3-circle">
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+        </div>`;
+        let nextPage = 'contact_info.html';
+        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+            dotStyle = `<div class="w3-bar-item w3-circle">
+                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
+            </div>`;
+            nextPage = 'fh_referral_info.html';
+        }
         const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
-        output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="contact_info.html" class="person-to-click">
-          <div class="w3-bar" style="display: flex;">
-            <div class="w3-bar-item w3-circle">
-              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-            </div>
+        output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="` + nextPage + `" class="person-to-click">
+          <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
               <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
@@ -403,31 +379,31 @@ function makeListFollowUpPeople(arr) {
     }
     _('yourfollowups').innerHTML = output;
 }
-function fillInSUInfo() {
+function fillInFHInfo() {
     const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[ CONFIG['FHColumns']['first name'] ] + ' ' + person[ CONFIG['FHColumns']['last name'] ];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['FHColumns']['referral origin'] ]);
-    _('email').innerHTML = person[ CONFIG['FHColumns']['email'] ];
-    _('address').innerHTML = person[ CONFIG['FHColumns']['city'] ] + ' ' + person[ CONFIG['FHColumns']['zip'] ];
-    _('SU_message').innerHTML = makeSUMessage(person);
+    _('contactname').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['tableColumns']['referral origin'] ]);
+    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
+    _('address').innerHTML = person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
+    _('FH_message').innerHTML = makeFHMessage(person);
 }
-function makeSUMessage(per) {
-    if (per[ CONFIG['FHColumns']['referral origin'] ].toLowerCase().includes('fb') || per[ CONFIG['FHColumns']['referral origin'] ].toLowerCase().includes('ig')) {
+function makeFHMessage(per) {
+    if (per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('fb') || per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('ig')) {
 return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[ CONFIG['FHColumns']['help request'] ] + `
+What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
 
-How experienced they are: ` + per[ CONFIG['FHColumns']['experience'] ];
+How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
     } else {
         return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[ CONFIG['FHColumns']['help request'] ] + `
+What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
 
-How experienced they are: ` + per[ CONFIG['FHColumns']['experience'] ];
+How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
     }
 }
 function fillInContactInfo() {
@@ -603,7 +579,7 @@ function deceasePerson() {
     if (!youSure) {
         return;
     }
-    const person = getCookieJSON('linkPages') || null;
+    let person = getCookieJSON('linkPages') || null;
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -622,7 +598,7 @@ function deceasePerson() {
     safeRedirect('force-sync.html');
 }
 function claimPerson() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = getCookieJSON('linkPages') || null;
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -695,6 +671,6 @@ window.onload = () => {
         _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
     } catch(e) {}
     try {
-        _('followup_reddot').style.display = (data.area_specific_data.follow_ups.length > 0) ? 'block' : 'none';
+        _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
 }

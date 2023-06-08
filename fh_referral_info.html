@@ -14,7 +14,7 @@
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
     <style>
-#SU_message {
+#FH_message {
   width: calc(100% - 20px);
   margin: 10px;
   white-space: pre-line;
@@ -34,7 +34,7 @@
 
     <!-- Contact message -->
     <div class="w3-large w3-center" style="padding-top: 10px; padding-left: 10px">Give the area this message:</div><p>
-    <div id="SU_message"><!--This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+    <div id="FH_message"><!--This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
       <p>
       LYCKA TILL!
       <p>
@@ -66,7 +66,7 @@
     </div>
     <div class="w3-container" style="margin-top: 30px">
       <div class="w3-container w3-cell w3-center">
-        <button class="w3-button w3-xlarge w3-round-large w3-blue" onclick="verifySUhasBeenSent(this)" href="force-sync.html">Dot created and sent?</button>            
+        <button class="w3-button w3-xlarge w3-round-large w3-blue" onclick="verifySentInSMOEsAB(this)" href="referral_edit.html">Dot created and sent?</button>            
       </div>
     </div>
     
@@ -92,7 +92,7 @@
        </a>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
+     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
        <a href="contact_book.html">
          <i class="fa fa-address-book"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
@@ -102,7 +102,7 @@
        </div>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
+     <div class="w3-container w3-cell w3-center w3-xlarge">
        <a href="unclaimed_referrals.html">
          <i class="fa fa-bell"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
@@ -120,7 +120,7 @@
      </div>
 
    </div>
-   <script>fillInSUInfo()</script>
+   <script>fillInFHInfo()</script>
 
   </body>
 </html>
