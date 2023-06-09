@@ -31,7 +31,8 @@
         "FH Query link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc",
         "FH apps script link" : "",
         "enable follow ups" : true,
-        "enable tell system which area is inboxing" : false
+        "enable tell system which area is inboxing" : false,
+        "most common language in mission" : "Swedish"
     },
     "tableColumns" : {
         "type" : 0,

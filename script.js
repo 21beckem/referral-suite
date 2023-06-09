@@ -382,9 +382,10 @@ function makeListFollowUpPeople(arr) {
 function fillInFHInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['tableColumns']['referral origin'] ]);
+    _('personName').innerHTML = _('contactname').innerHTML;
     _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
     _('address').innerHTML = person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
+    _('FH_lang').innerHTML = CONFIG['overall settings']['most common language in mission'];
     _('FH_message').innerHTML = makeFHMessage(person);
 }
 function makeFHMessage(per) {
