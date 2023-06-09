@@ -56,13 +56,6 @@
         "help request" : 22,
         "experience" : 23
     },
-    "follow up delays" : {
-        "not interested anymore" : null,
-        "hasnt been contacted" : 3,
-        "hasnt responded" : 7,
-        "is in contact" : 14,
-        "appointment is set up" : null
-    },
     "default values" : {
         "sent" : "Sent",
         "not interested" : "Not interested",
