@@ -29,7 +29,7 @@
     <div class="w3-center" style="padding-top: 100px;">Enter a PIN to continue</div>
     <div style="height:20px"></div>
     <div class="w3-center">
-        <input id="pin-code" type="password" inputmode="numeric" maxlength="4" autofocus oninput="validatePinCode(this)">
+        <input id="pin-code" type="password" inputmode="numeric" maxlength="5" autofocus oninput="validatePinCode(this)">
     </div>
 
     <script>
@@ -37,7 +37,10 @@
 SYNC_getConfig();
 
 function validatePinCode(el) {
-    if (el.value.length >= 4) {
+    if (el.value.length > 4) {
+        el.value = el.value.slice(4);
+    }
+    if (el.value.length == 4) {
         if (el.value == CONFIG['overall settings']['login pin']) {
             sessionStorage.setItem("logged_in", "1");
             safeRedirect('index.html');
@@ -49,6 +52,9 @@ function validatePinCode(el) {
         }
     }
 }
+setInterval(() => {
+    _('pin-code').focus();
+}, 100);
 
     </script>
 

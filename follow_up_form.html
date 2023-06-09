@@ -28,12 +28,6 @@
   <div style="height:20px"></div>
   <div class="w3-center">  
     <select onchange="areaOptionChanged(this)" id="statusdropdown">
-      <option></option>
-      <option value="0">😢 Not interested in contact</option>
-      <option value="1">😫 Hasn't been contacted</option>
-      <option value="2">🤔 Hasn't responded</option>
-      <option value="3">😀 Has been contacted</option>
-      <option value="4">🤩 Appointment is set up!</option>
     </select>
   </div>
 
@@ -91,9 +85,10 @@
 
 
   <script>
+fillInFollowUpOptions(_('statusdropdown'));
 
 function areaOptionChanged(el) {
-  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
+  _("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
 
   </script>

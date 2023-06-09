@@ -532,7 +532,13 @@ function sendToAnotherArea() {
     safeRedirect('force-sync.html');
 }
 
-
+function fillInFollowUpOptions(el) {
+    let out = "<option></option>";
+    for (let i = 0; i < Object.keys(CONFIG['follow ups']['status delays']).length; i++) {
+        out += '<option value="' + i + '">' + Object.keys(CONFIG['follow ups']['status delays'])[i] + '</option>';
+    }
+    el.innerHTML = out;
+}
 function saveFollowUpForm() {
     let person = getCookieJSON('linkPages') || null;
     if (person == null) {
@@ -555,7 +561,7 @@ function saveFollowUpForm() {
     if (status == '0' || status =='4') {
         person[ CONFIG['tableColumns']['next follow up'] ] = null;
     } else {
-        let delay = CONFIG['follow ups']['further delays'][ parseInt(status) ];
+        let delay = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
         let nextFU = new Date();
         nextFU.setDate(nextFU.getDate() + delay);
         nextFU.setHours(3,0,0,0);

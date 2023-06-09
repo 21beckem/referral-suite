@@ -10,7 +10,13 @@
     },
     "follow ups" : {
         "initial delay after sent" : 7,
-        "further delays" : [null, 3, 5, 7, null]
+        "status delays" : {
+            "😢 Not interested in contact" : null,
+            "😫 Hasn't been contacted" : 3,
+            "🤔 Hasn't responded" : 5,
+            "😀 Currently in contact" : 7,
+            "🤩 Appointment is set up!" : null
+        }
     },
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
