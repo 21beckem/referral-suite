@@ -552,16 +552,13 @@ function saveFollowUpForm() {
         data.changed_people = Array();
     }
 
-    if (status == '0') {
-        person[ CONFIG['tableColumns']['AB status'] ] = "Grey";
-    } else if (status == '4') {
-        person[ CONFIG['tableColumns']['AB status'] ] = "Green";
-    }
-    
-    if (status == '0' || status =='4') {
+    let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
+    let delay = CONFIG['follow ups']['status delays'][clickedOption];
+
+    if (typeof delay === 'string' || delay instanceof String) {
+        person[ CONFIG['tableColumns']['AB status'] ] = delay;
         person[ CONFIG['tableColumns']['next follow up'] ] = null;
     } else {
-        let delay = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
         let nextFU = new Date();
         nextFU.setDate(nextFU.getDate() + delay);
         nextFU.setHours(3,0,0,0);

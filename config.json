@@ -11,11 +11,11 @@
     "follow ups" : {
         "initial delay after sent" : 7,
         "status delays" : {
-            "😢 Not interested in contact" : null,
+            "😢 Not interested in contact" : "Grey",
             "😫 Hasn't been contacted" : 3,
             "🤔 Hasn't responded" : 5,
             "😀 Currently in contact" : 7,
-            "🤩 Appointment is set up!" : null
+            "🤩 Appointment is set up!" : "Green"
         }
     },
     "overall settings" : {
