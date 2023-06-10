@@ -158,6 +158,11 @@ a.uline {
     left: 50%;
     transform: translateX(-50%);
 }
+.google_slides_import {
+    border: none;
+    width: 100%;
+    height: calc(100% - 127px);
+}
 
 input#pin-code.shake {
     animation: horizontal-shaking 0.3s ease-in-out infinite;

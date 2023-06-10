@@ -410,7 +410,7 @@ How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
 function fillInContactInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
-    _('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
+    //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
