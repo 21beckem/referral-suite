@@ -424,6 +424,12 @@ function fillInContactInfo() {
     _('adName').innerHTML = person[ CONFIG['tableColumns']['ad name'] ];
     _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
 }
+function fillInHelpBeforeCallPage() {
+    const person = getCookieJSON('linkPages') || null;
+    let thisUrl = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
+    thisUrl = thisUrl.substr(0, thisUrl.lastIndexOf("/")) + '/embed';
+    _('google_slides_import').src = thisUrl;
+}
 function fillInFollowUpInfo() {
     const person = getCookieJSON('linkPages') || null;
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];

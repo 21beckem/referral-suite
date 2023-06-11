@@ -158,10 +158,12 @@ a.uline {
     left: 50%;
     transform: translateX(-50%);
 }
-.google_slides_import {
+#google_slides_import {
+    position: relative;
     border: none;
     width: 100%;
-    height: calc(100% - 127px);
+    height: calc(100% - 147px);
+    z-index: 1;
 }
 
 input#pin-code.shake {

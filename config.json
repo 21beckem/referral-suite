@@ -21,6 +21,10 @@
     "walkthrough links" : {
         "daily reporting" : "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618={Area}"
     },
+    "tips before calling" : {
+        "MB Request" : "https://docs.google.com/presentation/d/e/2PACX-1vQdQ_bw1CskY7jO9Fcg8A_Sk9Praug49c9GAc78_wcJ8y045r-XUkX0V2ASnf3S8aPbO26pATOBIWg_/pub?start=false&loop=false&delayms=3000",
+        "Missionary Visit" : "https://docs.google.com/presentation/d/e/2PACX-1vTb-US-JSSUYtKKg0P4lRrcRJ2QWu1rfs38r9lQK7kxXE13KIWUQ_bwGRgpWOb1dvUQy36vDLtXRrGg/embed?start=false&loop=false&delayms=3000"
+    },
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
         "table scribe link" : "https://script.google.com/macros/s/AKfycbyULhG4Vw-AK0Gvw5wOWLgzZPC-m5PA5-zDRNqrTeIKZarKLlqPSjX__nIN92EC6Rif/exec",

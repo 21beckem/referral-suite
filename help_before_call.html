@@ -13,6 +13,16 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
+    <style>
+#toCallBtn {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 60px;
+  z-index: 1;
+  box-shadow: 1px 2px 15px -7px black;
+}
+    </style>
   </head>
   <body>
     <!-- Top Bar -->
@@ -23,7 +33,13 @@
     </div>
     <div style="height: 68px;"></div>
 
-    <iframe class="google_slides_import" src="https://docs.google.com/presentation/d/e/2PACX-1vS7GAJJTYowfHDdJUIqfMO4wFzLQR_vbZ1Nh4T9a7Dr8YSuFgdHLr5qiinUrpHtyynuFAKGdtdYgnTT/embed" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <div id="loadingAnim" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+      <div class="lds-dual-ring"></div>
+    </div>
+    <iframe id="google_slides_import" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+    <button id="toCallBtn" class="w3-button w3-xlarge w3-blue" onclick="callThenGoBack()"><i class="fa fa-phone-square w3-xxlarge w3-text-call-color"></i> CONTINUE TO CALL 🡵</button>            
+
     
     <!-- Bottom Nav Bar -->
     <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
@@ -70,7 +86,15 @@
      </div>
 
    </div>
-   <script></script>
+   <script>
+
+fillInHelpBeforeCallPage();
+function callThenGoBack() {
+  const person = getCookieJSON('linkPages') || null;
+  window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
+  safeRedirect('contact_info.html');
+}
+   </script>
 
   </body>
 </html>
