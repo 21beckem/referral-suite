@@ -103,10 +103,14 @@
 
     <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
     <div class="full_width_home_btn">
-      <a target="_blank" id="admin_btn" href="https://smoe.ssmission.cloud/API/areas_overview.php?key=re7l5yXXdcssI07WK6DK"><div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');"></div></a>
+      <a id="MB_deliverLink" target="_blank" href="">
+        <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
+      </a>
     </div>
     <div class="full_width_home_btn">
-      <a target="_blank" href="https://forms.gle/UH2vA9VrdA2jswpZ9"><div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');">BoM Form</div></a>
+      <a id="adDeck" target="_blank" href="">
+        <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
+      </a>
     </div>
 
     <!-- Sign Out Button -->
@@ -164,7 +168,6 @@
 
 
     <script>
-if (ITLs) { _('admin_btn').style.display = ""; }
 
 let maxRefsAllowed = 15;
 const currentRefCount = data.area_specific_data.my_referrals.length;
@@ -197,7 +200,9 @@ if (data.area_specific_data.my_referrals.length > 0) {
   }
 }
 
-_('reporting_link').href = CONFIG['walkthrough links']['daily reporting'].replace("{Area}", area);
+_('reporting_link').href = CONFIG['home page links']['daily reporting'].replace("{Area}", area);
+_('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
+_('adDeck').href = CONFIG['home page links']['ad deck'];
     </script>
     
   </body>

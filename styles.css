@@ -162,6 +162,9 @@ a.uline {
     height: 80px;
     padding: 5px;
 }
+.full_width_home_btn div a {
+    border: 1px solid #f2bfff;
+}
 #google_slides_import {
     position: relative;
     border: none;

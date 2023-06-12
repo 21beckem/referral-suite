@@ -422,6 +422,7 @@ function fillInContactInfo() {
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
     _('adName').innerHTML = person[ CONFIG['tableColumns']['ad name'] ];
+    _('adDeck').href = CONFIG['home page links']['ad deck'];
     _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
 }
 function fillInHelpBeforeCallPage() {
