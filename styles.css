@@ -158,6 +158,10 @@ a.uline {
     left: 50%;
     transform: translateX(-50%);
 }
+.full_width_home_btn {
+    height: 80px;
+    padding: 5px;
+}
 #google_slides_import {
     position: relative;
     border: none;
