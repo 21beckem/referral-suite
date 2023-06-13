@@ -66,34 +66,34 @@
       <table id="bigBtnsTable">
         <tr>
             <td>
-              <a href="coming_soon.html">
+              <a id="1_sync" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/1_home_btn.jpg');"></div>
               </a>
             </td>
             <td>
-              <a href="coming_soon.html">
+              <a id="2_contact" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/2_home_btn.jpg');"></div>
               </a>
             </td>
             <td>
-              <a href="coming_soon.html">
+              <a id="3_log" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/3_home_btn.jpg');"></div>
               </a>
             </td>
         </tr>
         <tr>
             <td>
-              <a href="coming_soon.html">
+              <a id="4_message" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/4_home_btn.jpg');"></div>
               </a>
             </td>
             <td>
-              <a href="coming_soon.html">
+              <a id="5_comments" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/5_home_btn.jpg');"></div>
               </a>
             </td>
             <td>
-              <a target="_blank" id="reporting_link" href="#">
+              <a id="6_report" href="#">
                 <div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');"></div>
               </a>
             </td>
@@ -199,10 +199,31 @@ if (data.area_specific_data.my_referrals.length > 0) {
     agebyday.classList.add('w3-text-red');
   }
 }
-
-_('reporting_link').href = CONFIG['home page links']['daily reporting'].replace("{Area}", area);
+function openGoogleSlides(link) {
+  setCookie('openThisSlides', link);
+  safeRedirect('view_google_slides.html');
+}
+function setHomeBigBtnLink(elId) {
+  let link = CONFIG['home page links'][elId];
+  link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+  const el = _(elId);
+  if (link.includes('docs.google.com/presentation')) {
+    // this needs to be embedded
+    el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+  } {
+    // this is an external link
+    el.href = link.replace("{Area}", area);
+    el.setAttribute('target', '_blank');
+  }
+}
 _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
 _('adDeck').href = CONFIG['home page links']['ad deck'];
+setHomeBigBtnLink('1_sync');
+setHomeBigBtnLink('2_contact');
+setHomeBigBtnLink('3_log');
+setHomeBigBtnLink('4_message');
+setHomeBigBtnLink('5_comments');
+setHomeBigBtnLink('6_report');
     </script>
     
   </body>
