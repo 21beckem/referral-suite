@@ -87,13 +87,7 @@
 
    </div>
    <script>
-
 fillInHelpBeforeCallPage();
-function callThenGoBack() {
-  const person = getCookieJSON('linkPages') || null;
-  window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
-  safeRedirect('contact_info.html');
-}
    </script>
 
   </body>

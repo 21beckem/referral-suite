@@ -199,23 +199,6 @@ if (data.area_specific_data.my_referrals.length > 0) {
     agebyday.classList.add('w3-text-red');
   }
 }
-function openGoogleSlides(link) {
-  setCookie('openThisSlides', link);
-  safeRedirect('view_google_slides.html');
-}
-function setHomeBigBtnLink(elId) {
-  let link = CONFIG['home page links'][elId];
-  link = link.substr(0, link.lastIndexOf("/")) + '/embed';
-  const el = _(elId);
-  if (link.includes('docs.google.com/presentation')) {
-    // this needs to be embedded
-    el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
-  } {
-    // this is an external link
-    el.href = link.replace("{Area}", area);
-    el.setAttribute('target', '_blank');
-  }
-}
 _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
 _('adDeck').href = CONFIG['home page links']['ad deck'];
 setHomeBigBtnLink('1_sync');

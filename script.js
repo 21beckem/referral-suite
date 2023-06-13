@@ -425,6 +425,28 @@ function fillInContactInfo() {
     _('adDeck').href = CONFIG['home page links']['ad deck'];
     _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
 }
+function openGoogleSlides(link) {
+    setCookie('openThisSlides', link);
+    safeRedirect('view_google_slides.html');
+}
+function setHomeBigBtnLink(elId) {
+    let link = CONFIG['home page links'][elId];
+    link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    const el = _(elId);
+    if (link.includes('docs.google.com/presentation')) {
+        // this needs to be embedded
+        el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+    } {
+        // this is an external link
+        el.href = link.replace("{Area}", area);
+        el.setAttribute('target', '_blank');
+    }
+}
+function callThenGoBack() {
+    const person = getCookieJSON('linkPages') || null;
+    window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
+    safeRedirect('contact_info.html');
+}
 function fillInHelpBeforeCallPage() {
     const person = getCookieJSON('linkPages') || null;
     let thisUrl = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
