@@ -430,8 +430,14 @@ function openGoogleSlides(link) {
     safeRedirect('view_google_slides.html');
 }
 function setHomeBigBtnLink(elId) {
-    let link = CONFIG['home page links'][elId];
-    link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    let link = CONFIG['home page links'][elId]; //https://www.canva.com/design/DAFlyukE4Iw/view
+    if (link.includes('www.canva.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+    } else if (link.includes('docs.google.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    } else {
+        console.error('Unrecognized presentation link. Must be either google-slides, or canva, embeddable link. Issue link: ' + link);
+    }
     const el = _(elId);
     if (link.includes('docs.google.com/presentation')) {
         // this needs to be embedded
