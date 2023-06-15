@@ -8,6 +8,14 @@
         "Gävle" : ["115495285@missionary.org"],
         "SMOEs" : ["141877743@missionary.org", "leader"]
     },
+    "decease reasons" : {
+        "📵 Can't get in contact with them" : "can't contact",
+        "🤔 Doesn't remember the ad" : "doesn't remember",
+        "👵 Thought it was mor-mors bok" : "mor-mors bok",
+        "🙅 Not interested anymore" : "not interested anymore",
+        "🥸 Wasn't the person we thought" : "wrong person",
+        "😡 It was a prank" : "pranked"
+    },
     "follow ups" : {
         "initial delay after sent" : 7,
         "status delays" : {

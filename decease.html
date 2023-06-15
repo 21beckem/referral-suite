@@ -27,14 +27,7 @@
   <div class="w3-center" style="padding-top: 100px;">Why were they not interested?</div>
   <div style="height:20px"></div>
   <div class="w3-center">  
-    <select onchange="areaOptionChanged(this)" id="deceaseDropdown">
-      <option></option>
-      <option value="can't contact">📵 Can't get in contact with them</option>
-      <option value="doesn't remember">🤔 Doesn't remember the ad</option>
-      <option value="mor-mors bok">👵 Thought it was mor-mors bok</option>
-      <option value="not interested anymore">🙅 Not interested anymore</option>
-      <option value="pranked">😡 It was a prank</option>
-    </select>
+    <select onchange="areaOptionChanged(this)" id="deceaseDropdown"></select>
   </div>
 
   <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
@@ -92,6 +85,7 @@
 
   <script>
 
+fillInDeceeaseReasons(_('deceaseDropdown'))
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }

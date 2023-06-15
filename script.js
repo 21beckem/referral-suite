@@ -573,6 +573,13 @@ function sendToAnotherArea() {
     safeRedirect('force-sync.html');
 }
 
+function fillInDeceeaseReasons(el) {
+    let out = "<option></option>";
+    for (let i = 0; i < Object.keys(CONFIG['decease reasons']).length; i++) {
+        out += '<option value="' + CONFIG['decease reasons'][ Object.keys(CONFIG['decease reasons'])[i] ] + '">' + Object.keys(CONFIG['decease reasons'])[i] + '</option>';
+    }
+    el.innerHTML = out;
+}
 function fillInFollowUpOptions(el) {
     let out = "<option></option>";
     for (let i = 0; i < Object.keys(CONFIG['follow ups']['status delays']).length; i++) {
