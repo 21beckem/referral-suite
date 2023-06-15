@@ -28,49 +28,8 @@
   <div style="height:20px"></div>
   <div class="w3-center">  
     <select onchange="areaOptionChanged(this)" id="areadropdown">
-      <option></option>
-      <option>Alingsås</option>
-      <option>Borås</option>
-      <option>Borlänge</option>
-      <option>Eskilstuna</option>
-      <option>Gävle</option>
-      <option>Gubbängen</option>
-      <option>Halmstad</option>
-      <option>Handen</option>
-      <option>Helsingborg</option>
-      <option>Hägersten</option>
-      <option>Jakobsberg</option>
-      <option>Jönköping</option>
-      <option>Kalmar</option>
-      <option>Karlskrona</option>
-      <option>Karlstad</option>
-      <option>Katrineholm</option>
-      <option>Kristianstad</option>
-      <option>Kungsbacka</option>
-      <option>Linköping</option>
-      <option>Luleå</option>
-      <option>Lund</option>
-      <option>Malmö</option>
-      <option>Norrköping</option>
-      <option>Örebro</option>
-      <option>Örnsköldsvik</option>
-      <option>Östersund</option>
-      <option>Skellefteå</option>
-      <option>Skövde</option>
-      <option>Stockholm</option>
-      <option>Sundsvall</option>
-      <option>Södertälje</option>
-      <option>Trollhättan</option>
-      <option>Täby</option>
-      <option>Umeå</option>
-      <option>Uppsala</option>
-      <option>Utby</option>
-      <option>Vendelsö</option>
-      <option>Visby</option>
-      <option>Västerås</option>
-      <option>Västerhaninge</option>
-      <option>Västra Frölunda</option>
-      <option>Växjö</option>
+      <option value=""></option>
+      <option value="">An error has occured. Try Re-syncing</option>
     </select>
   </div>
 
@@ -125,14 +84,18 @@
 
     </div>
 
-
-
   <script>
 
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
-
+const areas = getCookieJSON('missionAreasList') || null;
+if (areas != null) {
+  _('areadropdown').innerHTML = '<option></option>';
+  for (let i = 0; i < areas.length; i++) {
+    _('areadropdown').innerHTML += '<option>' + areas[i] + '</option>';
+  }
+}
   </script>
 
   </body>

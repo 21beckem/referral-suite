@@ -101,9 +101,11 @@ async function SYNC(loadingCover=true) {
 
     let rs_wait = SYNC_referralSuiteStuff();
     let sm_wait = SYNC_sheetMapStuff();
+    let al_wait = SYNC_getMissionAreasList();
 
     await rs_wait;
     await sm_wait;
+    await al_wait;
 
     await SYNC_setCurrentInboxingArea();
 
@@ -111,6 +113,13 @@ async function SYNC(loadingCover=true) {
     if (loadingCover) {
         _('loadingcover').style.display = 'none';
     }
+}
+async function SYNC_getMissionAreasList() {
+    return await safeFetch('mission_areas_list.txt')
+        .then((response) => response.text())
+        .then((txt) => {
+            setCookieJSON('missionAreasList', txt.split('\n'));
+        });
 }
 async function SYNC_getConfig() {
     return await safeFetch('config.json')
