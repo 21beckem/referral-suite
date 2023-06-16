@@ -277,7 +277,7 @@ tr.spaceUnder>td {
     }
 }
 
-#arealoginbuttons { padding: 15%; }
+#arealoginbuttons { padding: 35px 15% 0px 15% }
 #arealoginbuttons button {
     width: 100%;
     font-size: 24px;
