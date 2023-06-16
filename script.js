@@ -30,7 +30,7 @@ document.addEventListener('click', e => {
     const origin = e.target.closest('a');
     if (origin) {
         //console.log(origin);
-        if (origin.hasAttribute("target")) {
+        if (origin.hasAttribute("target") || !origin.hasAttribute("href")) {
             //alert('has target');
             return;
         }
@@ -724,4 +724,8 @@ window.onload = () => {
     try {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
+    window.InboxFox = new WebPal();
+    // InboxFox.ask('Do you understand?', ['Yes'], (choice) => {
+    //     alert(choice);
+    // });
 }
