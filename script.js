@@ -79,7 +79,7 @@ let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
-const FoxEnabled = (document.currentScript.getAttribute('no-fox')==null && CONFIG['InboxFox']['enable']);
+const FoxEnabled = (document.currentScript.getAttribute('no-fox')==null && CONFIG!=null && CONFIG['InboxFox']['enable']);
 
 if (( area==null || CONFIG==null) && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
@@ -147,8 +147,9 @@ async function SYNC_referralSuiteStuff() {
     console.log('done: SYNC_referralSuiteStuff');
 }
 async function sortOfSYNC_QueryMyself() {
-    let qURL = _CONFIG()['overall settings']['table Query link'];
-    let tabId = _CONFIG()['overall settings']['table tab id']
+    const rawLink = _CONFIG()['overall settings']['table Query link'];
+    let qURL = rawLink.substr(0, rawLink.lastIndexOf("/"));
+    let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#','?')).get('gid');
     let sURL = _CONFIG()['overall settings']['table scribe link'];
     sURL += '?area=' + area;
     sURL += '&tabId=' + tabId;
@@ -275,13 +276,9 @@ async function sortOfSYNC_UseSQL() {
 }
 async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
-    const ss = new SheetMap({
-        url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
-        data_validation : 'E8',
-        fetchStyles : true
-    });
+    const ss = new SheetMap(CONFIG['schedule settings']);
     await SheetMap.syncChanges();
-    await ss.fetch('Schedule', 'C2:BI');
+    await ss.fetch(CONFIG['schedule settings']['tab name'], CONFIG['schedule settings']['schedule range']);
 }
 function GetTodaysSchedule() {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];

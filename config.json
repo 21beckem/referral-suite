@@ -44,7 +44,6 @@
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
         "table scribe link" : "https://script.google.com/macros/s/AKfycbyULhG4Vw-AK0Gvw5wOWLgzZPC-m5PA5-zDRNqrTeIKZarKLlqPSjX__nIN92EC6Rif/exec",
-        "table tab id" : "1589745808",
         "table type" : "sql",
         "login pin" : "1022",
         "enable FH referrals" : false,
@@ -53,6 +52,13 @@
         "enable follow ups" : true,
         "enable tell system which area is inboxing" : false,
         "most common language in mission" : "Swedish"
+    },
+    "schedule settings" : {
+        "url" : "https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec",
+        "data_validation" : "E8",
+        "fetchStyles" : true,
+        "tab name" : "Schedule",
+        "schedule range" : "C2:BI"
     },
     "InboxFox" : {
         "enable" : true
