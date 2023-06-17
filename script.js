@@ -718,7 +718,7 @@ function timeSince_formatted(date) {
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
-window.onload = () => {
+window.addEventListener("load", (e) => {
     try {
         _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
     } catch(e) {}
@@ -731,4 +731,4 @@ window.onload = () => {
         //     alert(choice);
         // });
     }
-}
+});

@@ -31,12 +31,6 @@
     </div>
     <script>
 
-const TablePreferences = {
-    url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
-    data_validation : 'E8',
-    fetchStyles : true
-};
-
 function scrollToToday(data, win, numberOfHiddenCols) {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -45,10 +39,7 @@ function scrollToToday(data, win, numberOfHiddenCols) {
     win.scrollTo(win.offsetWidth*iOfToday, 0);
 }
 
-async function main() {
-    //const ss = new SheetMap(TablePreferences);
-    //await ss.fetch('Schedule', 'C1:8');
-    //SheetMap.makeTableHTML('myDIV');
+window.addEventListener("load", (e) => {
     SheetMap.load();
     const colsToHide = [0,1];
     _('scheduleParent').innerHTML += SheetMap.makeColDivsHTML(hideC=colsToHide);
@@ -58,9 +49,7 @@ async function main() {
         timesContainer.innerHTML += '<div>' + SheetMap.vars.tableDataNOW[i][0] + '-' + SheetMap.vars.tableDataNOW[i][1] + '</div>';
     }
     scrollToToday(SheetMap.vars.tableDataNOW, _('SheetMapColDivs'), colsToHide.length);
-}
-main();
-// to reset saved data:  localStorage.removeItem('SheetMap_vars');
+});
 
     </script>
     <!-- Bottom Nav Bar -->
