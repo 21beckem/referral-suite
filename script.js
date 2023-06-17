@@ -79,6 +79,7 @@ let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
+const FoxEnabled = (document.currentScript.getAttribute('no-fox')==null && CONFIG['InboxFox']['enable']);
 
 if (( area==null || CONFIG==null) && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
@@ -724,8 +725,10 @@ window.onload = () => {
     try {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
-    window.InboxFox = new WebPal();
-    // InboxFox.ask('Do you understand?', ['Yes'], (choice) => {
-    //     alert(choice);
-    // });
+    if (FoxEnabled) {
+        window.InboxFox = new WebPal();
+        // InboxFox.ask('Do you understand?', ['Yes'], (choice) => {
+        //     alert(choice);
+        // });
+    }
 }

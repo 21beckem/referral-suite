@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
-    <script src="script.js" dont-redirect="true"></script>
+    <script src="script.js" dont-redirect="true" no-fox="true"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -39,20 +39,6 @@ function signInAsArea(el) {
   setCookie('areaUserEmail', el.getAttribute('email'));
   setCookie('areaUser', el.innerHTML);
   safeRedirect('force-sync.html');
-}
-function safeRedirect(ref) {
-  if (!inIframe()) {
-    window.location.href = ref;
-    return;
-  }
-  window.parent.postMessage(JSON.stringify({
-    type: 'redirect',
-    data: ref,
-  }), '*');
-}
-function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
-function setCookie(cname, cvalue) {
-  localStorage.setItem(cname, cvalue);
 }
 // get inboxing areas
 async function fillInAreaButtons() {

@@ -54,6 +54,9 @@
         "enable tell system which area is inboxing" : false,
         "most common language in mission" : "Swedish"
     },
+    "InboxFox" : {
+        "enable" : true
+    },
     "tableColumns" : {
         "type" : 0,
         "id" : 1,
