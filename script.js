@@ -470,6 +470,8 @@ function fillInFollowUpInfo() {
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
     _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
     _('lastAtt').innerHTML = new Date(person[ CONFIG['tableColumns']['sent date'] ]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    let fuTimes = person[ CONFIG['tableColumns']['amount of times followed up'] ];
+    _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes)==1) ? ' time' : ' times');
     _('refLoc').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
     _('refLoc2').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
     _('refSender').innerHTML = person[ CONFIG['tableColumns']['claimed area'] ];
@@ -615,6 +617,7 @@ function saveFollowUpForm() {
     }
     
     person[ CONFIG['tableColumns']['follow up status'] ] = status;
+    person[ CONFIG['tableColumns']['amount of times followed up'] ] = parseInt( person[ CONFIG['tableColumns']['amount of times followed up'] ] ) + 1;
 
     data.changed_people.push(person);
     setCookieJSON('dataSync', data);

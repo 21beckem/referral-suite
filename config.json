@@ -78,9 +78,10 @@
         "ad name" : 17,
         "next follow up" : 18,
         "follow up status" : 19,
-        "sent date" : 20,
-        "not interested reason" : 21,
-        "help request" : 22,
-        "experience" : 23
+        "amount of times followed up" : 20,
+        "sent date" : 21,
+        "not interested reason" : 22,
+        "help request" : 23,
+        "experience" : 24
     }
 }
