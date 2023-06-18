@@ -15,7 +15,7 @@
         "🙅 Not interested anymore" : "not interested anymore",
         "🥸 Wasn't the person we thought" : "wrong person",
         "😡 It was a prank" : "pranked",
-        "📨 Item sent. They don't want contact" : "delivered no contact"
+        "📨 Item sent. They don't want contact" : "sent. want no contact"
     },
     "follow ups" : {
         "initial delay after sent" : 7,
