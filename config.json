@@ -14,7 +14,8 @@
         "👵 Thought it was mor-mors bok" : "mor-mors bok",
         "🙅 Not interested anymore" : "not interested anymore",
         "🥸 Wasn't the person we thought" : "wrong person",
-        "😡 It was a prank" : "pranked"
+        "😡 It was a prank" : "pranked",
+        "📨 Item sent. They don't want contact" : "delivered no contact"
     },
     "follow ups" : {
         "initial delay after sent" : 7,
