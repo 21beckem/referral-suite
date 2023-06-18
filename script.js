@@ -715,6 +715,18 @@ function timeSince_formatted(date) {
     }
     return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
+function setupInboxFox() {
+    window.InboxFox = new WebPal();
+    InboxFox.pokeFunction = () => {
+        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks :)'], (choice) => {
+            if (choice.includes('No')) {
+                InboxFox.say('Okay, just let me know :)');
+            } else {
+                location.href = 'https://www.google.com/search?q=i+need+help';
+            }
+        }, true);
+    }
+}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
@@ -726,9 +738,6 @@ window.addEventListener("load", (e) => {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
     if (FoxEnabled) {
-        window.InboxFox = new WebPal();
-        // InboxFox.ask('Do you understand?', ['Yes'], (choice) => {
-        //     alert(choice);
-        // });
+        setupInboxFox();
     }
 });
