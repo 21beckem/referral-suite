@@ -115,6 +115,9 @@ function saveUnchangedSyncData() {
     setCookieJSON('unchangedSyncData', getCookieJSON('dataSync'));
 }
 function moveAllChangedPeopleToASeparateAreaOfData() {
+    if (data == null) {
+        return;
+    }
     const unchangedSyncData = getCookieJSON('unchangedSyncData');
     if (!data.hasOwnProperty('changed_people')) {
         data.changed_people = Array();
@@ -123,7 +126,7 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
         const rockPerson = unchangedSyncData.area_specific_data.my_referrals[i];
         const changedPerson = data.area_specific_data.my_referrals[i];
         //check if person changed at all
-        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
             data.changed_people.push(changedPerson);
         }
     }
@@ -131,7 +134,7 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
         const rockPerson = unchangedSyncData.overall_data.follow_ups[i];
         const changedPerson = data.overall_data.follow_ups[i];
         //check if person changed at all
-        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
             data.changed_people.push(changedPerson);
         }
     }
@@ -139,7 +142,7 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
         const rockPerson = unchangedSyncData.overall_data.new_referrals[i];
         const changedPerson = data.overall_data.new_referrals[i];
         //check if person changed at all
-        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
             data.changed_people.push(changedPerson);
         }
     }
