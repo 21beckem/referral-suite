@@ -173,6 +173,33 @@ a.uline {
     z-index: 1;
 }
 
+.contactDotBeenAttempted {
+    background-color: var(--call-color) !important;
+}
+#attemptLog {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 10px;
+}
+#attemptLog tr:first-child {
+    font-size: small;
+    text-align: center;
+    opacity: 0.6;
+}
+#attemptLog tr:not(:first-child) td:not(:first-child) button {
+    margin-left: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 40px;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    outline: none;
+}
+#attemptLog tr:not(:first-child) td:not(:first-child) button.recommended {
+    background-color: transparent;
+}
+
 input#pin-code.shake {
     animation: horizontal-shaking 0.3s ease-in-out infinite;
 }

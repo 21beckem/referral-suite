@@ -62,7 +62,7 @@
         "schedule range" : "C2:BI"
     },
     "InboxFox" : {
-        "enable" : true
+        "enable" : false
     },
     "tableColumns" : {
         "type" : 0,
@@ -88,7 +88,8 @@
         "amount of times followed up" : 20,
         "sent date" : 21,
         "not interested reason" : 22,
-        "help request" : 23,
-        "experience" : 24
+        "attempt log" : 23,
+        "help request" : 24,
+        "experience" : 25
     }
 }
