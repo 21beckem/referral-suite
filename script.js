@@ -92,6 +92,8 @@ async function SYNC(loadingCover=true) {
 
     await SYNC_getConfig();
 
+    moveAllChangedPeopleToASeparateAreaOfData();
+
     let rs_wait = SYNC_referralSuiteStuff();
     let sm_wait = SYNC_sheetMapStuff();
     let al_wait = SYNC_getMissionAreasList();
@@ -111,6 +113,37 @@ async function SYNC(loadingCover=true) {
 }
 function saveUnchangedSyncData() {
     setCookieJSON('unchangedSyncData', getCookieJSON('dataSync'));
+}
+function moveAllChangedPeopleToASeparateAreaOfData() {
+    const unchangedSyncData = getCookieJSON('unchangedSyncData');
+    if (!data.hasOwnProperty('changed_people')) {
+        data.changed_people = Array();
+    }
+    for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
+        const rockPerson = unchangedSyncData.area_specific_data.my_referrals[i];
+        const changedPerson = data.area_specific_data.my_referrals[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    for (let i = 0; i < data.overall_data.follow_ups.length; i++) {
+        const rockPerson = unchangedSyncData.overall_data.follow_ups[i];
+        const changedPerson = data.overall_data.follow_ups[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    for (let i = 0; i < data.overall_data.new_referrals.length; i++) {
+        const rockPerson = unchangedSyncData.overall_data.new_referrals[i];
+        const changedPerson = data.overall_data.new_referrals[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) === JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    setCookieJSON('dataSync', data);
 }
 async function SYNC_getMissionAreasList() {
     return await safeFetch('mission_areas_list.txt')
@@ -384,7 +417,7 @@ function makeListFollowUpPeople(arr) {
     _('yourfollowups').innerHTML = output;
 }
 function fillInFHInfo() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
     _('personName').innerHTML = _('contactname').innerHTML;
     _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
@@ -412,7 +445,7 @@ How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
     }
 }
 function fillInContactInfo() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
     //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
@@ -450,18 +483,18 @@ function setHomeBigBtnLink(elId) {
     }
 }
 function callThenGoBack() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
     safeRedirect('contact_info.html');
 }
 function fillInHelpBeforeCallPage() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let thisUrl = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
     thisUrl = thisUrl.substr(0, thisUrl.lastIndexOf("/")) + '/embed';
     _('google_slides_import').src = thisUrl;
 }
 function fillInFollowUpInfo() {
-    const person = data.overall_data.follow_ups[getCookieJSON('linkPages') || null];
+    const person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
     _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
     _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
     _('lastAtt').innerHTML = new Date(person[ CONFIG['tableColumns']['sent date'] ]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -498,7 +531,7 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
             }
         });
     }
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
     const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
@@ -543,7 +576,7 @@ function syncButton(el) {
     });
 }
 function sendToAnotherArea() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -562,10 +595,7 @@ function sendToAnotherArea() {
     nextFU.setHours(3,0,0,0);
     person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-    if (!("changed_people" in data)) {
-        data.changed_people = Array();
-    }
-    data.changed_people.push(person);
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
@@ -586,17 +616,12 @@ function fillInFollowUpOptions(el) {
     el.innerHTML = out;
 }
 function saveFollowUpForm() {
-    let person = data.overall_data.follow_ups[getCookieJSON('linkPages') || null];
+    let person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const status = document.getElementById('statusdropdown').value;
-
-    // overwrite old person
-    if (!data.hasOwnProperty('changed_people')) {
-        data.changed_people = Array();
-    }
 
     let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
     let delay = CONFIG['follow ups']['status delays'][clickedOption];
@@ -614,15 +639,13 @@ function saveFollowUpForm() {
     person[ CONFIG['tableColumns']['follow up status'] ] = status;
     person[ CONFIG['tableColumns']['amount of times followed up'] ] = parseInt( person[ CONFIG['tableColumns']['amount of times followed up'] ] ) + 1;
 
-    data.changed_people.push(person);
-    setCookieJSON('dataSync', data);
-    console.log(data.changed_people);
+    data.overall_data.follow_ups[getCookieJSON('linkPages')] = person;
 
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
 function logAttempt(el, y, x) {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
     let nowAttempted = !(al[x][y]==1);
     al[x][y] = (nowAttempted) ? 1 : 0;
@@ -633,11 +656,12 @@ function logAttempt(el, y, x) {
     } else {
         el.classList.remove('contactDotBeenAttempted');
     }
-    // add person to changed people if list is different
-
+    // save this change
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    setCookieJSON('dataSync', data);
 }
 function fillInAttemptLog() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let al = Array(7).fill([0,0,0]);
     try {
         al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
@@ -671,7 +695,7 @@ function deceasePerson() {
     if (!youSure) {
         return;
     }
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages') || null];
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -681,26 +705,21 @@ function deceasePerson() {
     person[ CONFIG['tableColumns']['sent status'] ] = 'Not interested';
     person[ CONFIG['tableColumns']['not interested reason'] ] = _('deceaseDropdown').value;
 
-    if (!("changed_people" in data)) {
-        data.changed_people = Array();
-    }
-    data.changed_people.push(person);
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
 function claimPerson() {
-    let person = data.overall_data.new_referrals[getCookieJSON('linkPages') || null];
+    let person = data.overall_data.new_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
         return;
     }
-    if ( !("changed_people" in data) ) {
-        data['changed_people'] = Array();
-    }
+    
     person[ CONFIG['tableColumns']['claimed area'] ] = area;
-    data['changed_people'].push(person);
+    data.overall_data.new_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
