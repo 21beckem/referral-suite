@@ -38,15 +38,27 @@
 #topHeaderBar {
     font-family: 'Advent Pro';
 }
-#topHeaderBar div {
+#topHeaderBar div:has(:not(.contact_info)) {
+    letter-spacing: 0.15em;
     background-color: var(--mainColor);
     color: #fff;
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    padding-top: 12px!important;
+    padding-bottom: 12px!important;
     text-align: center;
     padding: 0.01em 16px;
     display: table-cell;
     font-size: 30px;
+}
+#topHeaderBar div:has(.contact_info) {
+    letter-spacing: 0.1em;
+    background-color: var(--mainColor);
+    color: #fff;
+    text-align: left;
+    display: table-cell;
+    font-size: 30px;
+}
+.contact_info {
+    margin: -4px;
 }
 #BottomNavBar {
     padding-top: 7px;

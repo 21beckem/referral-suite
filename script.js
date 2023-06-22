@@ -421,8 +421,8 @@ function makeListFollowUpPeople(arr) {
 }
 function fillInFHInfo() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    _('contactname').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
-    _('personName').innerHTML = _('contactname').innerHTML;
+    _('personName').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
+    //_('contactname').innerHTML = _('personName').innerHTML;
     _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
     _('address').innerHTML = person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
     _('FH_lang').innerHTML = CONFIG['overall settings']['most common language in mission'];
