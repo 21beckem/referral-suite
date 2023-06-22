@@ -545,8 +545,7 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 	const rawFetch = await safeFetch(reqMssgUrl);
 	const rawTxt = await rawFetch.text();
 
-	const Messages = rawTxt.split(/\r{4,}?\n{4,}/gm);
-    console.log(Messages);
+	const Messages = rawTxt.split(/[\r\n]{5,}/gm);
 	//console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
