@@ -35,6 +35,19 @@
     font-size: 200px;
     z-index: 15;
 }
+#topHeaderBar {
+    font-family: 'Advent Pro';
+}
+#topHeaderBar div {
+    background-color: var(--mainColor);
+    color: #fff;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    text-align: center;
+    padding: 0.01em 16px;
+    display: table-cell;
+    font-size: 30px;
+}
 #BottomNavBar {
     padding-top: 7px;
     padding-bottom: 16px;
