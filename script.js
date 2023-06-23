@@ -492,9 +492,17 @@ function callThenGoBack() {
 }
 function fillInHelpBeforeCallPage() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    let thisUrl = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
-    thisUrl = thisUrl.substr(0, thisUrl.lastIndexOf("/")) + '/embed';
-    _('google_slides_import').src = thisUrl;
+    let link = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
+
+    if (link.includes('www.canva.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+    } else if (link.includes('docs.google.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    } else {
+        console.error('Unrecognized presentation link. Will open in new tab:' + link);
+    }
+
+    _('google_slides_import').src = link;
 }
 function fillInFollowUpInfo() {
     const person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
