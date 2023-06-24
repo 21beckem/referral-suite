@@ -149,14 +149,67 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
     setCookieJSON('dataSync', data);
 }
 async function SYNC_getMissionAreasList() {
-    return await safeFetch('mission_areas_list.txt')
+    return await safeFetch('mission_specific_editable_files/mission_areas_list.txt')
         .then((response) => response.text())
         .then((txt) => {
             setCookieJSON('missionAreasList', txt.split('\n'));
         });
 }
+async function SYNC_getMissionDirectory() {
+    return await safeFetch('mission_specific_editable_files/mission_directory.csv')
+        .then((response) => response.text())
+        .then((txt) => {
+            convertCSVtoList(txt);
+        });
+}
+function convertCSVtoList(rawTxt) {
+    console.log(rawTxt);
+    let parsed = Papa.parse(rawTxt, {
+        newline: "\n"
+    }).data;
+    console.log(parsed);
+
+    let contacts = {};
+    for (let i = 1; i < parsed.length; i++) {
+        const row = parsed[i];
+        const familyName = row[3];
+        const phoneNumber = row[36];
+        let areaEmail;
+        for (let j = 0; j < row.length; j++) {
+            if (row[j].includes('@missionary.org') && /\d/.test(row[j])) {
+                areaEmail = row[j];
+                break;
+            }
+        }
+        const email = areaEmail;
+        const address = row[37] + ' ' + row[40] + ' ' + row[43] + ' ' + row[44];
+        const notes = row[25];
+        contacts[familyName] = {
+            "phone" : phoneNumber,
+            "email" : email
+        };
+    }
+    setCookieJSON('missionDirectory', contacts);
+}
+function findSimilarAreaNames(myArea) {
+    const contacts = getCookieJSON('missionDirectory');
+    const areaTitles = Object.keys(contacts);
+    let myWords = myArea.split(' ');
+    myWords = myWords.filter(x => {
+        return x.length > 2;
+    });
+    return myWords;
+    for (let i = 0; i < areaTitles.length; i++) {
+        const areaName = areaTitles[i];
+
+        let theseWords = areaName.split(' ');
+        theseWords = theseWords.filter(x => {
+            return x.length > 2;
+        });
+    }
+}
 async function SYNC_getConfig() {
-    return await safeFetch('config.json')
+    return await safeFetch('mission_specific_editable_files/config.json')
         .then((response) => response.json())
         .then((json) => {
             setCookieJSON('CONFIG', json);

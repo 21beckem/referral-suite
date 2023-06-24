@@ -1,9 +1,11 @@
-Alingsås
-Borås
-Borlänge
+Alingsås,+46735032950
+Boden
+Borås,+46735270313
+Borlänge,
 Eskilstuna
 Gävle
-Gubbängen
+Gubbängen |
+Gubbängen ||
 Halmstad
 Handen
 Helsingborg
@@ -18,25 +20,31 @@ Kristianstad
 Kungsbacka
 Linköping
 Luleå
-Lund
-Malmö
+Lund |
+Lund ||
+Malmö |
+Malmö ||
 Norrköping
-Örebro
-Örnsköldsvik
-Östersund
 Skellefteå
 Skövde
 Stockholm
-Sundsvall
+Sundsvall |
+Sundsvall ||
 Södertälje
 Trollhättan
 Täby
-Umeå
+Umeå |
+Umeå ||
 Uppsala
 Utby
 Vendelsö
 Visby
 Västerås
 Västerhaninge
-Västra Frölunda
+Västra Frölunda |
+Västra Frölunda ||
 Växjö
+Örebro |
+Örebro ||
+Örnsköldsvik
+Östersund
