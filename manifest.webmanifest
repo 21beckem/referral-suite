@@ -2,5 +2,14 @@
     "description": "Manage SSM Referrals so simply!",
     "name": "Referral Suite Manager",
     "short_name": "Referral Suite",
-    "start_url": "index.html"
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#7347B2",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "500x500",
+            "type": "image/png"
+        }
+    ]
 }
