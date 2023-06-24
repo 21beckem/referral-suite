@@ -1,7 +1,7 @@
-Alingsås,+46735032950
+Alingsås
 Boden
-Borås,+46735270313
-Borlänge,
+Borås
+Borlänge
 Eskilstuna
 Gävle
 Gubbängen |
