@@ -97,7 +97,7 @@ const areas = getCookieJSON('missionAreasList') || null;
 if (areas != null) {
   _('areadropdown').innerHTML = '<option></option>';
   for (let i = 0; i < areas.length; i++) {
-    _('areadropdown').innerHTML += '<option>' + areas[i] + '</option>';
+    _('areadropdown').innerHTML += '<option>' + areas[i][0] + '</option>';
   }
 }
   </script>

@@ -152,7 +152,13 @@ async function SYNC_getMissionAreasList() {
     return await safeFetch('mission_specific_editable_files/mission_areas_list.txt')
         .then((response) => response.text())
         .then((txt) => {
-            setCookieJSON('missionAreasList', txt.split('\n'));
+            let areas = txt.split('\n');
+            areas = areas.map(x => {
+                return x.split(',').map(xx => {
+                    return xx.trim();
+                });
+            });
+            setCookieJSON('missionAreasList', areas);
         });
 }
 async function SYNC_getConfig() {
