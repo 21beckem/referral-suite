@@ -146,6 +146,8 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
             data.changed_people.push(changedPerson);
         }
     }
+    console.log('old', getCookieJSON('dataSync'));
+    console.log('new', data);
     setCookieJSON('dataSync', data);
 }
 async function SYNC_getMissionAreasList() {
@@ -644,6 +646,7 @@ function saveFollowUpForm() {
     person[ CONFIG['tableColumns']['amount of times followed up'] ] = parseInt( person[ CONFIG['tableColumns']['amount of times followed up'] ] ) + 1;
 
     data.overall_data.follow_ups[getCookieJSON('linkPages')] = person;
+    setCookieJSON('dataSync', data);
 
     // send to force-sync.html
     safeRedirect('force-sync.html');
