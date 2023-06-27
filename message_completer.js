@@ -1,5 +1,5 @@
 const current_page = document.currentScript.getAttribute('current-page');
-const person = getCookieJSON('linkPages') || null;
+const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')] || null;
 
 const templateMssg = (getCookie('completeThisMessage'));
 
