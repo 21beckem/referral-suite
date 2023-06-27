@@ -7,27 +7,24 @@
     <title>Your Referrals</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
+    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="script.js"></script>
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
 <body>
     <!-- Top Bar -->
-    <div class="w3-top">
-        <div class="w3-cell-row w3-area-blue">
-            <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-                <a>Your Referrals</a>
-            </div>
-        </div>
-        <div style="height: 1px;"></div>
-        <!-- Search bar -->
-        <div class="w3-container">
-            <input oninput="Search()" id="Search" class="w3-input" type="text" placeholder="Search">
-        </div>
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
+      <div>
+        <a>Your Referrals</a>
+      </div>
     </div>
-    <div style="height: 115px;"></div>
+    <div style="height: 80px;"></div>
      
    <!-- List of items -->
   <div class="w3-container">
@@ -88,7 +85,7 @@
 
 
 makeListClaimedPeople(data.area_specific_data.my_referrals);
-makeListFollowUpPeople(data.area_specific_data.follow_ups);
+makeListFollowUpPeople(data.overall_data.follow_ups);
 
 function Search() {
   let referrals = data.area_specific_data.my_referrals;
@@ -97,8 +94,8 @@ function Search() {
   let output = Array();
   for (let i = 0; i < referrals.length; i++) {
     const person = referrals[i];
-    const fullname = person[7];
-    const number = person[10];
+    const fullname = person[ CONFIG['tableColumns']['full name'] ];
+    const number = person[ CONFIG['tableColumns']['phone'] ];
     
     if (fullname.toLowerCase().includes(letters) || String(number).toLowerCase().includes(letters)) {
       output.push(person);

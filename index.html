@@ -7,9 +7,13 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
+    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="script.js"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -24,8 +28,8 @@
   </head>
   <body>
     <!-- Top Bar -->
-    <div class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
+      <div>
         <a>Referral Suite</a>
       </div>
     </div>
@@ -59,75 +63,64 @@
       </table>
       <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
     </div>
-    
+
     <div class="w3-center w3-xlarge" style="margin-top: 15px;">Welcome to Referral Suite!</div>
-    <div class="w3-large" style="padding-top: 10px; padding-left: 10px">Here is a list of things to check (in order) during your inbox shift!</div>
-    <div class="w3-border-bottom">
-      <table>
-        <tr class="spaceUnder">
-          <td>
-            <div class="w3-light-gray w3-xlarge w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px">
-              <i class="fa fa-refresh w3-center" style="padding-left: 3px"></i>
-            </div>
-          </td>
-          <td>
-            <div>Sync both the SMOEs Area Book and Referral Suite</div>
-          </td>
+    <div class="" style="text-align: center;">Here is a list of things to check (in order) during your inbox shift!</div>
+    <div class="w3-border-bottom" style="padding-bottom: 10px;">
+      <table id="bigBtnsTable">
+        <tr>
+            <td>
+              <a id="1_sync" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/1_home_btn.jpg');"></div>
+              </a>
+            </td>
+            <td>
+              <a id="2_contact" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/2_home_btn.jpg');"></div>
+              </a>
+            </td>
+            <td>
+              <a id="3_log" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/3_home_btn.jpg');"></div>
+              </a>
+            </td>
         </tr>
-        <tr class="spaceUnder">
-          <td>
-            <div class="w3-light-gray w3-xlarge w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px">
-              <i class="fa fa-bell w3-center" style="padding-left: 3px"></i>
-            </div>
-          </td>
-          <td>
-            <div>Claim and contact all unclaimed referrals in this app</div>
-          </td>
-        </tr>
-        <tr class="spaceUnder">
-          <td>
-            <img src="ABP.png" height="30px" class="w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px">
-          </td>
-          <td>
-            <div>Mark all contacts in the SMOEs Area Book</div>
-          </td>
-        </tr>
-        <tr class="spaceUnder">
-          <td>
-            <img src="Business_Suite.png" height="30px" class="w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px;">
-          </td>
-          <td>
-            <div>Check Business Suite, respond to any new messages</div>
-          </td>
-        </tr>
-        <tr class="spaceUnder">
-          <td>
-            <img src="Business_Suite.png" height="30px" class="w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px;">
-          </td>
-          <td>
-            <div>Respond to the comments on Busines Suite</div>
-          </td>
-        </tr>
-        <tr class="spaceUnder">
-          <td>
-            <div class="w3-light-gray w3-xlarge w3-round w3-icon-shadow" style="margin-left: 10px; margin-right: 5px">
-              <i class="fa fa-address-book w3-center" style="padding-left: 3px"></i>
-          </td>
-          <td>
-            <div>Contact anyone you have already claimed</div>
-          </td>
+        <tr>
+            <td>
+              <a id="4_message" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/4_home_btn.jpg');"></div>
+              </a>
+            </td>
+            <td>
+              <a id="5_comments" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/5_home_btn.jpg');"></div>
+              </a>
+            </td>
+            <td>
+              <a id="6_report" href="#">
+                <div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');"></div>
+              </a>
+            </td>
         </tr>
       </table>
-    </div>
+  </div>
 
-    <div class="w3-center w3-xlarge" style="margin-top: 15px;">Useful Links</div>
-    <ul class="w3-large">
-      <li id="admin_btn" style="display:none"><a class="uline" href="https://smoe.ssmission.cloud/API/areas_overview.php?key=re7l5yXXdcssI07WK6DK">Admin Panel 🤠</a></li>
-      <li><a class="uline" target="_blank" href="https://forms.gle/UH2vA9VrdA2jswpZ9">Book of Mormon Delivery Form</a></li>
-      <li><a id="reporting_link" class="uline" target="_blank">Inbox Reporting</a></li>
-      <li><a class="uline" href="coming_soon.html">FAQs for This App</a></li>
-      <li><a class="uline" href="coming_soon.html">FAQs for Business Suite</a></li>
-    </ul>
+    <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
+    <div class="full_width_home_btn">
+      <a id="MB_deliverLink" target="_blank" href="">
+        <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
+      </a>
+    </div>
+    <div class="full_width_home_btn">
+      <a id="adDeck" target="_blank" href="">
+        <div class="bigTipBtn" style="background-image: url('img/CurrentAdsInvert.jpg'); border: 1px solid #f2bfff;"></div>
+      </a>
+    </div>
+    <div class="full_width_home_btn">
+      <a id="gToBusSuite" target="_blank" href="">
+        <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
+      </a>
+    </div>
 
     <!-- Sign Out Button -->
     <button onclick="doubleCheckSignOut(this)" href="login.html" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">
@@ -184,7 +177,6 @@
 
 
     <script>
-if (ITLs) { _('admin_btn').style.display = ""; }
 
 let maxRefsAllowed = 15;
 const currentRefCount = data.area_specific_data.my_referrals.length;
@@ -201,10 +193,10 @@ if (currentRefCount >= maxRefsAllowed) {
   totReferrals.classList.add('w3-text-red');
 }
 if (data.area_specific_data.my_referrals.length > 0) {
-  let maxRefAge = 10;
+  let maxRefAge = 7;
   let oldReferralBar = _("oldReferralBar");
   let agebyday = _("agebyday");
-  let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][2];
+  let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][ CONFIG['tableColumns']['date'] ];
   let today = new Date();
   let oldDate = new Date(oldReferral);
   let dayDifference = Math.round((today.getTime()-oldDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -216,9 +208,15 @@ if (data.area_specific_data.my_referrals.length > 0) {
     agebyday.classList.add('w3-text-red');
   }
 }
-
-let reporting_link = _('reporting_link');
-reporting_link.href = "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618=" + area;
+_('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
+_('adDeck').href = CONFIG['home page links']['ad deck'];
+_('gToBusSuite').href = CONFIG['home page links']['business suite help']
+setHomeBigBtnLink('1_sync');
+setHomeBigBtnLink('2_contact');
+setHomeBigBtnLink('3_log');
+setHomeBigBtnLink('4_message');
+setHomeBigBtnLink('5_comments');
+setHomeBigBtnLink('6_report');
     </script>
     
   </body>

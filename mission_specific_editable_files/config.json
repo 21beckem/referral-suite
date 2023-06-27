@@ -1,0 +1,96 @@
+{
+    "inboxers" : {
+        "Hägersten" : ["500367156@missionary.org", "leader"],
+        "Kungsbacka" : ["500365898@missionary.org"],
+        "Eskilstuna" : ["8868609@missionary.org"],
+        "Trollhättan" : ["8868627@missionary.org"],
+        "Örnsköldsvik" : ["8868624@missionary.org"],
+        "Gävle" : ["115495285@missionary.org"],
+        "SMOEs" : ["141877743@missionary.org", "leader"]
+    },
+    "decease reasons" : {
+        "📵 Can't get in contact with them" : "can't contact",
+        "🤔 Doesn't remember the ad" : "doesn't remember",
+        "👵 Thought it was mor-mors bok" : "mor-mors bok",
+        "🙅 Not interested anymore" : "not interested anymore",
+        "🥸 Wasn't the person we thought" : "wrong person",
+        "😡 It was a prank" : "pranked",
+        "📨 Item sent. They don't want contact" : "sent. want no contact"
+    },
+    "follow ups" : {
+        "initial delay after sent" : 7,
+        "status delays" : {
+            "😢 Not interested in contact" : "Grey",
+            "😫 Hasn't been contacted" : 3,
+            "🤔 Hasn't responded" : 5,
+            "😀 Currently in contact" : 7,
+            "🤩 Appointment is set up!" : "Green"
+        }
+    },
+    "home page links" : {
+        "1_sync" : "https://www.canva.com/design/DAFlyukE4Iw/view",
+        "2_contact" : "https://www.canva.com/design/DAFl4wHP0Ks/view",
+        "3_log" : "https://www.canva.com/design/DAFl40Xvy6Q/view",
+        "4_message" : "https://www.canva.com/design/DAFly7mr0U0/view",
+        "5_comments" : "https://www.canva.com/design/DAFlzD2-OOU/view",
+        "6_report" : "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618={Area}",
+
+        "book or mormon delivery form" : "https://forms.gle/UH2vA9VrdA2jswpZ9",
+        "ad deck" : "https://docs.google.com/presentation/d/1vojptft9tOnyYQ2xpVd02hoqJ57liQlbXF0G5KAZTjI/edit?usp=sharing",
+        "business suite help" : "https://docs.google.com/presentation/d/1ouB-232e9T56QpYYfWxIAjJeXRIVWB2KnUbWvh4F2cE/edit?usp=sharing"
+    },
+    "tips before calling" : {
+        "MB Request" : "https://www.canva.com/design/DAFmqQ1LXIc/view",
+        "Missionary Visit" : "https://www.canva.com/design/DAFmqv7zfxk/view"
+    },
+    "overall settings" : {
+        "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
+        "table scribe link" : "https://script.google.com/macros/s/AKfycbyULhG4Vw-AK0Gvw5wOWLgzZPC-m5PA5-zDRNqrTeIKZarKLlqPSjX__nIN92EC6Rif/exec",
+        "table type" : "sql",
+        "login pin" : "1022",
+        "enable FH referrals" : false,
+        "FH Query link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc",
+        "FH apps script link" : "",
+        "enable follow ups" : true,
+        "enable tell system which area is inboxing" : false,
+        "most common language in mission" : "Swedish"
+    },
+    "schedule settings" : {
+        "url" : "https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec",
+        "data_validation" : "E8",
+        "fetchStyles" : true,
+        "tab name" : "Schedule",
+        "schedule range" : "C2:BI"
+    },
+    "InboxFox" : {
+        "enable" : false
+    },
+    "tableColumns" : {
+        "type" : 0,
+        "id" : 1,
+        "date" : 2,
+        "sent status" : 3,
+        "claimed area" : 4,
+        "teaching area" : 5,
+        "AB status" : 6,
+        "full name" : 7,
+        "first name" : 8,
+        "last name" : 9,
+        "phone" : 10,
+        "email" : 11,
+        "street address" : 12,
+        "city" : 13,
+        "zip" : 14,
+        "lang" : 15,
+        "referral origin" : 16,
+        "ad name" : 17,
+        "next follow up" : 18,
+        "follow up status" : 19,
+        "amount of times followed up" : 20,
+        "sent date" : 21,
+        "not interested reason" : 22,
+        "attempt log" : 23,
+        "help request" : 24,
+        "experience" : 25
+    }
+}

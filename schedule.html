@@ -7,7 +7,10 @@
     <title>Schedule</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
+    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="script.js"></script>
     <link rel="stylesheet" href="https://21beckem.github.io/SheetMap/sheetmap.css">
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
@@ -17,8 +20,8 @@
   </head>
   <body>
     <!-- Top Bar -->
-    <div class="w3-top w3-cell-row w3-area-blue" style="z-index: 99999999;">
-      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue" style="z-index: 99999999;">
+      <div>
         <a>Schedule</a>
       </div>
     </div>
@@ -29,12 +32,6 @@
     </div>
     <script>
 
-const TablePreferences = {
-    url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
-    data_validation : 'E8',
-    fetchStyles : true
-};
-
 function scrollToToday(data, win, numberOfHiddenCols) {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -43,10 +40,7 @@ function scrollToToday(data, win, numberOfHiddenCols) {
     win.scrollTo(win.offsetWidth*iOfToday, 0);
 }
 
-async function main() {
-    //const ss = new SheetMap(TablePreferences);
-    //await ss.fetch('Schedule', 'C1:8');
-    //SheetMap.makeTableHTML('myDIV');
+window.addEventListener("load", (e) => {
     SheetMap.load();
     const colsToHide = [0,1];
     _('scheduleParent').innerHTML += SheetMap.makeColDivsHTML(hideC=colsToHide);
@@ -56,9 +50,7 @@ async function main() {
         timesContainer.innerHTML += '<div>' + SheetMap.vars.tableDataNOW[i][0] + '-' + SheetMap.vars.tableDataNOW[i][1] + '</div>';
     }
     scrollToToday(SheetMap.vars.tableDataNOW, _('SheetMapColDivs'), colsToHide.length);
-}
-main();
-// to reset saved data:  localStorage.removeItem('SheetMap_vars');
+});
 
     </script>
     <!-- Bottom Nav Bar -->

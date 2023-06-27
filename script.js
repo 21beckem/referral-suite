@@ -8,19 +8,6 @@ function verifySentInSMOEsAB(el) {
         safeRedirect(el.getAttribute('href'));
     }
 }
-function verifySUhasBeenSent(el) {
-    const yesno = confirm("You sure? This person will disappear from referral suite when you click 'OK'");
-    if (yesno) {
-        const per = getCookieJSON('linkPages') || null;
-        if (per==null) {
-            return;
-        }
-        su_done.push( [per[0], per[3]] );
-        setCookieJSON('suDone', su_done);
-        //alert('syncing now');
-        safeRedirect(el.getAttribute('href'));
-    }
-}
 function safeRedirect(ref) {
     if (!inIframe()) {
         window.location.href = ref;
@@ -43,7 +30,7 @@ document.addEventListener('click', e => {
     const origin = e.target.closest('a');
     if (origin) {
         //console.log(origin);
-        if (origin.hasAttribute("target")) {
+        if (origin.hasAttribute("target") || !origin.hasAttribute("href")) {
             //alert('has target');
             return;
         }
@@ -71,15 +58,10 @@ function saveBeforeInfoPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
-function saveBeforeClaimPage(person, el) {
-    setCookieJSON('linkPages', person);
-    safeRedirect(el.getAttribute('href'));
-}
-function saveBeforeSUPage(person, el) {
-    setCookieJSON('linkPages', person);
-    safeRedirect(el.getAttribute('href'));
-}
 function _(x) { return document.getElementById(x); }
+function _CONFIG() {
+    return getCookieJSON('CONFIG') || null;
+}
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
 /////  above functions make everything function with basic navigation between pages. No Touch!
 /////   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
@@ -87,10 +69,16 @@ let data = getCookieJSON('dataSync') || null;
 let area = getCookie('areaUser') || null;
 let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
+let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
+const FoxEnabled = (document.currentScript.getAttribute('no-fox')==null && CONFIG!=null && CONFIG['InboxFox']['enable']);
 
-if (area == null) {
+if (( area==null || CONFIG==null) && document.currentScript.getAttribute('dont-redirect')==null) {
     safeRedirect('login.html');
+} else {
+    if (sessionStorage.getItem("logged_in")==null && document.currentScript.getAttribute('dont-redirect')==null) {
+        safeRedirect('pin-code.html');
+    }
 }
 
 
@@ -101,91 +89,235 @@ async function SYNC(loadingCover=true) {
     if (loadingCover) {
         _('loadingcover').style.display = '';
     }
+
+    await SYNC_getConfig();
+
+    moveAllChangedPeopleToASeparateAreaOfData();
+
     let rs_wait = SYNC_referralSuiteStuff();
-    let su_wait = SYNC_SUStuff();
     let sm_wait = SYNC_sheetMapStuff();
-    let ar_wait = SYNC_getAreaEmail();
+    let al_wait = SYNC_getMissionAreasList();
 
     await rs_wait;
-    await su_wait;
     await sm_wait;
-    await ar_wait;
+    await al_wait;
 
     await SYNC_setCurrentInboxingArea();
+
+    saveUnchangedSyncData();
 
     //take away overlay
     if (loadingCover) {
         _('loadingcover').style.display = 'none';
     }
 }
-const referralSuiteFetchURL = 'https://smoe.ssmission.cloud/API/referral-suite.php';
+function saveUnchangedSyncData() {
+    setCookieJSON('unchangedSyncData', getCookieJSON('dataSync'));
+}
+function moveAllChangedPeopleToASeparateAreaOfData() {
+    if (data == null) {
+        return;
+    }
+    const unchangedSyncData = getCookieJSON('unchangedSyncData');
+    if (!data.hasOwnProperty('changed_people')) {
+        data.changed_people = Array();
+    }
+    for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
+        const rockPerson = unchangedSyncData.area_specific_data.my_referrals[i];
+        const changedPerson = data.area_specific_data.my_referrals[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    for (let i = 0; i < data.overall_data.follow_ups.length; i++) {
+        const rockPerson = unchangedSyncData.overall_data.follow_ups[i];
+        const changedPerson = data.overall_data.follow_ups[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    for (let i = 0; i < data.overall_data.new_referrals.length; i++) {
+        const rockPerson = unchangedSyncData.overall_data.new_referrals[i];
+        const changedPerson = data.overall_data.new_referrals[i];
+        //check if person changed at all
+        if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
+            data.changed_people.push(changedPerson);
+        }
+    }
+    setCookieJSON('dataSync', data);
+}
+async function SYNC_getMissionAreasList() {
+    return await safeFetch('mission_specific_editable_files/mission_areas_list.txt')
+        .then((response) => response.text())
+        .then((txt) => {
+            let areas = txt.split('\n');
+            areas = areas.map(x => {
+                return x.split(',').map(xx => {
+                    return xx.trim();
+                });
+            });
+            setCookieJSON('missionAreasList', areas);
+        });
+}
+async function SYNC_getConfig() {
+    return await safeFetch('mission_specific_editable_files/config.json')
+        .then((response) => response.json())
+        .then((json) => {
+            setCookieJSON('CONFIG', json);
+            if (area != null) {
+                setCookie('areaUserEmail', json['inboxers'][area][0]);
+                leaders = (json['inboxers'][area].length > 1 && json['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
+                setCookie('areaIsLeaders', leaders);
+            }
+            return json;
+        });
+}
 async function SYNC_referralSuiteStuff() {
-    let fetchURL = referralSuiteFetchURL + '?area=';
-    fetchURL += area;
     if (data != null) {
         delete data.overall_data;
     }
-    fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
-    console.log('Referrals Fetch:', fetchURL);
-    console.log('Payload:', JSON.stringify(data));
-    const response = await fetch(fetchURL);
-    const syncRes = await response.json();
-    //alert('done');
-    console.log(syncRes);
+    if (_CONFIG()['overall settings']['table type'].toLowerCase().includes('sql')) {
+        await sortOfSYNC_UseSQL();
+    } else {
+        await sortOfSYNC_QueryMyself();
+    }
+    console.log('done: SYNC_referralSuiteStuff');
+}
+async function sortOfSYNC_QueryMyself() {
+    const rawLink = _CONFIG()['overall settings']['table Query link'];
+    let qURL = rawLink.substr(0, rawLink.lastIndexOf("/"));
+    let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#','?')).get('gid');
+    let sURL = _CONFIG()['overall settings']['table scribe link'];
+    sURL += '?area=' + area;
+    sURL += '&tabId=' + tabId;
+    sURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
+    sURL += '&data=' + encodeURIComponent( JSON.stringify(data) );
 
+    if (data != null && "changed_people" in data) {
+        if (data.changed_people.length > 0) {
+            console.log('scribe activated', sURL);
+            await safeFetch(sURL);
+        }
+    }
+
+
+    let newSyncData = {
+        "overall_data" : {
+            "new_referrals" : [],
+            "follow_ups" : []
+        },
+        "area_specific_data" : {
+            "my_referrals" : [],
+            "last_sync" : new Date()
+        }
+    }
+    let claimedCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['claimed area'] + 1);
+    let sentStatusCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['sent status'] + 1);
+
+    // read unclaimed
+    let newRefs_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = 'Unclaimed'");
+    
+    // read for this area
+    let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = '"+area+"' AND "+sentStatusCol+" = 'Not sent'");
+    
+    if (_CONFIG()['overall settings']['enable follow ups']) {
+        
+        // read ALL follow ups
+        let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
+        let FUs = await G_Sheets_Query(qURL, tabId, "select * where "+nxtFU_Col+" < now() and "+nxtFU_Col+" is not null");
+        
+        // filter through follow ups. Keep those that don't have a team anymore to the first leader in the list
+        for (let i = 0; i < FUs.length; i++) {
+            const per = FUs[i];
+            let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+            if (per_claimed == area) {
+                newSyncData.overall_data.follow_ups.push(per);
+                continue;
+            }
+            let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+            if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+                newSyncData.overall_data.follow_ups.push(per);
+                continue;
+            }
+        }
+    }
+    // wait for all fetches to finish
+    newSyncData.overall_data.new_referrals = await newRefs_wait;
+    newSyncData.area_specific_data.my_referrals = await myFers_wait;
+
+    setCookieJSON('dataSync', newSyncData);
+}
+function GoogleColumnToLetter(column) {
+    var temp, letter = '';
+    while (column > 0)
+    {
+      temp = (column - 1) % 26;
+      letter = String.fromCharCode(temp + 65) + letter;
+      column = (column - temp - 1) / 26;
+    }
+    return letter;
+}
+async function G_Sheets_Query(mainLink, tabId, query) {
+    let qLink = mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId;
+    console.log(qLink);
+    return await safeFetch(qLink)
+    .then((response) => response.text())
+    .then((txt) => {
+        return getRowsFromQuery(JSON.parse(
+            txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
+            .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
+        ));
+    })
+}
+function getRowsFromQuery(bigData) {
+    return bigData.table.rows.map(x => {
+        return x['c'].map(xx => {
+            if (xx == null) { return '' }
+            if ('f' in xx) { return xx['f'] }
+            return xx['v'];
+        })
+    })
+}
+async function sortOfSYNC_UseSQL() {
+    let fetchURL = _CONFIG()['overall settings']['table Query link'];
+    fetchURL += '?area=' + area;
+    fetchURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
+    fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
+    
+    console.log('SQL Fetch:', fetchURL);
+    console.log('Payload:', JSON.stringify(data));
+    const response = await safeFetch(fetchURL);
+    let syncRes = await response.json();
+    //alert('done');
+
+    // sort through which follow ups we should have
+    let newFUs = Array();
+    for (let i = 0; i < syncRes.overall_data.follow_ups.length; i++) {
+        const per = syncRes.overall_data.follow_ups[i];
+        let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+        if (per_claimed == area) {
+            newFUs.push(per);
+            continue;
+        }
+        let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+        if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+            newFUs.push(per);
+            continue;
+        }
+    }
+    syncRes.overall_data.follow_ups = newFUs;
+    
+    console.log(syncRes);
     //save to cookie
     setCookieJSON('dataSync', syncRes);
 }
-async function SYNC_SUStuff() {
-    let fetchURL = referralSuiteFetchURL + '?area=SU';
-    fetchURL += (su_done == null) ? '' : '&data=' + encodeURI( JSON.stringify(su_done) );
-    console.log('SU Fetch:', fetchURL);
-    const response = await fetch(fetchURL);
-    const syncRes = await response.json();
-    //alert('done');
-    console.log(syncRes);
-
-    //save to cookie
-    setCookieJSON('suSync', syncRes);
-}
 async function SYNC_sheetMapStuff() {
     // sync schedule changes then get updated stuff:
-    const ss = new SheetMap({
-        url : 'https://script.google.com/macros/s/AKfycbz4QXXjeLFUPltyk0Ufl--MMyw5kR9WwyBHBABxYD6Vr4n-o-aQ3mgPRufrbBTlnVPO/exec',
-        data_validation : 'E8',
-        fetchStyles : true
-    });
+    const ss = new SheetMap(CONFIG['schedule settings']);
     await SheetMap.syncChanges();
-    await ss.fetch('Schedule', 'C2:BI');
-}
-async function SYNC_getAreaEmail() {
-    //also get area email
-    let areaEmail = "";
-    let leaders = "0";
-    await safeFetch('login.html').then(res => res.text()).then(txt => {
-        let r = findAreaEmailFromHTML(txt, area);
-        console.log(r);
-        areaEmail = r[0];
-        leaders = r[1];
-    });
-    setCookie('areaUserEmail', areaEmail);
-    setCookie('areaIsLeaders', leaders);
-}
-function findAreaEmailFromHTML(txt, thisArea) {
-    let areaEmail = "";
-    let leaders = "0";
-    const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
-    for (const match of matches) {
-        if (match[4] == thisArea) {
-            //console.log("match",match);
-            areaEmail = match[2];
-            if (match[3].includes('leader')) {
-                leaders = "1";
-            }
-            break;
-        }
-    }
-    return [areaEmail, leaders];
+    await ss.fetch(CONFIG['schedule settings']['tab name'], CONFIG['schedule settings']['schedule range']);
 }
 function GetTodaysSchedule() {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -214,49 +346,30 @@ function getCurrentInboxingArea() {
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
 
-    let areaEmail = "";
-    await safeFetch('login.html').then(res => res.text()).then(txt => {
-        areaEmail = findAreaEmailFromHTML(txt, thisArea)[0];
-    });
-    const reqUrl = referralSuiteFetchURL + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
+    let areaEmail = _CONFIG()['inboxers'][0];
+    const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch( reqUrl );
-}
-function makeListSU_people() {
-    const arr = su_refs;
-    let output = '';
-    for (let i = 0; i < arr.length; i++) {
-        const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeSUPage(su_refs[` + i + `], this)" href="su_referral_info.html" class="person-to-click">
-        <div class="w3-bar" style="display: flex;">
-          <div class="w3-bar-item w3-circle">
-            <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>SU</b></div>
-          </div>
-          <div class="w3-bar-item">
-            <span class="w3-large">` + per[4] + ' ' + per[5] + `</span><br>
-            <span>` + elapsedTime + `</span><br>
-            <span>` + prettyPrintRefOrigin(per[11]) + `</span>
-          </div>
-        </div>
-      </aa>`;
-    }
-    _('su-referrals').innerHTML = output;
 }
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[1]));
-        output += `<aa onclick="saveBeforeClaimPage(data.overall_data.new_referrals[` + i + `], this)" href="claim_the_referral.html" class="person-to-click">
-          <div class="w3-bar" style="display: flex;">
-            <div class="w3-bar-item w3-circle">
-              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-            </div>
+        let dotStyle = `<div class="w3-bar-item w3-circle">
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+        </div>`;
+        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+            dotStyle = `<div class="w3-bar-item w3-circle">
+                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
+            </div>`;
+        }
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
+        output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="claim_the_referral.html" class="person-to-click">
+          <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[2] + ' ' + per[3] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -267,16 +380,23 @@ function makeListClaimedPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[2]));
-        output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="contact_info.html" class="person-to-click">
-          <div class="w3-bar" style="display: flex;">
-            <div class="w3-bar-item w3-circle">
-              <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-            </div>
+        let dotStyle = `<div class="w3-bar-item w3-circle">
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
+        </div>`;
+        let nextPage = 'contact_info.html';
+        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+            dotStyle = `<div class="w3-bar-item w3-circle">
+                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
+            </div>`;
+            nextPage = 'fh_referral_info.html';
+        }
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
+        output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="` + nextPage + `" class="person-to-click">
+          <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -287,8 +407,8 @@ function makeListFollowUpPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[18]));
-        output += `<aa onclick="saveBeforeInfoPage(` + JSON.stringify(per).replaceAll('"', '&quot;') + `, this)" href="follow_up_on.html" class="person-to-click">
+        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['next follow up'] ]));
+        output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="follow_up_on.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
               <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
@@ -296,66 +416,110 @@ function makeListFollowUpPeople(arr) {
               </div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[8] + ' ' + per[9] + `</span><br>
+              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[0].replaceAll('_', ' ') + `</span>
+              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
     }
     _('yourfollowups').innerHTML = output;
 }
-function fillInSUInfo() {
-    const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[4] + ' ' + person[5];
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[11]);
-    _('email').innerHTML = person[6];
-    _('address').innerHTML = person[7] + ' ' + person[8];
-    _('SU_message').innerHTML = makeSUMessage(person);
+function fillInFHInfo() {
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    _('personName').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
+    //_('contactname').innerHTML = _('personName').innerHTML;
+    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
+    _('address').innerHTML = person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
+    _('FH_lang').innerHTML = CONFIG['overall settings']['most common language in mission'];
+    _('FH_message').innerHTML = makeFHMessage(person);
 }
-function makeSUMessage(per) {
-    if (per[11].toLowerCase().includes('fb') || per[11].toLowerCase().includes('ig')) {
+function makeFHMessage(per) {
+    if (per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('fb') || per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('ig')) {
 return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[9] + `
+What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
 
-How experienced they are: ` + per[10];
+How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
     } else {
         return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[9] + `
+What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
 
-How experienced they are: ` + per[10];
+How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
     }
 }
 function fillInContactInfo() {
-    const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[7];
-    _('telnumber').href = 'tel:+' + person[10];
-    //_('smsnumber').href = 'sms:+' + person[8];
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
+    //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
+    //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
-    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[16]);
-    _('phonenumber').innerHTML = person[10];
-    _('email').innerHTML = person[11];
-    let addStr = person[12] + ' ' + person[13] + ' ' + person[14];
+    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['tableColumns']['referral origin'] ]);
+    _('phonenumber').innerHTML = person[ CONFIG['tableColumns']['phone'] ];
+    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
+    let addStr = person[ CONFIG['tableColumns']['street address'] ] + ' ' + person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
-    _('adName').innerHTML = person[17];
-    _('prefSprak').innerHTML = (person[15] == "") ? "Undeclared" : person[15];
+    _('adName').innerHTML = person[ CONFIG['tableColumns']['ad name'] ];
+    _('adDeck').href = CONFIG['home page links']['ad deck'];
+    _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
+    fillInAttemptLog();
+}
+function openGoogleSlides(link) {
+    setCookie('openThisSlides', link);
+    safeRedirect('view_google_slides.html');
+}
+function setHomeBigBtnLink(elId) {
+    let link = CONFIG['home page links'][elId];
+    const el = _(elId);
+    if (link.includes('www.canva.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+        el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+    } else if (link.includes('docs.google.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+        el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+    } else {
+        console.log('Unrecognized presentation link. Will open in new tab:' + link);
+        el.href = link.replace("{Area}", area);
+        el.setAttribute('target', '_blank');
+    }
+}
+function callThenGoBack() {
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
+    safeRedirect('contact_info.html');
+}
+function fillInHelpBeforeCallPage() {
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let link = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
+
+    if (link.includes('www.canva.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+    } else if (link.includes('docs.google.com')) {
+        link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    } else {
+        console.error('Unrecognized presentation link. Will open in new tab:' + link);
+    }
+
+    _('google_slides_import').src = link;
 }
 function fillInFollowUpInfo() {
-    const person = getCookieJSON('linkPages') || null;
-    _('contactname').innerHTML = person[7];
-    _('referraltype').innerHTML = person[0].replaceAll('_', ' ');
-    _('lastAtt').innerHTML = new Date(person[20]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    _('refLoc').innerHTML = person[5];
-    _('refLoc2').innerHTML = person[5];
+    const person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
+    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
+    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
+    _('lastAtt').innerHTML = new Date(person[ CONFIG['tableColumns']['sent date'] ]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    let fuTimes = person[ CONFIG['tableColumns']['amount of times followed up'] ];
+    _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes)==1) ? ' time' : ' times');
+    _('refLoc').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
+    _('refLoc2').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
+    _('refSender').innerHTML = person[ CONFIG['tableColumns']['claimed area'] ];
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
@@ -384,9 +548,9 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
             }
         });
     }
-    const person = getCookieJSON('linkPages') || null;
-    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[11] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[10])) + '?body=') : emailLink;
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;
@@ -395,8 +559,7 @@ async function fillMessageExamples(requestType, folderName, pasteBox) {
 	const rawFetch = await safeFetch(reqMssgUrl);
 	const rawTxt = await rawFetch.text();
 
-	text = rawTxt;
-	const Messages = text.split(/\n{4,}/gm);
+	const Messages = rawTxt.split(/[\r\n]{5,}/gm);
 	//console.log(Messages);
 	let output = "";
 	for (let i = 0; i < Messages.length; i++) {
@@ -429,7 +592,7 @@ function syncButton(el) {
     });
 }
 function sendToAnotherArea() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -437,43 +600,108 @@ function sendToAnotherArea() {
     const newArea = document.getElementById('areadropdown').value;
 
     // set new area in data and save to cookie
-    person[3] = 'Sent';
-    person[5] = newArea;
+    person[ CONFIG['tableColumns']['sent status'] ] = 'Sent';
+    person[ CONFIG['tableColumns']['teaching area'] ] = newArea;
 
-    if (!("changed_people" in data)) {
-        data.changed_people = Array();
-    }
-    data.changed_people.push(person);
+    // follow up
+    let nextFU = new Date();
+    person[ CONFIG['tableColumns']['sent date'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+
+    nextFU.setDate(nextFU.getDate() + CONFIG['follow ups']['initial delay after sent']);
+    nextFU.setHours(3,0,0,0);
+    person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
 
-// this controls how long until the follow up pops up again based off what answer the missionary gave.
-// "green" and "Not interested" tells the system to not make any more follow-up reminders
-//                          0             1         2         3         4
-let followUpDelay = ["Not interested", "3 days", "7 days", "14 days", "green"];
-
-
+function fillInDeceeaseReasons(el) {
+    let out = "<option></option>";
+    for (let i = 0; i < Object.keys(CONFIG['decease reasons']).length; i++) {
+        out += '<option value="' + CONFIG['decease reasons'][ Object.keys(CONFIG['decease reasons'])[i] ] + '">' + Object.keys(CONFIG['decease reasons'])[i] + '</option>';
+    }
+    el.innerHTML = out;
+}
+function fillInFollowUpOptions(el) {
+    let out = "<option></option>";
+    for (let i = 0; i < Object.keys(CONFIG['follow ups']['status delays']).length; i++) {
+        out += '<option value="' + i + '">' + Object.keys(CONFIG['follow ups']['status delays'])[i] + '</option>';
+    }
+    el.innerHTML = out;
+}
 function saveFollowUpForm() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const status = document.getElementById('statusdropdown').value;
 
-    // overwrite old person
-    if (!data.hasOwnProperty('follow_up_update')) {
-        data.follow_up_update = Array();
+    let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
+    let delay = CONFIG['follow ups']['status delays'][clickedOption];
+
+    if (typeof delay === 'string' || delay instanceof String) {
+        person[ CONFIG['tableColumns']['AB status'] ] = delay;
+        person[ CONFIG['tableColumns']['next follow up'] ] = null;
+    } else {
+        let nextFU = new Date();
+        nextFU.setDate(nextFU.getDate() + delay);
+        nextFU.setHours(3,0,0,0);
+        person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
     }
     
-    let tosend = [person[0], person[1], status, followUpDelay[parseInt(status)]];
-    data.follow_up_update.push(tosend);
-    setCookieJSON('dataSync', data);
+    person[ CONFIG['tableColumns']['follow up status'] ] = status;
+    person[ CONFIG['tableColumns']['amount of times followed up'] ] = parseInt( person[ CONFIG['tableColumns']['amount of times followed up'] ] ) + 1;
+
+    data.overall_data.follow_ups[getCookieJSON('linkPages')] = person;
 
     // send to force-sync.html
     safeRedirect('force-sync.html');
+}
+function logAttempt(el, y, x) {
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
+    let nowAttempted = !(al[x][y]==1);
+    al[x][y] = (nowAttempted) ? 1 : 0;
+    person[ CONFIG['tableColumns']['attempt log'] ] = JSON.stringify(al);
+    
+    if (nowAttempted) {
+        el.classList.add('contactDotBeenAttempted');
+    } else {
+        el.classList.remove('contactDotBeenAttempted');
+    }
+    // save this change
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    setCookieJSON('dataSync', data);
+}
+function fillInAttemptLog() {
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let al = Array(7).fill([0,0,0]);
+    try {
+        al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
+    } catch (e) {
+        person[ CONFIG['tableColumns']['attempt log'] ] = JSON.stringify(al);
+    }
+
+    // make days of the week start on right day
+    let startDay = new Date(person[ CONFIG['tableColumns']['date'] ]);
+    const shorterDays = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon'];
+    let daysString = '<td></td>';
+    for (let i = 0; i < 7; i++) {
+        daysString += '<td>' + shorterDays[startDay.getDay() + i] + '</td>';
+    }
+    _('attemptLog_weekdays').innerHTML = daysString;
+
+    //set dot colors
+    for (let i = 0; i < al.length; i++) {
+        for (let j = 0; j < al[i].length; j++) {
+            if (al[i][j]==1) {
+                _('attemptLogDot_'+j+','+i).classList.add('contactDotBeenAttempted');
+            }
+        }
+    }
 }
 function sendToDeceasePage(el) {
     safeRedirect(el.getAttribute('href'));
@@ -483,35 +711,31 @@ function deceasePerson() {
     if (!youSure) {
         return;
     }
-    const person = getCookieJSON('linkPages') || null;
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
 
     // set new area in data and save to cookie
-    person[3] = 'Not interested';
-    person[21] = _('deceaseDropdown').value;
+    person[ CONFIG['tableColumns']['sent status'] ] = 'Not interested';
+    person[ CONFIG['tableColumns']['not interested reason'] ] = _('deceaseDropdown').value;
 
-    if (!("changed_people" in data)) {
-        data.changed_people = Array();
-    }
-    data.changed_people.push(person);
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
 function claimPerson() {
-    const person = getCookieJSON('linkPages') || null;
+    let person = data.overall_data.new_referrals[getCookieJSON('linkPages')];
     if (person == null) {
         alert('something went wrong. Try again');
         safeRedirect('index.html');
         return;
     }
-    if ( !("claim_these" in data) ) {
-        data['claim_these'] = Array();
-    }
-    data['claim_these'].push(person);
+    
+    person[ CONFIG['tableColumns']['claimed area'] ] = area;
+    data.overall_data.new_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
@@ -566,14 +790,29 @@ function timeSince_formatted(date) {
     }
     return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
+function setupInboxFox() {
+    window.InboxFox = new WebPal();
+    InboxFox.pokeFunction = () => {
+        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks :)'], (choice) => {
+            if (choice.includes('No')) {
+                InboxFox.say('Okay, just let me know :)');
+            } else {
+                location.href = 'https://www.google.com/search?q=i+need+help';
+            }
+        }, true);
+    }
+}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
-window.onload = () => {
+window.addEventListener("load", (e) => {
     try {
         _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
     } catch(e) {}
     try {
-        _('followup_reddot').style.display = (data.area_specific_data.follow_ups.length > 0) ? 'block' : 'none';
+        _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch(e) {}
-}
+    if (FoxEnabled) {
+        setupInboxFox();
+    }
+});

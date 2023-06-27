@@ -7,17 +7,21 @@
     <title>Referral Updates</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
+    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="script.js"></script>
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>
     <!-- Top Bar -->
-    <div class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
-        <a>Updating Referral</a>
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
+      <div>
+        <a>Sending Referral</a>
       </div>
     </div>
     <div style="height: 80px;"></div>
@@ -28,49 +32,8 @@
   <div style="height:20px"></div>
   <div class="w3-center">  
     <select onchange="areaOptionChanged(this)" id="areadropdown">
-      <option></option>
-      <option>Alingsås</option>
-      <option>Borås</option>
-      <option>Borlänge</option>
-      <option>Eskilstuna</option>
-      <option>Gävle</option>
-      <option>Gubbängen</option>
-      <option>Halmstad</option>
-      <option>Handen</option>
-      <option>Helsingborg</option>
-      <option>Hägersten</option>
-      <option>Jakobsberg</option>
-      <option>Jönköping</option>
-      <option>Kalmar</option>
-      <option>Karlskrona</option>
-      <option>Karlstad</option>
-      <option>Katrineholm</option>
-      <option>Kristianstad</option>
-      <option>Kungsbacka</option>
-      <option>Linköping</option>
-      <option>Luleå</option>
-      <option>Lund</option>
-      <option>Malmö</option>
-      <option>Norrköping</option>
-      <option>Örebro</option>
-      <option>Örnsköldsvik</option>
-      <option>Östersund</option>
-      <option>Skellefteå</option>
-      <option>Skövde</option>
-      <option>Stockholm</option>
-      <option>Sundsvall</option>
-      <option>Södertälje</option>
-      <option>Trollhättan</option>
-      <option>Täby</option>
-      <option>Umeå</option>
-      <option>Uppsala</option>
-      <option>Utby</option>
-      <option>Vendelsö</option>
-      <option>Visby</option>
-      <option>Västerås</option>
-      <option>Västerhaninge</option>
-      <option>Västra Frölunda</option>
-      <option>Växjö</option>
+      <option value=""></option>
+      <option value="">An error has occured. Try Re-syncing</option>
     </select>
   </div>
 
@@ -125,14 +88,18 @@
 
     </div>
 
-
-
   <script>
 
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
-
+const areas = getCookieJSON('missionAreasList') || null;
+if (areas != null) {
+  _('areadropdown').innerHTML = '<option></option>';
+  for (let i = 0; i < areas.length; i++) {
+    _('areadropdown').innerHTML += '<option>' + areas[i][0] + '</option>';
+  }
+}
   </script>
 
   </body>

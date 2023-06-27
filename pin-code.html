@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral Suite</title>
+    <title>Pin Code</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
@@ -16,43 +17,51 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div>
-        <a>Choose your area</a>
-      </div>
+        <div>
+            <a>Verify Pin</a>
+        </div>
     </div>
-    <div style="height: 35px;"></div>
+    <div style="height: 80px;"></div>
 
-    <!-- Login Buttons -->
-    <div id="arealoginbuttons">
-      <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-        <div class="lds-dual-ring"></div>
-      </div>
+
+
+    <div class="w3-center" style="padding-top: 100px;">Enter a PIN to continue</div>
+    <div style="height:20px"></div>
+    <div class="w3-center">
+        <input id="pin-code" type="password" inputmode="numeric" maxlength="5" autofocus oninput="validatePinCode(this)">
     </div>
+
     <script>
-setCookie('dataSync', null);
-setCookie('areaUser', '');
-setCookie('suSync', null);
-setCookie('areaUserEmail', '');
-function signInAsArea(el) {
-  setCookie('areaUserEmail', el.getAttribute('email'));
-  setCookie('areaUser', el.innerHTML);
-  safeRedirect('force-sync.html');
+
+SYNC_getConfig();
+
+function validatePinCode(el) {
+    if (el.value.length > 4) {
+        el.value = el.value.slice(4);
+    }
+    if (el.value.length == 4) {
+        if (el.value == CONFIG['overall settings']['login pin']) {
+            sessionStorage.setItem("logged_in", "1");
+            safeRedirect('index.html');
+        } else {
+            el.classList.add('shake');
+            setTimeout(function(el) {
+                _('pin-code').classList.remove('shake');
+            }, 300);
+        }
+    }
 }
-// get inboxing areas
-async function fillInAreaButtons() {
-  const cfg = await SYNC_getConfig();
-  const arealoginbuttons = _('arealoginbuttons');
-  let output = '';
-  for (const [area, email] of Object.entries(cfg.inboxers)) {
-    output += '<button email="'+email[0]+'" onclick="signInAsArea(this)">'+area+'</button>'
-  }
-  arealoginbuttons.innerHTML = output;
-}
-fillInAreaButtons();
+setInterval(() => {
+    _('pin-code').focus();
+}, 100);
+
     </script>
-  </body>
+
+</body>
+
 </html>

@@ -40,7 +40,7 @@ function updateField(el) {
 }
 
 function sendTheMessage() {
-	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[10])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[11] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
+	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
 	const sendLink = link_beginning + encodeURI(MessageOutput.innerText);
 	_('fakeLinkToClickToSend').href = sendLink;
 	let listOfIns = _('completerItemsParent').querySelectorAll('INPUT');
@@ -64,5 +64,5 @@ function trySetValue(el, val) {
 		updateField(el);
 	} catch (e) {}
 }
-trySetValue(_('completerInputFor_{Name}'), person[8]);
-trySetValue(_('completerInputFor_{insert their number}'), person[10]);
+trySetValue(_('completerInputFor_{Name}'), person[ CONFIG['tableColumns']['first name'] ]);
+trySetValue(_('completerInputFor_{insert their number}'), person[ CONFIG['tableColumns']['phone'] ]);

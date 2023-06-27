@@ -7,16 +7,20 @@
     <title>Follow Up Response</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
+    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="script.js"></script>
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>
     <!-- Top Bar -->
-    <div class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-area-blue w3-cell w3-center w3-xlarge w3-padding-16 w3-text-white">
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
+      <div>
         <a>How did it go?</a>
       </div>
     </div>
@@ -28,12 +32,6 @@
   <div style="height:20px"></div>
   <div class="w3-center">  
     <select onchange="areaOptionChanged(this)" id="statusdropdown">
-      <option></option>
-      <option value="0">😢 Not interested in contact</option>
-      <option value="1">😫 Hasn't been contacted</option>
-      <option value="2">🤔 Hasn't responded</option>
-      <option value="3">😀 Has been contacted</option>
-      <option value="4">🤩 Appointment is set up!</option>
     </select>
   </div>
 
@@ -91,9 +89,10 @@
 
 
   <script>
+fillInFollowUpOptions(_('statusdropdown'));
 
 function areaOptionChanged(el) {
-  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
+  _("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
 
   </script>

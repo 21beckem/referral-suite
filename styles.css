@@ -35,10 +35,46 @@
     font-size: 200px;
     z-index: 15;
 }
+#topHeaderBar {
+    font-family: 'Advent Pro';
+}
+#topHeaderBar div:has(:not(.contact_info)):first-child {
+    letter-spacing: 0.15em;
+    background-color: var(--mainColor);
+    color: #fff;
+    padding-top: 12px!important;
+    padding-bottom: 12px!important;
+    text-align: center;
+    padding: 0.01em 16px;
+    font-size: 30px;
+}
+#topHeaderBar div:has(.contact_info):first-child {
+    letter-spacing: 0.1em;
+    background-color: var(--mainColor);
+    color: #fff;
+    text-align: left;
+    display: table-cell;
+    font-size: 30px;
+}
+.contact_info {
+    margin: -4px;
+}
 #BottomNavBar {
     padding-top: 7px;
     padding-bottom: 16px;
     z-index: 9999999;
+}
+#syncBtn {
+    width: 90%;
+    color: white;
+    height: 100px;
+    border: none;
+    background-image: url('img/SYNC_btn.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px;
+    box-shadow: 1px 2px 10px -7px black;
 }
 .w3-email-color {
     color: var(--white);
@@ -122,6 +158,113 @@ a.uline {
     color: var(--black) !important;
     background-color: var(--white) !important;
 }
+
+#bigBtnsTable {
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+#bigBtnsTable tr td {
+    padding: 5px;
+    width: 33%;
+    height: 25%;
+}
+.bigTipBtn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 1px 2px 10px -7px black;
+}
+.bigTipBtn i {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(calc(-50% - 52px), -50%);
+    font-size: 40px;
+}
+.bigTipBtn .caption {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.full_width_home_btn {
+    height: 80px;
+    padding: 5px;
+}
+.full_width_home_btn div a {
+    border: 1px solid #f2bfff;
+}
+#google_slides_import {
+    position: relative;
+    border: none;
+    width: 100%;
+    height: calc(100% - 127px);
+    z-index: 1;
+}
+
+.contactDotBeenAttempted {
+    background-color: var(--call-color) !important;
+}
+#attemptLog {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 10px;
+}
+#attemptLog tr:first-child {
+    font-size: small;
+    text-align: center;
+    opacity: 0.6;
+}
+#attemptLog tr:not(:first-child) td:not(:first-child) button {
+    margin-left: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 40px;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    outline: none;
+}
+#attemptLog tr:not(:first-child) td:not(:first-child) button.recommended {
+    background-color: transparent;
+}
+
+input#pin-code.shake {
+    animation: horizontal-shaking 0.3s ease-in-out infinite;
+}
+input#pin-code {
+    animation: idle-shaking 0.1s linear infinite;
+    position: relative;
+    caret-color: transparent;
+    display: inline-block;
+    transform: translateX(17px);
+    letter-spacing: 30px;
+    width: 180px;
+    overflow-x: hidden;
+    font-size: x-large;
+    background-color: transparent;
+    outline: 0;
+    border-width: 0 0 0;
+    border-color: var(--white);
+}
+input#pin-code:focus {
+    border-color: var(--light-blue);
+}
+@keyframes horizontal-shaking {
+    0% { transform: translateX(17) }
+    25% { transform: translateX(27px) }
+    50% { transform: translateX(10px) }
+    75% { transform: translateX(27px) }
+    100% { transform: translateX(17) }
+}
+@keyframes idle-shaking { 100% {transform: translateX(17)} }
 
 .w3-center-absolute {
     position: fixed;

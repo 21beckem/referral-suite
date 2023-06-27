@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Follow Up</title>
+    <title>How to Call</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
@@ -17,59 +17,36 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
+    <style>
+#toCallBtn {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 59px;
+  z-index: 1;
+  box-shadow: 1px 2px 15px -7px black;
+}
+    </style>
   </head>
   <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <div id="contactname"></div>
+        <center><div>How to Call</div></center>
       </div>
     </div>
-    <div style="height: 80px;"></div>
+    <div style="height: 68px;"></div>
 
-    <!-- Contact Card -->
-    <div class="w3-card">
-        <div class="w3-cell-row w3-padding">
-            <div class="w3-container w3-center w3-xlarge">Follow Up</div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-            <div class="w3-left-align w3-small w3-opacity">Sent on</div>
-            <div id="lastAtt" class="w3-left-align w3-large"></div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Referral type</div>
-          <div id="referraltype" class="w3-left-align w3-large"></div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Amount of times already followed up on</div>
-          <div id="followUpCount" class="w3-left-align w3-large"></div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Area they are in</div>
-          <div id="refLoc" class="w3-left-align w3-large"></div>
-        </div>
-        
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Team that sent the referral</div>
-          <div id="refSender" class="w3-left-align w3-large w3-margin-bottom"></div>
-        </div>
+    <div id="loadingAnim" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+      <div class="lds-dual-ring"></div>
     </div>
-    <div style="height: 10px;"></div>
+    <iframe id="google_slides_import" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-    <!-- Options to follow up -->
-    <div class="w3-container w3-cell-row" style="margin-top: 40px;">
-      <div class="w3-container w3-cell w3-center">
-        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.html">I've Sucessfully <br> Contacted <span id="refLoc2"></span></a>
-      </div>
-    </div>
+    <button id="toCallBtn" class="w3-button w3-xlarge w3-blue" onclick="callThenGoBack()"><i class="fa fa-phone-square w3-xxlarge w3-text-call-color"></i> CONTINUE TO CALL 🡵</button>            
+
     
-
-
-
-
-   <!-- Bottom Nav Bar -->
-   <div style="height: 80px;"></div>
-   <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
+    <!-- Bottom Nav Bar -->
+    <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
 
      <div class="w3-container w3-cell w3-center w3-xlarge">
        <a href="index.html">
@@ -113,7 +90,9 @@
      </div>
 
    </div>
-   <script>fillInFollowUpInfo()</script>
+   <script>
+fillInHelpBeforeCallPage();
+   </script>
 
   </body>
 </html>
