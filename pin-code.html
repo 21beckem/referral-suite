@@ -18,6 +18,19 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
+    <style>
+#pinPad {
+    padding-top: 70px;
+    width: 70%;
+}
+#pinPad td {
+    width: 33%;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 25px;
+}
+    </style>
 </head>
 
 <body>
@@ -31,31 +44,67 @@
 
 
 
-    <div class="w3-center" style="padding-top: 100px;">Enter a PIN to continue</div>
+    <div class="w3-center" style="padding-top: 30px;">Enter a PIN to continue</div>
     <div style="height:20px"></div>
     <div class="w3-center">
-        <input id="pin-code" type="password" inputmode="numeric" maxlength="5" autofocus oninput="validatePinCode(this)">
+        <div id="pin-code"></div>
     </div>
+    <center>
+        <table id="pinPad">
+            <tr>
+                <td onclick="addNumber('1')">1</td>
+                <td onclick="addNumber('2')">2</td>
+                <td onclick="addNumber('3')">3</td>
+            </tr>
+            <tr>
+                <td onclick="addNumber('4')">4</td>
+                <td onclick="addNumber('5')">5</td>
+                <td onclick="addNumber('6')">6</td>
+            </tr>
+            <tr>
+                <td onclick="addNumber('7')">7</td>
+                <td onclick="addNumber('8')">8</td>
+                <td onclick="addNumber('9')">9</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td onclick="addNumber('0')">0</td>
+                <td onclick="addNumber(null)"><i class="fa-solid fa-delete-left"></i></td>
+            </tr>
+        </table>
+    </center>
 
     <script>
 
 SYNC_getConfig();
+let currentPin = '';
 
-function validatePinCode(el) {
-    if (el.value.length > 4) {
-        el.value = el.value.slice(4);
+function addNumber(num) {
+    if (num == null) {
+        currentPin = currentPin.slice(0, -1);
+    } else {
+        currentPin += num;
     }
-    if (el.value.length == 4) {
-        if (el.value == CONFIG['overall settings']['login pin']) {
+    
+    if (currentPin.length > 4) {
+        currentPin = currentPin.slice(4);
+    }
+    if (currentPin.length == 4) {
+        if (currentPin == CONFIG['overall settings']['login pin']) {
             sessionStorage.setItem("logged_in", "1");
             safeRedirect('index.html');
         } else {
-            el.classList.add('shake');
+            _('pin-code').classList.add('shake');
             setTimeout(function(el) {
                 _('pin-code').classList.remove('shake');
             }, 300);
         }
     }
+    console.log(currentPin);
+    _('pin-code').innerHTML = Array(currentPin.length).fill('•').join('');
+}
+
+function validatePinCode(el) {
 }
 setInterval(() => {
     _('pin-code').focus();
