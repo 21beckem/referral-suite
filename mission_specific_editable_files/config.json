@@ -31,11 +31,11 @@
         }
     },
     "home page links" : {
-        "1_sync" : "https://www.canva.com/design/DAFlyukE4Iw/view",
-        "2_contact" : "https://www.canva.com/design/DAFl4wHP0Ks/view",
-        "3_log" : "https://www.canva.com/design/DAFl40Xvy6Q/view",
-        "4_message" : "https://www.canva.com/design/DAFly7mr0U0/view",
-        "5_comments" : "https://www.canva.com/design/DAFlzD2-OOU/view",
+        "1_sync" : "https://docs.google.com/presentation/d/e/2PACX-1vR4exzhvCFtXAkqTplAzh5qUYSg-Fe1aApOMvdDRDcS5SUryo8PVCJ0qqF-UUjOILVjm7QbtbXZG0fw/pub?start=false&loop=false&delayms=3000",
+        "2_contact" : "coming_soon.html",
+        "3_log" : "https://docs.google.com/presentation/d/e/2PACX-1vThE5frcDBBWTI_Kcyy4ctGM1579-XVAXL3nIcSUCsv7K4W0f9TDYTuUgVfaICa4Qgp9QAkVTwZccjN/pub?start=false&loop=false&delayms=3000",
+        "4_message" : "https://docs.google.com/presentation/d/e/2PACX-1vSHTK-uV0xA990FekTpa9FrhO3SrhmqqFiP35ZW-0K2WSVK8I_wGWjUfHTvJYlMTomQNQZwTJ8hlUTe/pub?start=false&loop=false&delayms=3000",
+        "5_comments" : "https://docs.google.com/presentation/d/e/2PACX-1vT62wTklkcNQivMqHtcI-no5CYLONuQFf4EXUFc69b-hDPJkJg4qYnH-nleWAee39QrwMs-WAk6djvg/pub?start=false&loop=false&delayms=3000",
         "6_report" : "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618={Area}",
 
         "book or mormon delivery form" : "https://forms.gle/UH2vA9VrdA2jswpZ9",
@@ -43,8 +43,8 @@
         "business suite help" : "https://docs.google.com/presentation/d/1ouB-232e9T56QpYYfWxIAjJeXRIVWB2KnUbWvh4F2cE/edit?usp=sharing"
     },
     "tips before calling" : {
-        "MB Request" : "https://www.canva.com/design/DAFmqQ1LXIc/view",
-        "Missionary Visit" : "https://www.canva.com/design/DAFmqv7zfxk/view"
+        "MB Request" : "https://docs.google.com/presentation/d/e/2PACX-1vTxH3zQhGvHCrPlgdDIiNWryPcjLgA4j96ziZSkoQ5WzavbS1qpMVfs8nq6O0ZRHio9mU1XQKL6Elbd/pub?start=false&loop=false&delayms=3000",
+        "Missionary Visit" : "https://docs.google.com/presentation/d/e/2PACX-1vS_7TYeUGzJYJPbRUUYMbjmEBdMWvxZAbl5-cSvqlITUq-HThAAiQg6AjTjCxCEusOvqhkcwl3-9Sb-/pub?start=false&loop=false&delayms=3000"
     },
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",

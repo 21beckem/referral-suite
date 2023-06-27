@@ -485,6 +485,8 @@ function setHomeBigBtnLink(elId) {
     } else if (link.includes('docs.google.com/presentation')) {
         link = link.substr(0, link.lastIndexOf("/")) + '/embed';
         el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+    } else if (!link.startsWith('http')) {
+        el.href = link;
     } else {
         console.log('Unrecognized presentation link. Will open in new tab:' + link);
         el.href = link.replace("{Area}", area);
