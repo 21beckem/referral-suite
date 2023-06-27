@@ -479,11 +479,7 @@ function openGoogleSlides(link) {
 function setHomeBigBtnLink(elId) {
     let link = CONFIG['home page links'][elId];
     const el = _(elId);
-    if (link.includes('www.canva.com')) {
-        link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
-        el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
-    } else if (link.includes('docs.google.com/presentation')) {
-        link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+    if (link.includes('www.canva.com') || link.includes('docs.google.com/presentation')) {
         el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
     } else if (!link.startsWith('http')) {
         el.href = link;
@@ -537,20 +533,10 @@ function prettyPrintRefOrigin(x) {
             return x;
     }
 }
-async function fillMessageExamples(requestType, folderName, pasteBox) {
+async function fillMessageExamples(folderName, pasteBox) {
     let areaEmail = getCookie('areaUserEmail') || null;
-    if (areaEmail == null) {
-        await safeFetch('login.html').then(res => res.text()).then(txt => {
-            const matches = txt.matchAll(/\<button(.*)email=\"(.*)\"(.*)\>(.*)<\/button>/gmi);
-            for (const match of matches) {
-                if (match[4] == area) {
-                    areaEmail = match[2];
-                    break;
-                }
-            }
-        });
-    }
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let requestType = person[ CONFIG['tableColumns']['type'] ];
     const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
     const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';

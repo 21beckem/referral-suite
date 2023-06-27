@@ -79,7 +79,13 @@
 
    </div>
    <script>
-_('google_slides_import').src = getCookie('openThisSlides');
+let link = getCookie('openThisSlides');
+if (link.includes('www.canva.com')) {
+    link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+} else {
+    link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+}
+_('google_slides_import').src = link;
    </script>
 
   </body>

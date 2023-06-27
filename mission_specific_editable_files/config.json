@@ -46,6 +46,10 @@
         "MB Request" : "https://docs.google.com/presentation/d/e/2PACX-1vTxH3zQhGvHCrPlgdDIiNWryPcjLgA4j96ziZSkoQ5WzavbS1qpMVfs8nq6O0ZRHio9mU1XQKL6Elbd/pub?start=false&loop=false&delayms=3000",
         "Missionary Visit" : "https://docs.google.com/presentation/d/e/2PACX-1vS_7TYeUGzJYJPbRUUYMbjmEBdMWvxZAbl5-cSvqlITUq-HThAAiQg6AjTjCxCEusOvqhkcwl3-9Sb-/pub?start=false&loop=false&delayms=3000"
     },
+    "tips on prewritten messages page" : {
+        "SMS" : "https://docs.google.com/presentation/d/e/2PACX-1vQgdWO7nNGvM4Pu15_u9jWMKQpgoatUqwugKiWnLBxRWK7oS7tPTHh94tqwmZFpox637PLz95iW4QzY/pub?start=false&loop=false&delayms=3000",
+        "Email" : "https://docs.google.com/presentation/d/e/2PACX-1vSyAXrAA6CWz1t4Bpj9lmmsdfP54E9_3KmwvMiK0Z2GzS54uTQtytZ27J9kHnKFCtXvN4eQ-A3-VUF7/pub?start=false&loop=false&delayms=3000"
+    },
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
         "table scribe link" : "https://script.google.com/macros/s/AKfycbyULhG4Vw-AK0Gvw5wOWLgzZPC-m5PA5-zDRNqrTeIKZarKLlqPSjX__nIN92EC6Rif/exec",

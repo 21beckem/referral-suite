@@ -47,25 +47,19 @@
   </head>
   <body>
     <!-- Top Bar -->
-    <div id="topHeaderBar" class="w3-top">
-        <div class="w3-cell-row w3-area-blue">
-            <div style="padding: 0px!important;">
-                <a>Create Email</a>
-            </div>
-        </div>
-        <!-- Search bar -->
-        <div class="w3-container w3-white w3-padding w3-card-subtle">
-            <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-email-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Email</a>OR
-            <hr style="margin: 10px;">
-            <select id="selectRefType" onchange="fillMessageExamples(this.value, 'email', messageExamples)">
-                <option>MB Request</option>
-                <option>Missionary Visit Request</option>
-                <option>Vägen Till Hopp och Frid</option>
-                <option>Special Item Request</option>
-            </select>
-        </div>
+    <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
+      <div class="w3-container w3-padding-16">
+        <div class="contact_info">Create Email</div>
+      </div>
+      <div onclick="openGoogleSlides(CONFIG['tips on prewritten messages page']['Email'])" class="w3-container w3-cell w3-xlarge w3-right-align">
+        
+        <i class="fa-solid fa-circle-question w3-text-white" style="position: relative;"></i>
+      </div>
     </div>
-    <div style="height: 180px;"></div>
+    <div style="height: 80px;"></div>
+    <div class="w3-container w3-white w3-padding w3-card-subtle">
+        <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-email-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Email</a>OR
+    </div>
     
     <div id="messageExamples">
 		<div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
@@ -122,9 +116,8 @@
     </div>
 	<script>
 const messageExamples = _('messageExamples');
-const selectRefType = _('selectRefType');
 
-fillMessageExamples(selectRefType.value, 'email', messageExamples);
+fillMessageExamples('email', messageExamples);
 	</script>
 
   </body>
