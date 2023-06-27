@@ -482,7 +482,7 @@ function setHomeBigBtnLink(elId) {
     if (link.includes('www.canva.com')) {
         link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
         el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
-    } else if (link.includes('docs.google.com')) {
+    } else if (link.includes('docs.google.com/presentation')) {
         link = link.substr(0, link.lastIndexOf("/")) + '/embed';
         el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
     } else {
