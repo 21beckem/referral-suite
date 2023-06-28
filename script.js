@@ -520,6 +520,17 @@ function fillInFollowUpInfo() {
     _('refLoc').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
     _('refLoc2').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
     _('refSender').innerHTML = person[ CONFIG['tableColumns']['claimed area'] ];
+
+    // find area number
+    const areas = getCookieJSON('missionAreasList') || [];
+    for (let i = 0; i < areas.length; i++) {
+        if (areas[i][0] == person[ CONFIG['tableColumns']['teaching area'] ] && areas[i][1] != '') {
+            _('contactAreaCard').style.display = '';
+            _('telnumber').href = 'tel:+' + areas[i][1];
+            _('smsnumber').href = 'sms:+' + areas[i][1];
+            break;
+        }
+    }
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
