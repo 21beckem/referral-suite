@@ -46,10 +46,16 @@
 
     <div class="w3-center" style="padding-top: 30px;">Enter a PIN to continue</div>
     <div style="height:20px"></div>
-    <div class="w3-center">
-        <div id="pin-code"></div>
-    </div>
     <center>
+        <table id="pin-code">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
         <table id="pinPad">
             <tr>
                 <td onclick="addNumber('1')">1</td>
@@ -101,7 +107,7 @@ function addNumber(num) {
         }
     }
     console.log(currentPin);
-    _('pin-code').innerHTML = Array(currentPin.length).fill('•').join('');
+    _('pin-code').innerHTML = '<tr>' + Array(currentPin.length).fill('<td>•</td>').join('') + Array(4 - currentPin.length).fill('<td></td>').join('') + '</tr>';
 }
 
 function validatePinCode(el) {

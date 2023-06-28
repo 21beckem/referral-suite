@@ -240,29 +240,21 @@ a.uline {
     animation: horizontal-shaking 0.3s ease-in-out infinite;
 }
 #pin-code {
-    height: 30px;
-    overflow: hidden;
     animation: idle-shaking 0.1s linear infinite;
-    position: relative;
-    caret-color: transparent;
-    display: inline-block;
-    transform: translateX(13px);
-    letter-spacing: 30px;
-    width: 180px;
-    overflow-x: hidden;
-    font-size: 30px;
-    background-color: transparent;
-    text-align: left;
-    outline: 0;
-    border-width: 0 0 0;
-    border-color: var(--white);
+    width: 50%;
+}
+#pin-code td {
+    height: 100px;
+    width: 25%;
+    text-align: center;
+    font-size: 40px;
 }
 @keyframes horizontal-shaking {
-    0% { transform: translateX(17) }
-    25% { transform: translateX(27px) }
-    50% { transform: translateX(10px) }
-    75% { transform: translateX(27px) }
-    100% { transform: translateX(17) }
+    0% { transform: translateX(0) }
+    25% { transform: translateX(10px) }
+    50% { transform: translateX(-7px) }
+    75% { transform: translateX(10px) }
+    100% { transform: translateX(0) }
 }
 @keyframes idle-shaking { 100% {transform: translateX(17)} }
 
