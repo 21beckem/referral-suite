@@ -233,7 +233,7 @@ a.uline {
     outline: none;
 }
 #attemptLog tr:not(:first-child) td:not(:first-child) button.recommended {
-    background-color: transparent;
+    background-color: var(--white);
 }
 
 #pin-code.shake {
