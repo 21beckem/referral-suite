@@ -83,28 +83,8 @@
 
    </div>
    <script>
-
-
 makeListClaimedPeople(data.area_specific_data.my_referrals);
 makeListFollowUpPeople(data.overall_data.follow_ups);
-
-function Search() {
-  let referrals = data.area_specific_data.my_referrals;
-  let letters = document.getElementById("Search").value.toLowerCase();
-
-  let output = Array();
-  for (let i = 0; i < referrals.length; i++) {
-    const person = referrals[i];
-    const fullname = person[ CONFIG['tableColumns']['full name'] ];
-    const number = person[ CONFIG['tableColumns']['phone'] ];
-    
-    if (fullname.toLowerCase().includes(letters) || String(number).toLowerCase().includes(letters)) {
-      output.push(person);
-    }
-  }
-  makeListClaimedPeople(output);
-}
-
     </script>
 </body>
 </html>

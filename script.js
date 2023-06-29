@@ -379,6 +379,7 @@ function makeListUNclaimedPeople() {
 }
 function makeListClaimedPeople(arr) {
     let output = '';
+    arr = arr.sort((first, second) => new Date(second[ CONFIG['tableColumns']['date'] ]) - new Date(first[ CONFIG['tableColumns']['date'] ]));
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         let dotStyle = `<div class="w3-bar-item w3-circle">
@@ -406,6 +407,7 @@ function makeListClaimedPeople(arr) {
 }
 function makeListFollowUpPeople(arr) {
     let output = '';
+    arr = arr.sort((first, second) => new Date(first[ CONFIG['tableColumns']['next follow up'] ]) - new Date(second[ CONFIG['tableColumns']['next follow up'] ]));
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['next follow up']]));
