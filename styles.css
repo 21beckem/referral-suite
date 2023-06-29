@@ -249,6 +249,9 @@ a.uline {
     text-align: center;
     font-size: 40px;
 }
+#referralSearchbar {
+    width: 100%;
+}
 @keyframes horizontal-shaking {
     0% { transform: translateX(0) }
     25% { transform: translateX(10px) }
