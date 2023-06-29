@@ -1,5 +1,5 @@
-function inIframe() { try {return window.self !== window.top;} catch(e) {return true;} }
-HTMLCollection.prototype.forEach = function(x) {
+function inIframe() { try { return window.self !== window.top; } catch (e) { return true; } }
+HTMLCollection.prototype.forEach = function (x) {
     return Array.from(this).forEach(x);
 }
 function verifySentInSMOEsAB(el) {
@@ -48,7 +48,7 @@ function getCookieJSON(x) {
     let out = null;
     try {
         out = JSON.parse(getCookie(x));
-    } catch (e) {}
+    } catch (e) { }
     return out;
 }
 function setCookieJSON(x, y) {
@@ -71,18 +71,18 @@ let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
-const FoxEnabled = (document.currentScript.getAttribute('no-fox')==null && CONFIG!=null && CONFIG['InboxFox']['enable']);
+const FoxEnabled = (document.currentScript.getAttribute('no-fox') == null && CONFIG != null && CONFIG['InboxFox']['enable']);
 
-if (( area==null || CONFIG==null) && document.currentScript.getAttribute('dont-redirect')==null) {
+if ((area == null || CONFIG == null) && document.currentScript.getAttribute('dont-redirect') == null) {
     safeRedirect('login.html');
 } else {
-    if (sessionStorage.getItem("logged_in")==null && document.currentScript.getAttribute('dont-redirect')==null) {
+    if (sessionStorage.getItem("logged_in") == null && document.currentScript.getAttribute('dont-redirect') == null) {
         safeRedirect('pin-code.html');
     }
 }
 
 
-async function SYNC(loadingCover=true) {
+async function SYNC(loadingCover = true) {
     if (area == null) {
         safeRedirect('login.html')
     }
@@ -190,12 +190,12 @@ async function SYNC_referralSuiteStuff() {
 async function sortOfSYNC_QueryMyself() {
     const rawLink = _CONFIG()['overall settings']['table Query link'];
     let qURL = rawLink.substr(0, rawLink.lastIndexOf("/"));
-    let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#','?')).get('gid');
+    let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
     let sURL = _CONFIG()['overall settings']['table scribe link'];
     sURL += '?area=' + area;
     sURL += '&tabId=' + tabId;
     sURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
-    sURL += '&data=' + encodeURIComponent( JSON.stringify(data) );
+    sURL += '&data=' + encodeURIComponent(JSON.stringify(data));
 
     if (data != null && "changed_people" in data) {
         if (data.changed_people.length > 0) {
@@ -206,40 +206,40 @@ async function sortOfSYNC_QueryMyself() {
 
 
     let newSyncData = {
-        "overall_data" : {
-            "new_referrals" : [],
-            "follow_ups" : []
+        "overall_data": {
+            "new_referrals": [],
+            "follow_ups": []
         },
-        "area_specific_data" : {
-            "my_referrals" : [],
-            "last_sync" : new Date()
+        "area_specific_data": {
+            "my_referrals": [],
+            "last_sync": new Date()
         }
     }
     let claimedCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['claimed area'] + 1);
     let sentStatusCol = GoogleColumnToLetter(_CONFIG()['tableColumns']['sent status'] + 1);
 
     // read unclaimed
-    let newRefs_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = 'Unclaimed'");
-    
+    let newRefs_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = 'Unclaimed'");
+
     // read for this area
-    let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where "+claimedCol+" = '"+area+"' AND "+sentStatusCol+" = 'Not sent'");
-    
+    let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = '" + area + "' AND " + sentStatusCol + " = 'Not sent'");
+
     if (_CONFIG()['overall settings']['enable follow ups']) {
-        
+
         // read ALL follow ups
         let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
-        let FUs = await G_Sheets_Query(qURL, tabId, "select * where "+nxtFU_Col+" < now() and "+nxtFU_Col+" is not null");
-        
+        let FUs = await G_Sheets_Query(qURL, tabId, "select * where " + nxtFU_Col + " < now() and " + nxtFU_Col + " is not null");
+
         // filter through follow ups. Keep those that don't have a team anymore to the first leader in the list
         for (let i = 0; i < FUs.length; i++) {
             const per = FUs[i];
-            let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+            let per_claimed = per[_CONFIG()['tableColumns']['claimed area']];
             if (per_claimed == area) {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
             let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
-            if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+            if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
@@ -253,11 +253,10 @@ async function sortOfSYNC_QueryMyself() {
 }
 function GoogleColumnToLetter(column) {
     var temp, letter = '';
-    while (column > 0)
-    {
-      temp = (column - 1) % 26;
-      letter = String.fromCharCode(temp + 65) + letter;
-      column = (column - temp - 1) / 26;
+    while (column > 0) {
+        temp = (column - 1) % 26;
+        letter = String.fromCharCode(temp + 65) + letter;
+        column = (column - temp - 1) / 26;
     }
     return letter;
 }
@@ -265,13 +264,13 @@ async function G_Sheets_Query(mainLink, tabId, query) {
     let qLink = mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId;
     console.log(qLink);
     return await safeFetch(qLink)
-    .then((response) => response.text())
-    .then((txt) => {
-        return getRowsFromQuery(JSON.parse(
-            txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
-            .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
-        ));
-    })
+        .then((response) => response.text())
+        .then((txt) => {
+            return getRowsFromQuery(JSON.parse(
+                txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
+                    .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
+            ));
+        })
 }
 function getRowsFromQuery(bigData) {
     return bigData.table.rows.map(x => {
@@ -286,8 +285,8 @@ async function sortOfSYNC_UseSQL() {
     let fetchURL = _CONFIG()['overall settings']['table Query link'];
     fetchURL += '?area=' + area;
     fetchURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
-    fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent( JSON.stringify(data) );
-    
+    fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent(JSON.stringify(data));
+
     console.log('SQL Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
     const response = await safeFetch(fetchURL);
@@ -298,19 +297,19 @@ async function sortOfSYNC_UseSQL() {
     let newFUs = Array();
     for (let i = 0; i < syncRes.overall_data.follow_ups.length; i++) {
         const per = syncRes.overall_data.follow_ups[i];
-        let per_claimed = per[ _CONFIG()['tableColumns']['claimed area'] ];
+        let per_claimed = per[_CONFIG()['tableColumns']['claimed area']];
         if (per_claimed == area) {
             newFUs.push(per);
             continue;
         }
         let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
-        if ( !Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
+        if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
             newFUs.push(per);
             continue;
         }
     }
     syncRes.overall_data.follow_ups = newFUs;
-    
+
     console.log(syncRes);
     //save to cookie
     setCookieJSON('dataSync', syncRes);
@@ -322,8 +321,8 @@ async function SYNC_sheetMapStuff() {
     await ss.fetch(CONFIG['schedule settings']['tab name'], CONFIG['schedule settings']['schedule range']);
 }
 function GetTodaysSchedule() {
-    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
     SheetMap.load();
     let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
@@ -335,11 +334,11 @@ function getCurrentInboxingArea() {
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
 
     const d = new Date();
-    const time_beginning = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
     for (let i = 0; i < dagensSchedule.length; i++) {
-        const dateFrom = new Date( time_beginning + ' ' + scheduleTimes[i][0].trim() + ':00.000' );
-        const dateTo = new Date( time_beginning + ' ' + scheduleTimes[i][1].trim() + ':00.000' );
-        if ( d.getTime() <= dateTo.getTime() && d.getTime() >= dateFrom.getTime() ) {
+        const dateFrom = new Date(time_beginning + ' ' + scheduleTimes[i][0].trim() + ':00.000');
+        const dateTo = new Date(time_beginning + ' ' + scheduleTimes[i][1].trim() + ':00.000');
+        if (d.getTime() <= dateTo.getTime() && d.getTime() >= dateFrom.getTime()) {
             return dagensSchedule[i];
         }
     }
@@ -350,7 +349,7 @@ async function SYNC_setCurrentInboxingArea() {
 
     let areaEmail = _CONFIG()['inboxers'][0];
     const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
-    await safeFetch( reqUrl );
+    await safeFetch(reqUrl);
 }
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
@@ -360,18 +359,18 @@ function makeListUNclaimedPeople() {
         let dotStyle = `<div class="w3-bar-item w3-circle">
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
         </div>`;
-        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
             dotStyle = `<div class="w3-bar-item w3-circle">
                 <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
             </div>`;
         }
-        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
+        const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['date']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="claim_the_referral.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
+              <span class="w3-large">` + per[CONFIG['tableColumns']['first name']] + ' ' + per[CONFIG['tableColumns']['last name']] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
+              <span>` + per[CONFIG['tableColumns']['type']].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -386,19 +385,19 @@ function makeListClaimedPeople(arr) {
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
         </div>`;
         let nextPage = 'contact_info.html';
-        if (per[ CONFIG['tableColumns']['type'] ].toLowerCase().includes('family history')) {
+        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
             dotStyle = `<div class="w3-bar-item w3-circle">
                 <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
             </div>`;
             nextPage = 'fh_referral_info.html';
         }
-        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['date'] ]));
+        const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['date']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="` + nextPage + `" class="person-to-click">
           <div class="w3-bar" style="display: flex;">` + dotStyle + `
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
+              <span class="w3-large">` + per[CONFIG['tableColumns']['first name']] + ' ' + per[CONFIG['tableColumns']['last name']] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
+              <span>` + per[CONFIG['tableColumns']['type']].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -409,7 +408,7 @@ function makeListFollowUpPeople(arr) {
     let output = '';
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
-        const elapsedTime = timeSince_formatted(new Date(per[ CONFIG['tableColumns']['next follow up'] ]));
+        const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['next follow up']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="follow_up_on.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">
             <div class="w3-bar-item w3-circle">
@@ -418,9 +417,9 @@ function makeListFollowUpPeople(arr) {
               </div>
             </div>
             <div class="w3-bar-item">
-              <span class="w3-large">` + per[ CONFIG['tableColumns']['first name'] ] + ' ' + per[ CONFIG['tableColumns']['last name'] ] + `</span><br>
+              <span class="w3-large">` + per[CONFIG['tableColumns']['first name']] + ' ' + per[CONFIG['tableColumns']['last name']] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ') + `</span>
+              <span>` + per[CONFIG['tableColumns']['type']].replaceAll('_', ' ') + `</span>
             </div>
           </div>
         </aa>`;
@@ -429,49 +428,90 @@ function makeListFollowUpPeople(arr) {
 }
 function fillInFHInfo() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    _('personName').innerHTML = person[ CONFIG['tableColumns']['first name'] ] + ' ' + person[ CONFIG['tableColumns']['last name'] ];
+    _('personName').innerHTML = person[CONFIG['tableColumns']['first name']] + ' ' + person[CONFIG['tableColumns']['last name']];
     //_('contactname').innerHTML = _('personName').innerHTML;
-    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
-    _('address').innerHTML = person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
+    _('email').innerHTML = person[CONFIG['tableColumns']['email']];
+    _('address').innerHTML = person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
     _('FH_lang').innerHTML = CONFIG['overall settings']['most common language in mission'];
     _('FH_message').innerHTML = makeFHMessage(person);
 }
 function makeFHMessage(per) {
-    if (per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('fb') || per[ CONFIG['tableColumns']['referral origin'] ].toLowerCase().includes('ig')) {
-return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+    if (per[CONFIG['tableColumns']['referral origin']].toLowerCase().includes('fb') || per[CONFIG['tableColumns']['referral origin']].toLowerCase().includes('ig')) {
+        return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
+What they want help with: ` + per[CONFIG['tableColumns']['help request']] + `
 
-How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
+How experienced they are: ` + per[CONFIG['tableColumns']['experience']];
     } else {
         return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
 
 LYCKA TILL!
 
-What they want help with: ` + per[ CONFIG['tableColumns']['help request'] ] + `
+What they want help with: ` + per[CONFIG['tableColumns']['help request']] + `
 
-How experienced they are: ` + per[ CONFIG['tableColumns']['experience'] ];
+How experienced they are: ` + per[CONFIG['tableColumns']['experience']];
     }
+}
+function fillInHomePage() {
+    let maxRefsAllowed = 15;
+    const currentRefCount = data.area_specific_data.my_referrals.length;
+
+
+    let totReferralsBar = _("totReferralsBar");
+    let totReferrals = _("totReferrals");
+
+    totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
+
+    totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
+
+    if (currentRefCount >= maxRefsAllowed) {
+        totReferrals.classList.add('w3-text-red');
+    }
+    if (data.area_specific_data.my_referrals.length > 0) {
+        let maxRefAge = 7;
+        let oldReferralBar = _("oldReferralBar");
+        let agebyday = _("agebyday");
+        let oldReferral = getOldestClaimedPerson()[CONFIG['tableColumns']['date']];
+        let today = new Date();
+        let oldDate = new Date(oldReferral);
+        let dayDifference = Math.round((today.getTime() - oldDate.getTime()) / (1000 * 60 * 60 * 24));
+        oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
+
+        agebyday.innerHTML = dayDifference + '/' + maxRefAge;
+
+        if (dayDifference >= maxRefAge) {
+            agebyday.classList.add('w3-text-red');
+        }
+    }
+    _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
+    _('adDeck').href = CONFIG['home page links']['ad deck'];
+    _('gToBusSuite').href = CONFIG['home page links']['business suite help']
+    setHomeBigBtnLink('1_sync');
+    setHomeBigBtnLink('2_contact');
+    setHomeBigBtnLink('3_log');
+    setHomeBigBtnLink('4_message');
+    setHomeBigBtnLink('5_comments');
+    setHomeBigBtnLink('6_report');
 }
 function fillInContactInfo() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
+    _('contactname').innerHTML = person[CONFIG['tableColumns']['full name']];
     //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
 
-    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
-    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[ CONFIG['tableColumns']['referral origin'] ]);
-    _('phonenumber').innerHTML = person[ CONFIG['tableColumns']['phone'] ];
-    _('email').innerHTML = person[ CONFIG['tableColumns']['email'] ];
-    let addStr = person[ CONFIG['tableColumns']['street address'] ] + ' ' + person[ CONFIG['tableColumns']['city'] ] + ' ' + person[ CONFIG['tableColumns']['zip'] ];
+    _('referraltype').innerHTML = person[CONFIG['tableColumns']['type']].replaceAll('_', ' ');
+    _('referralorigin').innerHTML = prettyPrintRefOrigin(person[CONFIG['tableColumns']['referral origin']]);
+    _('phonenumber').innerHTML = person[CONFIG['tableColumns']['phone']];
+    _('email').innerHTML = person[CONFIG['tableColumns']['email']];
+    let addStr = person[CONFIG['tableColumns']['street address']] + ' ' + person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
     _('address').innerHTML = addStr;
     _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
-    _('adName').innerHTML = person[ CONFIG['tableColumns']['ad name'] ];
+    _('adName').innerHTML = person[CONFIG['tableColumns']['ad name']];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
-    _('prefSprak').innerHTML = (person[ CONFIG['tableColumns']['lang'] ] == "") ? "Undeclared" : person[ CONFIG['tableColumns']['lang'] ];
+    _('prefSprak').innerHTML = (person[CONFIG['tableColumns']['lang']] == "") ? "Undeclared" : person[CONFIG['tableColumns']['lang']];
     fillInAttemptLog();
 }
 function openGoogleSlides(link) {
@@ -482,7 +522,7 @@ function setHomeBigBtnLink(elId) {
     let link = CONFIG['home page links'][elId];
     const el = _(elId);
     if (link.includes('www.canva.com') || link.includes('docs.google.com/presentation')) {
-        el.setAttribute('onclick', "openGoogleSlides('"+link+"')");
+        el.setAttribute('onclick', "openGoogleSlides('" + link + "')");
     } else if (!link.startsWith('http')) {
         el.href = link;
     } else {
@@ -493,12 +533,12 @@ function setHomeBigBtnLink(elId) {
 }
 function callThenGoBack() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    window.open('tel:+' + person[ CONFIG['tableColumns']['phone'] ],'_blank');
+    window.open('tel:+' + person[CONFIG['tableColumns']['phone']], '_blank');
     safeRedirect('contact_info.html');
 }
 function fillInHelpBeforeCallPage() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    let link = CONFIG['tips before calling'][ person[ CONFIG['tableColumns']['type'] ] ];
+    let link = CONFIG['tips before calling'][person[CONFIG['tableColumns']['type']]];
 
     if (link.includes('www.canva.com')) {
         link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
@@ -512,19 +552,19 @@ function fillInHelpBeforeCallPage() {
 }
 function fillInFollowUpInfo() {
     const person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
-    _('contactname').innerHTML = person[ CONFIG['tableColumns']['full name'] ];
-    _('referraltype').innerHTML = person[ CONFIG['tableColumns']['type'] ].replaceAll('_', ' ');
-    _('lastAtt').innerHTML = new Date(person[ CONFIG['tableColumns']['sent date'] ]).toLocaleDateString("en-US", {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    let fuTimes = person[ CONFIG['tableColumns']['amount of times followed up'] ];
-    _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes)==1) ? ' time' : ' times');
-    _('refLoc').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
-    _('refLoc2').innerHTML = person[ CONFIG['tableColumns']['teaching area'] ];
-    _('refSender').innerHTML = person[ CONFIG['tableColumns']['claimed area'] ];
+    _('contactname').innerHTML = person[CONFIG['tableColumns']['full name']];
+    _('referraltype').innerHTML = person[CONFIG['tableColumns']['type']].replaceAll('_', ' ');
+    _('lastAtt').innerHTML = new Date(person[CONFIG['tableColumns']['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    let fuTimes = person[CONFIG['tableColumns']['amount of times followed up']];
+    _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes) == 1) ? ' time' : ' times');
+    _('refLoc').innerHTML = person[CONFIG['tableColumns']['teaching area']];
+    _('refLoc2').innerHTML = person[CONFIG['tableColumns']['teaching area']];
+    _('refSender').innerHTML = person[CONFIG['tableColumns']['claimed area']];
 
     // find area number
     const areas = getCookieJSON('missionAreasList') || [];
     for (let i = 0; i < areas.length; i++) {
-        if (areas[i][0] == person[ CONFIG['tableColumns']['teaching area'] ] && areas[i][1] != '') {
+        if (areas[i][0] == person[CONFIG['tableColumns']['teaching area']] && areas[i][1] != '') {
             _('contactAreaCard').style.display = '';
             _('telnumber').href = 'tel:+' + areas[i][1];
             _('smsnumber').href = 'sms:+' + areas[i][1];
@@ -532,14 +572,25 @@ function fillInFollowUpInfo() {
         }
     }
 }
+function getOldestClaimedPerson() {
+    let peeps = data.area_specific_data.my_referrals;
+    let currentOldest = peeps[0];
+    for (let i = 0; i < peeps.length; i++) {
+        const per = peeps[i];
+        if (new Date(per[CONFIG['tableColumns']['date']]) < currentOldest[CONFIG['tableColumns']['date']]) {
+            currentOldest = per;
+        }
+    }
+    return currentOldest;
+}
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
         case 'fb':
             return 'Facebook';
         case 'web':
-            return 'VandraITro.se';
+            return 'Mission Website';
         case 'wix':
-            return 'VandraITro.se';
+            return 'Mission Website';
         case 'ig':
             return 'Instagram';
         default:
@@ -549,29 +600,29 @@ function prettyPrintRefOrigin(x) {
 async function fillMessageExamples(folderName, pasteBox) {
     let areaEmail = getCookie('areaUserEmail') || null;
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    let requestType = person[ CONFIG['tableColumns']['type'] ];
-    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
-    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=') : emailLink;
+    let requestType = person[CONFIG['tableColumns']['type']];
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[CONFIG['tableColumns']['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[CONFIG['tableColumns']['phone']])) + '?body=') : emailLink;
     const _destination = (folderName == 'sms') ? '_parent' : '_blank';
     _('startBlankBtn').href = link_beginning;
     _('startBlankBtn').target = _destination;
-	const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
-	//console.log(reqMssgUrl);
-	const rawFetch = await safeFetch(reqMssgUrl);
-	const rawTxt = await rawFetch.text();
+    const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
+    //console.log(reqMssgUrl);
+    const rawFetch = await safeFetch(reqMssgUrl);
+    const rawTxt = await rawFetch.text();
 
-	const Messages = rawTxt.split(/\n{4,}/gm);
-	//console.log(Messages);
-	let output = "";
-	for (let i = 0; i < Messages.length; i++) {
+    const Messages = rawTxt.split(/\n{4,}/gm);
+    //console.log(Messages);
+    let output = "";
+    for (let i = 0; i < Messages.length; i++) {
         if (Messages[i].match(/{[^}]*}/gm) == null) {
             const this_url = link_beginning + encodeURI(Messages[i]);
             output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
         } else {
             output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
         }
-	}
-	pasteBox.innerHTML = output;
+    }
+    pasteBox.innerHTML = output;
 }
 function sendToCompletionPage(smsOrEmail, el) {
     setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
@@ -601,16 +652,16 @@ function sendToAnotherArea() {
     const newArea = document.getElementById('areadropdown').value;
 
     // set new area in data and save to cookie
-    person[ CONFIG['tableColumns']['sent status'] ] = 'Sent';
-    person[ CONFIG['tableColumns']['teaching area'] ] = newArea;
+    person[CONFIG['tableColumns']['sent status']] = 'Sent';
+    person[CONFIG['tableColumns']['teaching area']] = newArea;
 
     // follow up
     let nextFU = new Date();
-    person[ CONFIG['tableColumns']['sent date'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+    person[CONFIG['tableColumns']['sent date']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
     nextFU.setDate(nextFU.getDate() + CONFIG['follow ups']['initial delay after sent']);
-    nextFU.setHours(3,0,0,0);
-    person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+    nextFU.setHours(3, 0, 0, 0);
+    person[CONFIG['tableColumns']['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
@@ -621,7 +672,7 @@ function sendToAnotherArea() {
 function fillInDeceeaseReasons(el) {
     let out = "<option></option>";
     for (let i = 0; i < Object.keys(CONFIG['decease reasons']).length; i++) {
-        out += '<option value="' + CONFIG['decease reasons'][ Object.keys(CONFIG['decease reasons'])[i] ] + '">' + Object.keys(CONFIG['decease reasons'])[i] + '</option>';
+        out += '<option value="' + CONFIG['decease reasons'][Object.keys(CONFIG['decease reasons'])[i]] + '">' + Object.keys(CONFIG['decease reasons'])[i] + '</option>';
     }
     el.innerHTML = out;
 }
@@ -640,21 +691,21 @@ function saveFollowUpForm() {
     }
     const status = document.getElementById('statusdropdown').value;
 
-    let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[ parseInt(status) ];
+    let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[parseInt(status)];
     let delay = CONFIG['follow ups']['status delays'][clickedOption];
 
     if (typeof delay === 'string' || delay instanceof String) {
-        person[ CONFIG['tableColumns']['AB status'] ] = delay;
-        person[ CONFIG['tableColumns']['next follow up'] ] = null;
+        person[CONFIG['tableColumns']['AB status']] = delay;
+        person[CONFIG['tableColumns']['next follow up']] = null;
     } else {
         let nextFU = new Date();
         nextFU.setDate(nextFU.getDate() + delay);
-        nextFU.setHours(3,0,0,0);
-        person[ CONFIG['tableColumns']['next follow up'] ] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+        nextFU.setHours(3, 0, 0, 0);
+        person[CONFIG['tableColumns']['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
     }
-    
-    person[ CONFIG['tableColumns']['follow up status'] ] = status;
-    person[ CONFIG['tableColumns']['amount of times followed up'] ] = parseInt( person[ CONFIG['tableColumns']['amount of times followed up'] ] ) + 1;
+
+    person[CONFIG['tableColumns']['follow up status']] = status;
+    person[CONFIG['tableColumns']['amount of times followed up']] = parseInt(person[CONFIG['tableColumns']['amount of times followed up']]) + 1;
 
     data.overall_data.follow_ups[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
@@ -664,11 +715,11 @@ function saveFollowUpForm() {
 }
 function logAttempt(el, y, x) {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    let al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
-    let nowAttempted = !(al[x][y]==1);
+    let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    let nowAttempted = !(al[x][y] == 1);
     al[x][y] = (nowAttempted) ? 1 : 0;
-    person[ CONFIG['tableColumns']['attempt log'] ] = JSON.stringify(al);
-    
+    person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
+
     if (nowAttempted) {
         el.classList.add('contactDotBeenAttempted');
     } else {
@@ -680,15 +731,15 @@ function logAttempt(el, y, x) {
 }
 function fillInAttemptLog() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-    let al = Array(7).fill([0,0,0]);
+    let al = Array(7).fill([0, 0, 0]);
     try {
-        al = JSON.parse(person[ CONFIG['tableColumns']['attempt log'] ]);
+        al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
     } catch (e) {
-        person[ CONFIG['tableColumns']['attempt log'] ] = JSON.stringify(al);
+        person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
     }
 
     // make days of the week start on right day
-    let startDay = new Date(person[ CONFIG['tableColumns']['date'] ]);
+    let startDay = new Date(person[CONFIG['tableColumns']['date']]);
     const shorterDays = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon'];
     let daysString = '<td></td>';
     for (let i = 0; i < 7; i++) {
@@ -699,8 +750,8 @@ function fillInAttemptLog() {
     //set dot colors
     for (let i = 0; i < al.length; i++) {
         for (let j = 0; j < al[i].length; j++) {
-            if (al[i][j]==1) {
-                _('attemptLogDot_'+j+','+i).classList.add('contactDotBeenAttempted');
+            if (al[i][j] == 1) {
+                _('attemptLogDot_' + j + ',' + i).classList.add('contactDotBeenAttempted');
             }
         }
     }
@@ -720,8 +771,8 @@ function deceasePerson() {
     }
 
     // set new area in data and save to cookie
-    person[ CONFIG['tableColumns']['sent status'] ] = 'Not interested';
-    person[ CONFIG['tableColumns']['not interested reason'] ] = _('deceaseDropdown').value;
+    person[CONFIG['tableColumns']['sent status']] = 'Not interested';
+    person[CONFIG['tableColumns']['not interested reason']] = _('deceaseDropdown').value;
 
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
@@ -735,8 +786,8 @@ function claimPerson() {
         safeRedirect('index.html');
         return;
     }
-    
-    person[ CONFIG['tableColumns']['claimed area'] ] = area;
+
+    person[CONFIG['tableColumns']['claimed area']] = area;
     data.overall_data.new_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
@@ -810,10 +861,10 @@ function setupInboxFox() {
 window.addEventListener("load", (e) => {
     try {
         _('reddot').style.display = (data.overall_data.new_referrals.length > 0 || su_refs.length > 0) ? 'block' : 'none';
-    } catch(e) {}
+    } catch (e) { }
     try {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
-    } catch(e) {}
+    } catch (e) { }
     if (FoxEnabled) {
         setupInboxFox();
     }

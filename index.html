@@ -178,46 +178,7 @@
 
 
     <script>
-
-let maxRefsAllowed = 15;
-const currentRefCount = data.area_specific_data.my_referrals.length;
-
-
-let totReferralsBar = _("totReferralsBar");
-let totReferrals = _("totReferrals");
-
-totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
-
-totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
-
-if (currentRefCount >= maxRefsAllowed) {
-  totReferrals.classList.add('w3-text-red');
-}
-if (data.area_specific_data.my_referrals.length > 0) {
-  let maxRefAge = 7;
-  let oldReferralBar = _("oldReferralBar");
-  let agebyday = _("agebyday");
-  let oldReferral = data.area_specific_data.my_referrals[currentRefCount-1][ CONFIG['tableColumns']['date'] ];
-  let today = new Date();
-  let oldDate = new Date(oldReferral);
-  let dayDifference = Math.round((today.getTime()-oldDate.getTime()) / (1000 * 60 * 60 * 24));
-  oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
-
-  agebyday.innerHTML = dayDifference + '/' + maxRefAge;
-
-  if (dayDifference >= maxRefAge) {
-    agebyday.classList.add('w3-text-red');
-  }
-}
-_('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
-_('adDeck').href = CONFIG['home page links']['ad deck'];
-_('gToBusSuite').href = CONFIG['home page links']['business suite help']
-setHomeBigBtnLink('1_sync');
-setHomeBigBtnLink('2_contact');
-setHomeBigBtnLink('3_log');
-setHomeBigBtnLink('4_message');
-setHomeBigBtnLink('5_comments');
-setHomeBigBtnLink('6_report');
+      fillInHomePage()
     </script>
     
   </body>
