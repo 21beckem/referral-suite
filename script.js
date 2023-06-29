@@ -437,22 +437,33 @@ function fillInFHInfo() {
 }
 function makeFHMessage(per) {
     if (per[CONFIG['tableColumns']['referral origin']].toLowerCase().includes('fb') || per[CONFIG['tableColumns']['referral origin']].toLowerCase().includes('ig')) {
-        return `This is a SLÄKT UPPTÄCKT REFERRAL!! This person clicked on a FB ad and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+        return `This is a FAMILY HISTORY REFERRAL from Facebook!! This person clicked on a FB ad and wants help with Family History! Contact them as as soon as possible. USE EMAIL!
 
-LYCKA TILL!
+GOOD LUCK!
 
 What they want help with: ` + per[CONFIG['tableColumns']['help request']] + `
 
 How experienced they are: ` + per[CONFIG['tableColumns']['experience']];
     } else {
-        return `This is a VANDRAITRO REFERRAL!! This person went to the website and wants help with släktforskning! Contact them as as soon as possible. USE EMAIL!
+        return `This is a FAMILY HISTORY REFERRAL from the MISSION WEBSITE!! This person went to the website and wants help with Family History! Contact them as as soon as possible. USE EMAIL!
 
-LYCKA TILL!
+GOOD Luck!
 
 What they want help with: ` + per[CONFIG['tableColumns']['help request']] + `
 
 How experienced they are: ` + per[CONFIG['tableColumns']['experience']];
     }
+}
+function getOldestClaimedPerson() {
+    let peeps = data.area_specific_data.my_referrals;
+    let currentOldest = peeps[0];
+    for (let i = 0; i < peeps.length; i++) {
+        const per = peeps[i];
+        if (new Date(per[CONFIG['tableColumns']['date']]) < currentOldest[CONFIG['tableColumns']['date']]) {
+            currentOldest = per;
+        }
+    }
+    return currentOldest;
 }
 function fillInHomePage() {
     let maxRefsAllowed = 15;
@@ -571,17 +582,6 @@ function fillInFollowUpInfo() {
             break;
         }
     }
-}
-function getOldestClaimedPerson() {
-    let peeps = data.area_specific_data.my_referrals;
-    let currentOldest = peeps[0];
-    for (let i = 0; i < peeps.length; i++) {
-        const per = peeps[i];
-        if (new Date(per[CONFIG['tableColumns']['date']]) < currentOldest[CONFIG['tableColumns']['date']]) {
-            currentOldest = per;
-        }
-    }
-    return currentOldest;
 }
 function prettyPrintRefOrigin(x) {
     switch (x.toLowerCase()) {
