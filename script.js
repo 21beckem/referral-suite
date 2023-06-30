@@ -115,8 +115,8 @@ async function SYNC(loadingCover = true) {
 }
 function sortSyncDataByDates() {
     let thisData = getCookieJSON('dataSync');
-    thisData.area_specific_data.my_referrals = thisData.area_specific_data.my_referrals.sort((first, second) => new Date(second[ CONFIG['tableColumns']['date'] ]) - new Date(first[ CONFIG['tableColumns']['date'] ]));
-    thisData.overall_data.follow_ups = thisData.overall_data.follow_ups.sort((first, second) => new Date(first[ CONFIG['tableColumns']['next follow up'] ]) - new Date(second[ CONFIG['tableColumns']['next follow up'] ]));
+    thisData.area_specific_data.my_referrals = thisData.area_specific_data.my_referrals.sort((first, second) => new Date(second[CONFIG['tableColumns']['date']]) - new Date(first[CONFIG['tableColumns']['date']]));
+    thisData.overall_data.follow_ups = thisData.overall_data.follow_ups.sort((first, second) => new Date(first[CONFIG['tableColumns']['next follow up']]) - new Date(second[CONFIG['tableColumns']['next follow up']]));
     setCookieJSON('dataSync', thisData);
 }
 function saveUnchangedSyncData() {
@@ -472,6 +472,73 @@ function getOldestClaimedPerson() {
         }
     }
     return currentOldest;
+}
+async function searchAndDisplayDatabaseReferrals() {
+    _('loadingAnim').style.display = '';
+    const searchQ = _('referralSearchbar').value;
+
+    const returnedRefs = await getReferralsFromDatabase(searchQ);
+
+    let output = '';
+    for (let i = 0; i < returnedRefs.length; i++) {
+        const per = returnedRefs[i];
+        output += `<div class="searchResult" onclick="viewPersonInfo(` + JSON.stringify(per).replaceAll("'", "\\'").replaceAll('"', "'") + `)">
+              <a class="name">` + per[CONFIG['tableColumns']['full name']] + `</a>
+              <table style="width: 100%;">
+                <tr>
+                  <td>
+                    <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-clock" style="color: var(--light-blue);"></i> ` + per[CONFIG['tableColumns']['date']] + `</div>
+                  </td>
+                  <td>
+                    <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-signal" style="color: var(--call-color);"></i> ` + per[CONFIG['tableColumns']['sent status']] + `</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-reply-all" style="color: var(--sms-color);"></i> ` + per[CONFIG['tableColumns']['type']] + `</div>
+                  </td>
+                  <td>
+                    <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-chalkboard-user" style="color: var(--red);"></i> ` + per[CONFIG['tableColumns']['teaching area']] + `</div>
+                  </td>
+                </tr>
+              </table>
+          </div>`;
+    }
+
+    if (returnedRefs.length == 0) {
+        output = 'No results';
+    } else if (output == '') {
+        output = "There's been an error...";
+    }
+    _('loadingAnim').style.display = 'none';
+    _('searchResultsBox').innerHTML = output;
+}
+function viewPersonInfo(per) {
+    setCookieJSON('personJSON', per);
+    safeRedirect('view_full_person_info.html');
+}
+function getReferralsFromDatabase(searchQ) {
+    return data.area_specific_data.my_referrals;
+}
+function fillInViewFullPersonInfo() {
+    const per = getCookieJSON('personJSON');
+    let tableCols = [];
+    for (let i = 0; i < Object.keys(CONFIG['tableColumns']).length; i++) {
+        tableCols.push([Object.keys(CONFIG['tableColumns'])[i], CONFIG['tableColumns'][Object.keys(CONFIG['tableColumns'])[i]]]);
+    }
+    tableCols = tableCols.sort((first, second) => first[1] - second[1]);
+
+    let output = '';
+    for (let i = 0; i < tableCols.length; i++) {
+        const COL = tableCols[i];
+        let val = (per[COL[1]] == '') ? 'Undefined' : per[COL[1]];
+        output += `
+        <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+            <div class="w3-left-align w3-small w3-opacity">` + COL[0] + `</div>
+            <div id="referraltype" class="w3-left-align w3-large">` + val + `</div>
+        </div>`;
+    }
+    _('fullInfoResultsBox').innerHTML = output;
 }
 function fillInHomePage() {
     let maxRefsAllowed = 15;

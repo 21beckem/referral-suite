@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Referral Search</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
@@ -31,10 +30,14 @@
     border-bottom: 2px solid gray;
 }
 .searchResult {
-    border: 1px solid black;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+    /* border: 1px solid black; */
 }
 .searchResult .name {
     font-size: large;
+}
+.searchResult table td:first-child {
+  width: 60%;
 }
     </style>
   </head>
@@ -47,14 +50,14 @@
     </div>
     
     <!-- Progress bars -->
-    <div class="w3-border-bottom" style="position: fixed; top: 80px;background-color: var(--white);">
+    <div class="w3-border-bottom" style="position: fixed; width: 100%; top: 80px;background-color: var(--white);">
         <table style="width: 100%;">
             <tr>
                 <td style="width: 70%; padding-left: 10px;">
                     <input id="referralSearchbar" type="text">
                 </td>
-                <td style="width: 30px; padding-left: 10px; padding-right: 10px;">
-                    <button class="w3-button w3-blue w3-round-large w3-center w3-large">Search</button>
+                <td style="padding-left: 10px; padding-right: 10px;">
+                    <button class="w3-button w3-blue w3-round-large w3-center w3-large" onclick="searchAndDisplayDatabaseReferrals()">Search</button>
                 </td>
             </tr>
         </table>
@@ -62,10 +65,9 @@
     </div>
     <div style="height: 160px;"></div>
 
-    <div class="w3-container">
-        <div class="searchResult">
-            <a class="name">Katarina Brodhen</a>
-        </div>
+    <div id="searchResultsBox" class="w3-container"></div>
+    <div id="loadingAnim" style="display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+      <div class="lds-dual-ring"></div>
     </div>
 
     <!-- Bottom Nav Bar -->
@@ -114,10 +116,6 @@
       </div>
 
     </div>
-
-
-    <script>
-    </script>
     
   </body>
 </html>
