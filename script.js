@@ -517,8 +517,21 @@ function viewPersonInfo(per) {
     setCookieJSON('personJSON', per);
     safeRedirect('view_full_person_info.html');
 }
-function getReferralsFromDatabase(searchQ) {
-    return data.area_specific_data.my_referrals;
+async function getReferralsFromDatabase(searchQ) {
+    // return data.area_specific_data.my_referrals;
+
+    if (!_CONFIG()['overall settings']['table type'].toLowerCase().includes('sql')) {
+        const rawLink = CONFIG['overall settings']['table Query link'];
+        let qURL = rawLink.substr(0, rawLink.lastIndexOf("/"));
+        let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+        return await G_Sheets_Query(qURL, tabId, 'select * where * contains "' + searchQ.replaceAll('"', '\\"') + '" limit 50');
+    } else {
+        let fetchURL = CONFIG['overall settings']['table Query link'] + '?area=SuperCoolAndSecretQuery&q=' + encodeURIComponent(searchQ);
+
+        const response = await safeFetch(fetchURL);
+        return await response.json();
+    }
+
 }
 function fillInViewFullPersonInfo() {
     const per = getCookieJSON('personJSON');
