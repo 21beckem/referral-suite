@@ -117,6 +117,7 @@ function sortSyncDataByDates() {
     let thisData = getCookieJSON('dataSync');
     thisData.area_specific_data.my_referrals = thisData.area_specific_data.my_referrals.sort((first, second) => new Date(second[ CONFIG['tableColumns']['date'] ]) - new Date(first[ CONFIG['tableColumns']['date'] ]));
     thisData.overall_data.follow_ups = thisData.overall_data.follow_ups.sort((first, second) => new Date(first[ CONFIG['tableColumns']['next follow up'] ]) - new Date(second[ CONFIG['tableColumns']['next follow up'] ]));
+    setCookieJSON('dataSync', thisData);
 }
 function saveUnchangedSyncData() {
     setCookieJSON('unchangedSyncData', getCookieJSON('dataSync'));
