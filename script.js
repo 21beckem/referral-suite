@@ -390,15 +390,17 @@ function makeListClaimedPeople(arr) {
     for (let i = 0; i < arr.length; i++) {
         const per = arr[i];
         let dotStyle = `<div class="w3-bar-item w3-circle">
-            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-        </div>`;
+            <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
         let nextPage = 'contact_info.html';
         if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
             dotStyle = `<div class="w3-bar-item w3-circle">
-                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
-            </div>`;
+                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>`;
             nextPage = 'fh_referral_info.html';
         }
+        if (!hasPersonBeenContactedToday(per)) {
+            dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
+        }
+        dotStyle += `</div>`;
         const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['date']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="` + nextPage + `" class="person-to-click">
           <div class="w3-bar" style="display: flex;">` + dotStyle + `
@@ -801,6 +803,17 @@ function saveFollowUpForm() {
     // send to force-sync.html
     safeRedirect('force-sync.html');
 }
+function hasPersonBeenContactedToday(per) {
+    let todaysI = getTodaysInxdexOfAttempts(per);
+    if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return true }
+    let log = JSON.parse(per[ CONFIG['tableColumns']['attempt log'] ])[todaysI];
+    return !(log[0]==0 && log[1]==0 && log[2]==0);
+}
+function getTodaysInxdexOfAttempts(per) {
+    let sentDate = new Date(per[ CONFIG['tableColumns']['date'] ]);
+    sentDate.setHours(0,0,0,0);
+    return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
+}
 function logAttempt(el, y, x) {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
@@ -843,6 +856,10 @@ function fillInAttemptLog() {
             }
         }
     }
+
+    //highlight todays thing
+    let todaysI = getTodaysInxdexOfAttempts(person);
+    _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
 }
 function sendToDeceasePage(el) {
     safeRedirect(el.getAttribute('href'));

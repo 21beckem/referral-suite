@@ -231,8 +231,6 @@ a.uline {
     width: 30px;
     height: 30px;
     outline: none;
-}
-#attemptLog tr:not(:first-child) td:not(:first-child) button.recommended {
     background-color: var(--white);
 }
 
