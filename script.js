@@ -804,10 +804,13 @@ function saveFollowUpForm() {
     safeRedirect('force-sync.html');
 }
 function hasPersonBeenContactedToday(per) {
-    let todaysI = getTodaysInxdexOfAttempts(per);
-    if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return true }
-    let log = JSON.parse(per[ CONFIG['tableColumns']['attempt log'] ])[todaysI];
-    return !(log[0]==0 && log[1]==0 && log[2]==0);
+    try {
+        let todaysI = getTodaysInxdexOfAttempts(per);
+        if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return true }
+        let log = JSON.parse(per[ CONFIG['tableColumns']['attempt log'] ])[todaysI];
+        return !(log[0]==0 && log[1]==0 && log[2]==0);
+    } catch (e) {}
+    return true;
 }
 function getTodaysInxdexOfAttempts(per) {
     let sentDate = new Date(per[ CONFIG['tableColumns']['date'] ]);
@@ -858,8 +861,10 @@ function fillInAttemptLog() {
     }
 
     //highlight todays thing
-    let todaysI = getTodaysInxdexOfAttempts(person);
-    _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
+    try {
+        let todaysI = getTodaysInxdexOfAttempts(person);
+        _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
+    } catch (e) {}
 }
 function sendToDeceasePage(el) {
     safeRedirect(el.getAttribute('href'));
