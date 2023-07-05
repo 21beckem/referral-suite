@@ -956,7 +956,8 @@ function timeSince_formatted(date) {
 function setupInboxFox() {
     window.InboxFox = new WebPal();
     InboxFox.pokeFunction = () => {
-        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks :)'], (choice) => {
+        InboxFox.playAnimation('Wave1');
+        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks'], (choice) => {
             if (choice.includes('No')) {
                 InboxFox.say('Okay, just let me know :)');
             } else {
