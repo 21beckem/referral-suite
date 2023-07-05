@@ -336,7 +336,7 @@ function GetTodaysSchedule() {
     let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
     return SheetMap.vars.tableDataNOW.map(x => x[iOfToday]);
 }
-function getCurrentInboxingArea() {
+function getCurrentInboxingArea(detailed=false) {
     SheetMap.load();
     let dagensSchedule = GetTodaysSchedule();
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
@@ -351,6 +351,28 @@ function getCurrentInboxingArea() {
         }
     }
     return '';
+}
+function howFarThroughShift() {
+    SheetMap.load();
+    const todaysShiftI = GetTodaysSchedule().indexOf(area);
+    if (todaysShiftI < 0) {
+        return null;
+    }
+    const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
+    const d = new Date();
+    const dTime = d.getTime();
+    const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
+    const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
+    
+    if (dTime < dateFrom) {
+        return Math.floor(((dTime - dateFrom)/1000)/60) * -1; // minutes before shift starts
+    } else if (dTime > dateTo) {
+        return Math.floor(((dTime - dateTo)/1000)/60) * -1; // minutes after shift ended
+    }
+
+    // it must be during at this point. return percentage of how far we are through the shift
+    return ((dTime - dateFrom) / (dateTo - dateFrom));
 }
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
@@ -979,4 +1001,9 @@ window.addEventListener("load", (e) => {
     if (FoxEnabled) {
         setupInboxFox();
     }
+    handleDailyAndShiftlyNotifications();
 });
+
+function handleDailyAndShiftlyNotifications() {
+    // do something with howFarThroughShift()
+}
