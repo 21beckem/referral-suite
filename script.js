@@ -102,7 +102,9 @@ async function SYNC(loadingCover = true) {
     await sm_wait;
     await al_wait;
 
-    await SYNC_setCurrentInboxingArea();
+    if (_CONFIG()['overall settings']['tell backend system which area is inboxing']) {
+        await SYNC_setCurrentInboxingArea();
+    }
 
     sortSyncDataByDates();
 
