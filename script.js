@@ -264,11 +264,41 @@ async function sortOfSYNC_QueryMyself() {
     // wait for all fetches to finish
     newSyncData.overall_data.new_referrals = await newRefs_wait;
     newSyncData.area_specific_data.my_referrals = await myFers_wait;
-    newSyncData.fox = await areaFoxStat_wait;
+    newSyncData.fox = decodeFox(await areaFoxStat_wait);
 
     console.log('newly received package', newSyncData);
 
     setCookieJSON('dataSync', newSyncData);
+}
+function decodeFox(arr) {
+    let restart = false;
+    let str = '';
+    if (arr.length == 0) {
+        restart = true;
+    } else if (arr[0][0] == '') {
+        restart = true;
+    }
+    if (restart) {
+        return {
+            "points" : 0,
+            "streak" : 0,
+            "lastStreakDay" : null
+        }
+    } else {
+        try {
+            return JSON.parse(
+                decodeURIComponent(atob(arr[0][0]).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''))
+            );
+        } catch (e) {
+            return {
+                "points" : 0,
+                "streak" : 0,
+                "lastStreakDay" : null
+            }
+        }
+    }
 }
 function GoogleColumnToLetter(column) {
     var temp, letter = '';
@@ -338,7 +368,7 @@ async function sortOfSYNC_UseSQL() {
         }
     }
     syncRes.overall_data.follow_ups = newFUs;
-    syncRes.fox = await areaFoxStat_wait;
+    syncRes.fox = decodeFox(await areaFoxStat_wait);
 
     console.log('newly received package', syncRes);
     //save to cookie
