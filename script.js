@@ -199,23 +199,26 @@ async function SYNC_referralSuiteStuff() {
 }
 async function sortOfSYNC_QueryMyself() {
     const rawLink = _CONFIG()['overall settings']['table Query link'];
+    const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
     let qURL = rawLink.substr(0, rawLink.lastIndexOf("/"));
     let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+    let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
     let sURL = _CONFIG()['overall settings']['table scribe link'];
     sURL += '?area=' + area;
     sURL += '&tabId=' + tabId;
     sURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
+    sURL += '&readOnlyId=' + readOnlyId;
     sURL += '&data=' + encodeURIComponent(JSON.stringify(data));
 
-    if (data != null && "changed_people" in data) {
-        if (data.changed_people.length > 0) {
-            console.log('scribe activated', sURL);
-            await safeFetch(sURL);
-        }
+
+    if (data != null && ("changed_people" in data && data.changed_people.length > 1) || ("fox" in data && "new_fox_data" in data.fox)) {
+        console.log('scribe activated', sURL);
+        await safeFetch(sURL);
     }
 
 
     let newSyncData = {
+        "fox": {},
         "overall_data": {
             "new_referrals": [],
             "follow_ups": []
@@ -230,6 +233,9 @@ async function sortOfSYNC_QueryMyself() {
 
     // read unclaimed
     let newRefs_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = 'Unclaimed'");
+
+    let readonlyLink = rawReadOnlyLink.substr(0, rawReadOnlyLink.lastIndexOf("/"));
+    let areaFoxStat_wait = G_Sheets_Query(readonlyLink, readOnlyId, 'SELECT * WHERE B="'+area+'"', 'A3:B');
 
     // read for this area
     let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = '" + area + "' AND " + sentStatusCol + " = 'Not sent'");
@@ -258,6 +264,9 @@ async function sortOfSYNC_QueryMyself() {
     // wait for all fetches to finish
     newSyncData.overall_data.new_referrals = await newRefs_wait;
     newSyncData.area_specific_data.my_referrals = await myFers_wait;
+    newSyncData.fox = await areaFoxStat_wait;
+
+    console.log('newly received package', newSyncData);
 
     setCookieJSON('dataSync', newSyncData);
 }
@@ -270,12 +279,16 @@ function GoogleColumnToLetter(column) {
     }
     return letter;
 }
-async function G_Sheets_Query(mainLink, tabId, query) {
+async function G_Sheets_Query(mainLink, tabId, query, range=null) {
     let qLink = mainLink + '/gviz/tq?tq=' + encodeURIComponent(query) + '&gid=' + tabId;
+    if (range != null) {
+        qLink += '&range=' + range;
+    }
     console.log(qLink);
     return await safeFetch(qLink)
         .then((response) => response.text())
         .then((txt) => {
+            //console.log('G_query-res', txt);
             return getRowsFromQuery(JSON.parse(
                 txt.replace("/*O_o*/\n", "") // remove JSONP wrapper
                     .replace(/(google\.visualization\.Query\.setResponse\()|(\);)/gm, "") // remove JSONP wrapper
@@ -296,6 +309,12 @@ async function sortOfSYNC_UseSQL() {
     fetchURL += '?area=' + area;
     fetchURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent(JSON.stringify(data));
+
+    // get all the readonly stuff
+    const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
+    let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
+    let readonlyLink = rawReadOnlyLink.substr(0, rawReadOnlyLink.lastIndexOf("/"));
+    let areaFoxStat_wait = G_Sheets_Query(readonlyLink, readOnlyId, 'SELECT * WHERE B="'+area+'"', 'A3:B');
 
     console.log('SQL Fetch:', fetchURL);
     console.log('Payload:', JSON.stringify(data));
@@ -319,8 +338,9 @@ async function sortOfSYNC_UseSQL() {
         }
     }
     syncRes.overall_data.follow_ups = newFUs;
+    syncRes.fox = await areaFoxStat_wait;
 
-    console.log(syncRes);
+    console.log('newly received package', syncRes);
     //save to cookie
     setCookieJSON('dataSync', syncRes);
 }

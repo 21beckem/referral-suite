@@ -3,19 +3,22 @@ function doGet(e) {
   const area = e.parameter.area || null;
   const searchCol = e.parameter.searchCol || null;
   const tabId = e.parameter.tabId || null;
+  const readOnlyId = e.parameter.readOnlyId || null;
   if (area == null || dataRaw == null || tabId == null) {
     return ContentService.createTextOutput('error. Missing info');
   }
   let data = JSON.parse(dataRaw);
 
   ///////// save all the provided dataif ("changed_people" in data) {
-  if ("fox" in data) {
-    if ("new_fox_data" in data.fox) {
-      saveFoxData(area, data.fox.new_fox_data, tabId);
+  if (readOnlyId != null) {
+    if ("fox" in data) {
+      if ("new_fox_data" in data.fox) {
+        saveFoxData(area, data.fox.new_fox_data, readOnlyId);
+      }
     }
-  }
-  if ("new_pranked_numbers" in data) {
-    addPrankedNumbers(data.new_pranked_numbers, tabId);
+    if ("new_pranked_numbers" in data) {
+      addPrankedNumbers(data.new_pranked_numbers, readOnlyId);
+    }
   }
   if ("changed_people" in data) {
     if (data.changed_people.length > 0) {

@@ -52,7 +52,8 @@
     },
     "overall settings" : {
         "table Query link" : "https://smoe.ssmission.cloud/API/referral-suite-scribe.php",
-        "table scribe link" : "https://script.google.com/macros/s/AKfycbyULhG4Vw-AK0Gvw5wOWLgzZPC-m5PA5-zDRNqrTeIKZarKLlqPSjX__nIN92EC6Rif/exec",
+        "table scribe link" : "https://script.google.com/macros/s/AKfycbyvrr93xr3Cy6vig3PSPJGrTxUBG1QNt-KgjPRgjuIi-CirD5drF8wpFopHcowrYM69/exec",
+        "readonly data sheet link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc/edit#gid=1482684192",
         "table type" : "sql",
         "login pin" : "1022",
         "enable FH referrals" : false,
