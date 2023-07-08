@@ -92,7 +92,7 @@ async function SYNC(loadingCover = true) {
 
     await SYNC_getConfig();
 
-    moveAllChangedPeopleToASeparateAreaOfData();
+    moveAllChangedDataToASeparateAreaOfData();
 
     let rs_wait = SYNC_referralSuiteStuff();
     let sm_wait = SYNC_sheetMapStuff();
@@ -124,7 +124,7 @@ function sortSyncDataByDates() {
 function saveUnchangedSyncData() {
     setCookieJSON('unchangedSyncData', getCookieJSON('dataSync'));
 }
-function moveAllChangedPeopleToASeparateAreaOfData() {
+function moveAllChangedDataToASeparateAreaOfData() {
     if (data == null) {
         return;
     }
@@ -155,6 +155,15 @@ function moveAllChangedPeopleToASeparateAreaOfData() {
         if (JSON.stringify(rockPerson) !== JSON.stringify(changedPerson)) {
             data.changed_people.push(changedPerson);
         }
+    }
+
+    //fox and pranklist
+    if (JSON.stringify(unchangedSyncData.fox) !== JSON.stringify(data.fox)) {
+        let strEn = JSON.stringify(data.fox);
+        data.fox.new_fox_data = btoa(encodeURIComponent(strEn).replace(/%([0-9A-F]{2})/g,
+                function toSolidBytes(match, p1) {
+                    return String.fromCharCode('0x' + p1);
+            }));
     }
     console.log('old', getCookieJSON('dataSync'));
     console.log('new', data);
@@ -197,6 +206,11 @@ async function SYNC_referralSuiteStuff() {
     }
     console.log('done: SYNC_referralSuiteStuff');
 }
+function needScribeReadonlyThings() {
+    if (data == null) { return false; }
+    return ("fox" in data && "new_fox_data" in data.fox) ||
+        ("new_pranked_numbers" in data && data.new_pranked_numbers.length > 0);
+}
 async function sortOfSYNC_QueryMyself() {
     const rawLink = _CONFIG()['overall settings']['table Query link'];
     const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
@@ -211,7 +225,7 @@ async function sortOfSYNC_QueryMyself() {
     sURL += '&data=' + encodeURIComponent(JSON.stringify(data));
 
 
-    if (data != null && ("changed_people" in data && data.changed_people.length > 1) || ("fox" in data && "new_fox_data" in data.fox)) {
+    if (data != null && ("changed_people" in data && data.changed_people.length > 1) || needScribeReadonlyThings()) {
         console.log('scribe activated', sURL);
         await safeFetch(sURL);
     }
@@ -340,18 +354,39 @@ async function sortOfSYNC_UseSQL() {
     fetchURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
     fetchURL += (data == null) ? '' : '&data=' + encodeURIComponent(JSON.stringify(data));
 
+
+    console.log('SQL Fetch:', fetchURL);
+    console.log('Payload:', JSON.stringify(data));
+    let response_SQL_wait = safeFetch(fetchURL);
+    
+    //update readonly stuff
+    if (needScribeReadonlyThings()) {
+        const rawLink = _CONFIG()['overall settings']['table Query link'];
+        const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
+        let tabId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+        let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
+        let sURL = _CONFIG()['overall settings']['table scribe link'];
+        sURL += '?area=' + area;
+        sURL += '&tabId=' + tabId;
+        sURL += '&searchCol=' + _CONFIG()['tableColumns']['id'];
+        sURL += '&readOnlyId=' + readOnlyId;
+        delete data.changed_people;
+        sURL += '&data=' + encodeURIComponent(JSON.stringify(data));
+
+        console.log('scribe activated', sURL);
+        await safeFetch(sURL);
+    }
+
     // get all the readonly stuff
     const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
     let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
     let readonlyLink = rawReadOnlyLink.substr(0, rawReadOnlyLink.lastIndexOf("/"));
     let areaFoxStat_wait = G_Sheets_Query(readonlyLink, readOnlyId, 'SELECT * WHERE B="'+area+'"', 'A3:B');
-
-    console.log('SQL Fetch:', fetchURL);
-    console.log('Payload:', JSON.stringify(data));
-    const response = await safeFetch(fetchURL);
+    
+    // wait for all fetches to finish
+    let response = await response_SQL_wait;
     let syncRes = await response.json();
-    //alert('done');
-
+    
     // sort through which follow ups we should have
     let newFUs = Array();
     for (let i = 0; i < syncRes.overall_data.follow_ups.length; i++) {
@@ -957,6 +992,14 @@ function deceasePerson() {
     // set new area in data and save to cookie
     person[CONFIG['tableColumns']['sent status']] = 'Not interested';
     person[CONFIG['tableColumns']['not interested reason']] = _('deceaseDropdown').value;
+
+    // add this person's number to list of pranked numbers
+    if (_('deceaseDropdown').value.includes('prank')) {
+        if (!data.hasOwnProperty("new_pranked_numbers")) {
+            data.new_pranked_numbers = Array();
+        }
+        data.new_pranked_numbers.push( [ person[CONFIG['tableColumns']['phone']] , new Date().toISOString().split('T')[0] ] );
+    }
 
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
