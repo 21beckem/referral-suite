@@ -89,7 +89,7 @@ function TEST_saveFoxData() {
   return saveFoxData(area, data, tabId);
 }
 function TEST_addPrankedNumbers() {
-  return addPrankedNumbers([ ['1234567890', '2023-7-7'] ], '1482684192');
+  return addPrankedNumbers([ ['8080808089', '2023-07-04'] ], '1482684192');
 }
 
 function saveFoxData(area, data, tabId) {
@@ -115,18 +115,21 @@ function saveFoxData(area, data, tabId) {
 function addPrankedNumbers(nums, tabId) {
   var sheet = getSheetById(parseInt(tabId));
 
-  sheet.getRange('A1:D2').setValues([
-    ['Fox', '', '', 'Prank List'],
-    ['Data', 'Area', '', 'Data']
+  sheet.getRange('A1:E2').setValues([
+    ['Fox', '', '', 'Prank List', ''],
+    ['Data', 'Area', '', 'Number', 'Date']
   ]);
   sheet.getRange('A1:2').setBackground('#d1d1d1');
 
-  let rawCurrNums = sheet.getRange('D3').getValue();
-  let currNumbers = [];
-  if (rawCurrNums.includes('[')) {
-    currNumbers = JSON.parse(rawCurrNums);
-  }
-  sheet.getRange('D3').setValue(JSON.stringify(currNumbers.concat(nums)));
+  let currNumbers = sheet.getRange('D3:E').getValues().filter(x => (x[0] != ''));
+  let combined = currNumbers.concat(nums);
+  let obj = {};
+  combined.forEach((v) => {
+      obj[ String(v[0]) ] = v[1];
+  });
+  let newArr = Object.entries(obj);
+
+  sheet.getRange(3,4,newArr.length,2).setValues(newArr);
 }
 
 function fakeGet() {

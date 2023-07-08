@@ -97,10 +97,12 @@ async function SYNC(loadingCover = true) {
     let rs_wait = SYNC_referralSuiteStuff();
     let sm_wait = SYNC_sheetMapStuff();
     let al_wait = SYNC_getMissionAreasList();
+    let pl_wait = SYNC_getPrakedNumbersList();
 
     await rs_wait;
     await sm_wait;
     await al_wait;
+    await pl_wait;
 
     if (_CONFIG()['overall settings']['tell backend system which area is inboxing']) {
         await SYNC_setCurrentInboxingArea();
@@ -157,7 +159,7 @@ function moveAllChangedDataToASeparateAreaOfData() {
         }
     }
 
-    //fox and pranklist
+    //fox
     if (JSON.stringify(unchangedSyncData.fox) !== JSON.stringify(data.fox)) {
         let strEn = JSON.stringify(data.fox);
         data.fox.new_fox_data = btoa(encodeURIComponent(strEn).replace(/%([0-9A-F]{2})/g,
@@ -181,6 +183,19 @@ async function SYNC_getMissionAreasList() {
             });
             setCookieJSON('missionAreasList', areas);
         });
+}
+async function SYNC_getPrakedNumbersList() {
+    const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
+    let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
+    let readonlyLink = rawReadOnlyLink.substr(0, rawReadOnlyLink.lastIndexOf("/"));
+    let prankArr = await G_Sheets_Query(readonlyLink, readOnlyId, 'SELECT *', 'D3:E');
+
+    //convert list to object
+    let prankNumberList = {};
+    prankArr.forEach((v) => {
+        prankNumberList[ v[0] ] = v[1];
+    });
+    setCookieJSON('prankNumberList', prankNumberList);
 }
 async function SYNC_getConfig() {
     return await safeFetch('mission_specific_editable_files/config.json')
@@ -328,7 +343,7 @@ async function G_Sheets_Query(mainLink, tabId, query, range=null) {
     if (range != null) {
         qLink += '&range=' + range;
     }
-    console.log(qLink);
+    console.log("G_querying:", qLink);
     return await safeFetch(qLink)
         .then((response) => response.text())
         .then((txt) => {
