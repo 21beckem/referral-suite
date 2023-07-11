@@ -106,15 +106,8 @@ function addNumber(num) {
             }, 300);
         }
     }
-    console.log(currentPin);
     _('pin-code').innerHTML = '<tr>' + Array(currentPin.length).fill('<td>•</td>').join('') + Array(4 - currentPin.length).fill('<td></td>').join('') + '</tr>';
 }
-
-function validatePinCode(el) {
-}
-setInterval(() => {
-    _('pin-code').focus();
-}, 100);
 
     </script>
 
