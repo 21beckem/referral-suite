@@ -945,7 +945,13 @@ function getTodaysInxdexOfAttempts(per) {
 function logAttempt(el, y, x) {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    let attemptType = ['call', 'text', 'email'][y];
     let nowAttempted = !(al[x][y] == 1);
+    if (nowAttempted && false) {
+        if (!confirm('You attempted to '+attemptType+' them just now?')) {
+            return;
+        }
+    }
     al[x][y] = (nowAttempted) ? 1 : 0;
     person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
 
@@ -983,8 +989,6 @@ function fillInAttemptLog() {
         for (let j = 0; j < al[i].length; j++) {
             if (al[i][j] == 1) {
                 _('attemptLogDot_' + j + ',' + i).classList.add('contactDotBeenAttempted');
-            } else {
-                
             }
         }
     }
@@ -993,6 +997,11 @@ function fillInAttemptLog() {
     try {
         let todaysI = getTodaysInxdexOfAttempts(person);
         _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
+        for (let i = 0; i < 7; i++) {
+            _('attemptLogDot_0,' + i).disabled = (i!=todaysI);
+            _('attemptLogDot_1,' + i).disabled = (i!=todaysI);
+            _('attemptLogDot_2,' + i).disabled = (i!=todaysI);
+        }
     } catch (e) {}
 }
 function sendToDeceasePage(el) {
@@ -1118,3 +1127,7 @@ window.addEventListener("load", (e) => {
     }
     handleDailyAndShiftlyNotifications();
 });
+
+function handleDailyAndShiftlyNotifications() {
+    // do something with howFarThroughShift()
+}
