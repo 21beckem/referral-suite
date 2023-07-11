@@ -694,21 +694,22 @@ function fillInHomePage() {
     if (currentRefCount >= maxRefsAllowed) {
         totReferrals.classList.add('w3-text-red');
     }
+    let maxRefAge = 7;
     if (data.area_specific_data.my_referrals.length > 0) {
-        let maxRefAge = 7;
         let oldReferralBar = _("oldReferralBar");
-        let agebyday = _("agebyday");
         let oldReferral = getOldestClaimedPerson()[CONFIG['tableColumns']['date']];
         let today = new Date();
         let oldDate = new Date(oldReferral);
         let dayDifference = Math.round((today.getTime() - oldDate.getTime()) / (1000 * 60 * 60 * 24));
         oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
 
-        agebyday.innerHTML = dayDifference + '/' + maxRefAge;
+        _("agebyday").innerHTML = dayDifference + '/' + maxRefAge;
 
         if (dayDifference >= maxRefAge) {
-            agebyday.classList.add('w3-text-red');
+            _("agebyday").classList.add('w3-text-red');
         }
+    } else {
+        _("agebyday").innerHTML = '0/' + maxRefAge;
     }
     _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
