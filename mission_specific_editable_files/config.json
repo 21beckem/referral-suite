@@ -69,7 +69,7 @@
         "schedule range" : "C2:BI"
     },
     "InboxFox" : {
-        "enable" : false
+        "enable" : true
     },
     "tableColumns" : {
         "type" : 0,

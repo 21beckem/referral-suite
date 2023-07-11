@@ -23,7 +23,8 @@ function didIJustContactEveryoneINeedToForToday() {
     const d = new Date();
     data.fox.lastStreakDay = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
     setCookieJSON('dataSync', data);
-    console.log('Done with contacts for today! Increase streak!');
+    InboxFox.playAnimation('Wave1');
+    InboxFox.say("Let's go!! Good job, you extended your streak!")
 }
 const dateIsToday = (someDate) => {
     if (String(someDate.getFullYear()).includes('1970')) {
