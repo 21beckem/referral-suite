@@ -957,6 +957,8 @@ function logAttempt(el, y, x) {
     // save this change
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
+
+    didIJustContactEveryoneINeedToForToday();
 }
 function fillInAttemptLog() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
@@ -981,6 +983,8 @@ function fillInAttemptLog() {
         for (let j = 0; j < al[i].length; j++) {
             if (al[i][j] == 1) {
                 _('attemptLogDot_' + j + ',' + i).classList.add('contactDotBeenAttempted');
+            } else {
+                
             }
         }
     }
@@ -1114,7 +1118,3 @@ window.addEventListener("load", (e) => {
     }
     handleDailyAndShiftlyNotifications();
 });
-
-function handleDailyAndShiftlyNotifications() {
-    // do something with howFarThroughShift()
-}
