@@ -301,7 +301,6 @@ async function sortOfSYNC_QueryMyself() {
 }
 function decodeFox(arr) {
     let restart = false;
-    let str = '';
     if (arr.length == 0) {
         restart = true;
     } else if (arr[0][0] == '') {
@@ -310,8 +309,7 @@ function decodeFox(arr) {
     if (restart) {
         return {
             "points" : 0,
-            "streak" : 0,
-            "lastStreakDay" : null
+            "streak" : []
         }
     } else {
         try {
@@ -323,8 +321,7 @@ function decodeFox(arr) {
         } catch (e) {
             return {
                 "points" : 0,
-                "streak" : 0,
-                "lastStreakDay" : null
+                "streak" : []
             }
         }
     }

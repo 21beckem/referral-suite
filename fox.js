@@ -8,20 +8,20 @@ function didIJustContactEveryoneINeedToForToday() {
         }
     }
     if (!yes) {
-        data.fox.streak = getCookieJSON('unchangedSyncData').fox.streak;
-        data.fox.lastStreakDay = getCookieJSON('unchangedSyncData').fox.lastStreakDay;
+        if (dateIsToday(new Date( data.fox.streak[data.fox.streak.length-1] ))) {
+            data.fox.streak.pop();
+        }
         setCookieJSON('dataSync', data);
         console.log('streak reset to last sync data');
         return;
     }
     // check if streak already done for today
-    if (dateIsToday(new Date(data.fox.lastStreakDay))) {
+    if (dateIsToday(new Date( data.fox.streak[data.fox.streak.length-1] ))) {
         return;
     }
     // increase streak num and last day
-    data.fox.streak += 1;
     const d = new Date();
-    data.fox.lastStreakDay = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    data.fox.streak.push( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
     setCookieJSON('dataSync', data);
     InboxFox.playAnimation('Wave1');
     InboxFox.say("Let's go!! Good job, you extended your streak!")
