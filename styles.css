@@ -223,15 +223,15 @@ a.uline {
     text-align: center;
     opacity: 0.6;
 }
-#attemptLog tr:not(:first-child) td:not(:first-child) button {
+#attemptLog .attemptDot {
     margin-left: 5px;
     border: 1px solid #cccccc;
-    border-radius: 40px;
+    border-radius: 8px;
     text-align: center;
     margin-left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     outline: none;
     background-color: var(--white);
 }

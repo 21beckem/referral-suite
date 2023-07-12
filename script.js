@@ -756,6 +756,7 @@ function setHomeBigBtnLink(elId) {
 }
 function callThenGoBack() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    logAttempt(0);
     window.open('tel:+' + person[CONFIG['tableColumns']['phone']], '_blank');
     safeRedirect('contact_info.html');
 }
@@ -939,29 +940,42 @@ function getTodaysInxdexOfAttempts(per) {
     sentDate.setHours(0,0,0,0);
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
-function logAttempt(el, y, x) {
+function clearTodaysAttempts() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let x = getTodaysInxdexOfAttempts(person);
     let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
-    let attemptType = ['call', 'text', 'email'][y];
-    let nowAttempted = !(al[x][y] == 1);
-    if (nowAttempted && false) {
-        if (!confirm('You attempted to '+attemptType+' them just now?')) {
-            return;
-        }
-    }
-    al[x][y] = (nowAttempted) ? 1 : 0;
+    al[x][0] = 0;
+    al[x][1] = 0;
+    al[x][2] = 0;
     person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
-
-    if (nowAttempted) {
-        el.classList.add('contactDotBeenAttempted');
-    } else {
-        el.classList.remove('contactDotBeenAttempted');
-    }
+    try {
+        _('attemptLogDot_0,'+x).classList.remove('contactDotBeenAttempted');
+        _('attemptLogDot_1,'+x).classList.remove('contactDotBeenAttempted');
+        _('attemptLogDot_2,'+x).classList.remove('contactDotBeenAttempted');
+    } catch (e) {}
     // save this change
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
+}
+function logAttemptBeforeSendingToLink(el, type) {
+    logAttempt(type);
+    setTimeout(() => {
+        safeRedirect('contact_info.html');
+    }, 10);
+}
+function logAttempt(y) {
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let x = getTodaysInxdexOfAttempts(person);
+    let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    al[x][y] = 1;
+    person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
 
-    didIJustContactEveryoneINeedToForToday();
+    try {
+        _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
+    } catch (e) {}
+    // save this change
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    setCookieJSON('dataSync', data);
 }
 function fillInAttemptLog() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];

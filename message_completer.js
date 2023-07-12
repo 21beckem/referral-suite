@@ -51,7 +51,9 @@ function sendTheMessage() {
 		}
 	});
 	if (send) {
+		logAttempt((current_page == 'sms') ? 1 : 2);
 		_('fakeLinkToClickToSend').click();
+		safeRedirect('contact_info.html');
 	} else {
 		alert('Please fill out the required info 🙃');
 	}
