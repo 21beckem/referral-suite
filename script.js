@@ -757,6 +757,7 @@ function setHomeBigBtnLink(elId) {
 function callThenGoBack() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     logAttempt(0);
+    localStorage.setItem('justAttemptedContact', '1');
     window.open('tel:+' + person[CONFIG['tableColumns']['phone']], '_blank');
     safeRedirect('contact_info.html');
 }
@@ -962,6 +963,7 @@ function logAttemptBeforeSendingToLink(el, type) {
     setTimeout(() => {
         safeRedirect('contact_info.html');
     }, 10);
+    localStorage.setItem('justAttemptedContact', '1');
 }
 function logAttempt(y) {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
@@ -1138,7 +1140,3 @@ window.addEventListener("load", (e) => {
     }
     handleDailyAndShiftlyNotifications();
 });
-
-function handleDailyAndShiftlyNotifications() {
-    // do something with howFarThroughShift()
-}

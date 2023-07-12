@@ -52,6 +52,7 @@ function sendTheMessage() {
 	});
 	if (send) {
 		logAttempt((current_page == 'sms') ? 1 : 2);
+		localStorage.setItem('justAttemptedContact', '1');
 		_('fakeLinkToClickToSend').click();
 		safeRedirect('contact_info.html');
 	} else {

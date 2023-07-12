@@ -16,12 +16,12 @@ function didIJustContactEveryoneINeedToForToday() {
         return;
     }
     // check if streak already done for today
-    if (dateIsToday(new Date( data.fox.streak[data.fox.streak.length-1] ))) {
+    if (dateIsToday(new Date( data.fox.streak[0] ))) {
         return;
     }
     // increase streak num and last day
     const d = new Date();
-    data.fox.streak.push( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
+    data.fox.streak.unshift( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
     setCookieJSON('dataSync', data);
     InboxFox.playAnimation('Wave1');
     InboxFox.say("Let's go!! Good job, you extended your streak!")
@@ -36,5 +36,9 @@ const dateIsToday = (someDate) => {
         someDate.getFullYear() == today.getFullYear()
 }
 function handleDailyAndShiftlyNotifications() {
-
+    // check if we just came back from contacting
+    if (localStorage.getItem('justAttemptedContact')) {
+        localStorage.removeItem('justAttemptedContact');
+        didIJustContactEveryoneINeedToForToday();
+    }
 }
