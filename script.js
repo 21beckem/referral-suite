@@ -110,6 +110,8 @@ async function SYNC(loadingCover = true) {
 
     sortSyncDataByDates();
 
+    parseStreakStatus();
+
     saveUnchangedSyncData();
 
     //take away overlay
