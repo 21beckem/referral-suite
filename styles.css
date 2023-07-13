@@ -236,6 +236,16 @@ a.uline {
     background-color: var(--white);
 }
 
+#leaderboardBtn {
+    background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
+    background-color: #BBA7DA;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    color: #fff;
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
+}
+
 #pin-code.shake {
     animation: horizontal-shaking 0.3s ease-in-out infinite;
 }
