@@ -21,11 +21,18 @@
     <style>
 .leaderboardResult {
     width: 100%;
-    display: flexbox;
+    display: flex;
+    align-items: stretch;
+    flex-flow: row;
+    border-bottom: 1px solid black;
+    font-size: 25px;
+}
+.leaderboardResult * {
+    padding: 10px;
+    vertical-align: middle;
 }
 .leaderboardResult .name {
-    font-size: 20px;
-    display: table-cell;
+    flex: 1;
 }
     </style>
   </head>
@@ -51,8 +58,9 @@
 
     <div class="w3-container">
         <div class="leaderboardResult">
-            <a class="name">Michael</a>
-            
+            <div><i class="fa-solid fa-fire"></i></div>
+            <div class="name">Michael</div>
+            <div>1000</div>
         </div>
     </div>
 
