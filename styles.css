@@ -245,6 +245,21 @@ a.uline {
     color: #fff;
     box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
 }
+.leaderboardTopSwitchBtn {
+    align-items: center;
+    text-align: center;
+    background-color: var(--white);
+    color: var(--light-blue);
+    font-size: 30px;
+    border: 2px solid #E5E5E5;
+    box-shadow: 0px 2px 0px #E5E5E5;
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+}
+.leaderboardTopSwitchBtn.active {
+    background-color: #bd43ff1f;
+}
 
 #pin-code.shake {
     animation: horizontal-shaking 0.3s ease-in-out infinite;
