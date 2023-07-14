@@ -295,7 +295,7 @@ async function sortOfSYNC_QueryMyself() {
     // wait for all fetches to finish
     newSyncData.overall_data.new_referrals = await newRefs_wait;
     newSyncData.area_specific_data.my_referrals = await myFers_wait;
-    newSyncData.fox = decodeFox(await areaFoxStat_wait);
+    newSyncData.fox = decodeFox((await areaFoxStat_wait)[0]);
 
     console.log('newly received package', newSyncData);
 
@@ -305,7 +305,7 @@ function decodeFox(arr) {
     let restart = false;
     if (arr.length == 0) {
         restart = true;
-    } else if (arr[0][0] == '') {
+    } else if (arr[0] == '') {
         restart = true;
     }
     if (restart) {
@@ -316,7 +316,7 @@ function decodeFox(arr) {
     } else {
         try {
             return JSON.parse(
-                decodeURIComponent(atob(arr[0][0]).split('').map(function(c) {
+                decodeURIComponent(atob(arr[0]).split('').map(function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''))
             );
@@ -417,7 +417,7 @@ async function sortOfSYNC_UseSQL() {
         }
     }
     syncRes.overall_data.follow_ups = newFUs;
-    syncRes.fox = decodeFox(await areaFoxStat_wait);
+    syncRes.fox = decodeFox((await areaFoxStat_wait)[0]);
 
     console.log('newly received package', syncRes);
     //save to cookie

@@ -19,20 +19,53 @@
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
     <style>
+.leaderboardTopSwitchBtn {
+  align-items: center;
+  text-align: center;
+  background-color: var(--white);
+  color: var(--light-blue);
+  font-size: 30px;
+  border: 2px solid #E5E5E5;
+  box-shadow: 0px 2px 0px #E5E5E5;
+  width: 100%;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.leaderboardTopSwitchBtn.active {
+  background-color: #bd43ff1f;
+}
 .leaderboardResult {
-    width: 100%;
-    display: flex;
-    align-items: stretch;
-    flex-flow: row;
-    border-bottom: 1px solid black;
-    font-size: 25px;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  flex-flow: row;
+  border-bottom: 1px solid #80808047;
+  font-size: 25px;
+}
+#streakResultsContainer i {
+  color: #e758ff;
+}
+#streakResultsContainer .amount {
+  color: #e758ff;
+}
+#pointsResultsContainer i {
+  color: #508d00;
+}
+#pointsResultsContainer .amount {
+  color: #508d00;
+}
+#pointsResultsContainer .amount::before {
+  font-size: 15px;
+  content: "$";
+  color: #508d009c;
 }
 .leaderboardResult * {
-    padding: 10px;
-    vertical-align: middle;
+  padding: 10px;
+  align-items: center;
 }
 .leaderboardResult .name {
-    flex: 1;
+  flex: 1;
 }
     </style>
   </head>
@@ -48,21 +81,23 @@
     <table style="width: 100%;">
         <tr>
             <td style="width: 50%;">
-                <div class="leaderboardTopSwitchBtn active"><i class="fa-solid fa-fire"></i></div>
+                <button id="leaderboardTopSwitchBtnStreak" onclick="showLeaderboardPage(1)" class="leaderboardTopSwitchBtn active"><i class="fa-solid fa-fire"></i></button>
             </td>
             <td style="width: 50%;">
-                <div class="leaderboardTopSwitchBtn"><i class="fa-regular fa-money-bill-1"></i></div>
+                <button id="leaderboardTopSwitchBtnPoints" onclick="showLeaderboardPage(2)" class="leaderboardTopSwitchBtn"><i class="fa-regular fa-money-bill-1"></i></button>
             </td>
         </tr>
     </table>
 
-    <div class="w3-container">
-        <div class="leaderboardResult">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <div class="name">Michael</div>
-            <div>1000</div>
-        </div>
+    <div id="loadingAnim" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+      <div class="lds-dual-ring"></div>
     </div>
+
+    <div id="streakResultsContainer" class="w3-container">
+    </div>
+
+    <div id="pointsResultsContainer" style="display: none;" class="w3-container">
+  </div>
 
     
 
@@ -116,7 +151,21 @@
 
 
     <script>
-      //fillInLeaderboardPage()
+fillInLeaderboardPage()
+
+function showLeaderboardPage(pg) {
+  _('leaderboardTopSwitchBtnStreak').classList.remove('active');
+  _('leaderboardTopSwitchBtnPoints').classList.remove('active');
+  _('streakResultsContainer').style.display = 'none';
+  _('pointsResultsContainer').style.display = 'none';
+  if (pg==1) {
+    _('leaderboardTopSwitchBtnStreak').classList.add('active');
+    _('streakResultsContainer').style.display = '';
+  } else {
+    _('leaderboardTopSwitchBtnPoints').classList.add('active');
+    _('pointsResultsContainer').style.display = '';
+  }
+}
     </script>
     
   </body>

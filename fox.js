@@ -69,3 +69,36 @@ function parseStreakStatus() {
         }
     }
 }
+
+async function fillInLeaderboardPage() {
+    const rawReadOnlyLink = _CONFIG()['overall settings']['readonly data sheet link'];
+    let readonlyLink = rawReadOnlyLink.substr(0, rawReadOnlyLink.lastIndexOf("/"));
+    let readOnlyId = new URLSearchParams(new URL(rawReadOnlyLink).hash.replace('#', '?')).get('gid');
+    let areaFoxStat_wait = G_Sheets_Query(readonlyLink, readOnlyId, 'SELECT *', 'A3:B');
+
+    let foxListData = await areaFoxStat_wait;
+    let newFoxList = foxListData.map(x => {
+        return decodeFox(x);
+    });
+
+    let streakOutput = '';
+    let pointsOutput = '';
+    for (let i = 0; i < foxListData.length; i++) {
+        streakOutput += `
+        <div class="leaderboardResult">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <div class="name">` + foxListData[i][1] + `</div>
+            <div class="amount">` + newFoxList[i].streak.length + `</div>
+        </div>`;
+        pointsOutput += `
+        <div class="leaderboardResult">
+            <div><i class="fa-regular fa-money-bill-1"></i></div>
+            <div class="name">` + foxListData[i][1] + `</div>
+            <div class="amount">` + newFoxList[i].points + `</div>
+        </div>`;
+    }
+    _('streakResultsContainer').innerHTML = streakOutput;
+    _('pointsResultsContainer').innerHTML = pointsOutput;
+
+    _('loadingAnim').style.display = 'none';
+}
