@@ -302,17 +302,21 @@ async function sortOfSYNC_QueryMyself() {
     setCookieJSON('dataSync', newSyncData);
 }
 function decodeFox(arr) {
+    const defaultFox = {
+        "points" : 0,
+        "streak" : []
+    };
     let restart = false;
+    if (arr == undefined) {
+        return defaultFox;
+    }
     if (arr.length == 0) {
         restart = true;
     } else if (arr[0] == '') {
         restart = true;
     }
     if (restart) {
-        return {
-            "points" : 0,
-            "streak" : []
-        }
+        return defaultFox;
     } else {
         try {
             return JSON.parse(
@@ -321,10 +325,7 @@ function decodeFox(arr) {
                 }).join(''))
             );
         } catch (e) {
-            return {
-                "points" : 0,
-                "streak" : []
-            }
+            return defaultFox;
         }
     }
 }

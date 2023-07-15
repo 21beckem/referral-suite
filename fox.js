@@ -81,19 +81,27 @@ async function fillInLeaderboardPage() {
         return decodeFox(x);
     });
 
+    SheetMap.load();
+
     let streakOutput = '';
     let pointsOutput = '';
     for (let i = 0; i < foxListData.length; i++) {
+        const areaName = foxListData[i][1];
+        if (!CONFIG.inboxers.hasOwnProperty(areaName)) {
+            continue;
+        }
+        const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
+        const imgLink = 'https://ui-avatars.com/api/?name=' + areaName.charAt(0) +'&' + colStr;
         streakOutput += `
         <div class="leaderboardResult">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <div class="name">` + foxListData[i][1] + `</div>
+            <div><img class="areaCircle" src="` + imgLink + `"></div>
+            <div class="name">` + areaName + `</div>
             <div class="amount">` + newFoxList[i].streak.length + `</div>
         </div>`;
         pointsOutput += `
         <div class="leaderboardResult">
-            <div><i class="fa-regular fa-money-bill-1"></i></div>
-            <div class="name">` + foxListData[i][1] + `</div>
+            <div><img class="areaCircle" src="` + imgLink + `"></div>
+            <div class="name">` + areaName + `</div>
             <div class="amount">` + newFoxList[i].points + `</div>
         </div>`;
     }
