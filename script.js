@@ -1119,11 +1119,11 @@ function setupInboxFox() {
     window.InboxFox = new WebPal();
     InboxFox.pokeFunction = () => {
         InboxFox.playAnimation('Wave1');
-        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks'], (choice) => {
-            if (choice.includes('No')) {
-                InboxFox.say('Okay, just let me know :)');
+        InboxFox.ask('What\s up?', ['Extend Streak!', 'Coin!'], (choice) => {
+            if (choice.includes('Streak')) {
+                InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
             } else {
-                location.href = 'https://www.google.com/search?q=i+need+help';
+                InboxFox.playLargeRive('coin1.riv', 'State Machine 1');
             }
         }, true);
     }
