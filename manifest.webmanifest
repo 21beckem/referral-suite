@@ -5,6 +5,7 @@
     "start_url": "index.html",
     "display": "standalone",
     "background_color": "#7347B2",
+    "orientation": "portrait-primary",
     "icons": [
         {
             "src": "logo.png",
