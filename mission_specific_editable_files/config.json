@@ -69,7 +69,8 @@
         "schedule range" : "C2:BI"
     },
     "InboxFox" : {
-        "enable" : true
+        "enable" : true,
+        "fox config" : "mission_specific_editable_files/fox.json"
     },
     "tableColumns" : {
         "type" : 0,

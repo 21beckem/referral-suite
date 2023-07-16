@@ -1,3 +1,33 @@
+let FOX_CONFIG = getCookieJSON('FOX_CONFIG') || null;
+let localFox = getCookieJSON('localFox') || {
+    "yesterdaysVerse" : 0,
+    "todaysDate" : new Date(),
+    "notificationsGivenToday" : []
+}
+
+
+function howFarThroughShift() {
+    SheetMap.load();
+    const todaysShiftI = GetTodaysSchedule().indexOf(area);
+    if (todaysShiftI < 0) {
+        return null;
+    }
+    const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
+    const d = new Date();
+    const dTime = d.getTime();
+    const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
+    const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
+    
+    if (dTime < dateFrom) {
+        return Math.floor(((dTime - dateFrom)/1000)/60); // minutes before shift starts
+    } else if (dTime > dateTo) {
+        return Math.floor(((dTime - dateTo)/1000)/60); // minutes after shift ended
+    }
+
+    // it must be during at this point. return percentage of how far we are through the shift
+    return ((dTime - dateFrom) / (dateTo - dateFrom));
+}
 function didIJustContactEveryoneINeedToForToday() {
     let yes = true;
     for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
@@ -41,11 +71,85 @@ function isMoreThanDaysOld(thisD, days) {
     d.setDate(d.getDate() - days);
     return thisD.getTime() < d.getTime();
 }
+function remindThisWithFox(remId, ifShouldFunction) {
+    const rem = FOX_CONFIG.reminders[remId]
+    if (!rem[0]) {
+        return false;
+    }
+    if (localFox.notificationsGivenToday.includes(remId)) {
+        return false;
+    }
+    if (rem[1]==null || rem[2]==null) {
+        return true;
+    }
+    if (howFarThroughShift() > rem[1] && howFarThroughShift() < rem[2]) {
+        ifShouldFunction();
+        localFox.notificationsGivenToday.push(remId);
+        setCookieJSON('localFox', localFox);
+    }
+    return true;
+}
 function handleDailyAndShiftlyNotifications() {
+    // check todays date in local data
+    const d = new Date();
+    let tStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    if (localFox.todaysDate != tStr) {
+        localFox.todaysDate = tStr;
+        localFox.notificationsGivenToday = Array();
+        setCookieJSON('localFox', localFox);
+    }
+
+    // remember to pray
+    remindThisWithFox('begin with prayer', () => {
+        InboxFox.playAnimation('Wave1');
+        InboxFox.ask("Let's do some inboxing! Have you started with a prayer?", ['Yes!', 'Just did it!'], (choice) => {
+            InboxFox.say("Awesome! Here's the scripture of the day!");
+        }, false);
+    });
+
+    // remember to end with reporting
+    remindThisWithFox('end with reporting', () => {
+        InboxFox.playAnimation('Wave1');
+        InboxFox.ask("Let's go! This has been a great Inbox Shift! Have you reported yet?", ['Yes!', 'Take me to it!'], (choice) => {
+            if (choice.includes('Yes')) {
+                InboxFox.say("Härligt! Kör på i tro då!");
+            } else {
+                sendToReportingForm();
+            }
+        }, false);
+    });
+
     // check if we just came back from contacting
     if (localStorage.getItem('justAttemptedContact')) {
         localStorage.removeItem('justAttemptedContact');
         didIJustContactEveryoneINeedToForToday();
+    }
+}
+async function SYNC_foxVars() {
+    // get fox config
+    SYNC_getFoxConfig(_CONFIG()['InboxFox']['fox config']);
+    parseStreakStatus();
+}
+async function SYNC_getFoxConfig(lank) {
+    return await safeFetch(lank)
+        .then((response) => response.json())
+        .then((json) => {
+            setCookieJSON('FOX_CONFIG', json);
+            FOX_CONFIG = json;
+            return json;
+        });
+}
+function setupInboxFox() {
+    window.InboxFox = new WebPal();
+    InboxFox.pokeFunction = () => {
+        InboxFox.playAnimation('Wave1');
+        InboxFox.ask('What\s up?', ['Extend Streak!', 'Coin!'], (choice) => {
+            if (choice.includes('Streak')) {
+                InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
+            } else {
+                InboxFox.playLargeRive('coin1.riv', 'State Machine 1');
+            }
+        }, true);
     }
 }
 function parseStreakStatus() {

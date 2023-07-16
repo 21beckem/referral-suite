@@ -110,7 +110,7 @@ async function SYNC(loadingCover = true) {
 
     sortSyncDataByDates();
 
-    parseStreakStatus();
+    await SYNC_foxVars();
 
     saveUnchangedSyncData();
 
@@ -454,28 +454,6 @@ function getCurrentInboxingArea(detailed=false) {
     }
     return '';
 }
-function howFarThroughShift() {
-    SheetMap.load();
-    const todaysShiftI = GetTodaysSchedule().indexOf(area);
-    if (todaysShiftI < 0) {
-        return null;
-    }
-    const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
-    const d = new Date();
-    const dTime = d.getTime();
-    const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-    const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
-    const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
-    
-    if (dTime < dateFrom) {
-        return Math.floor(((dTime - dateFrom)/1000)/60) * -1; // minutes before shift starts
-    } else if (dTime > dateTo) {
-        return Math.floor(((dTime - dateTo)/1000)/60) * -1; // minutes after shift ended
-    }
-
-    // it must be during at this point. return percentage of how far we are through the shift
-    return ((dTime - dateFrom) / (dateTo - dateFrom));
-}
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
 
@@ -553,7 +531,7 @@ function makeListFollowUpPeople(arr) {
             <div class="w3-bar-item">
               <span class="w3-large">` + per[CONFIG['tableColumns']['first name']] + ' ' + per[CONFIG['tableColumns']['last name']] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[CONFIG['tableColumns']['type']].replaceAll('_', ' ') + `</span>
+              <span>` + per[CONFIG['tableColumns']['teaching area']] + `</span>
             </div>
           </div>
         </aa>`;
@@ -713,13 +691,16 @@ function fillInHomePage() {
     }
     _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
-    _('gToBusSuite').href = CONFIG['home page links']['business suite help']
+    _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
     setHomeBigBtnLink('1_sync');
     setHomeBigBtnLink('2_contact');
     setHomeBigBtnLink('3_log');
     setHomeBigBtnLink('4_message');
     setHomeBigBtnLink('5_comments');
-    setHomeBigBtnLink('6_report');
+}
+function sendToReportingForm() {
+    let link = CONFIG['home page links']['6_report'].replace("{Area}", area);
+    window.open(link, '_BLANK')
 }
 function fillInContactInfo() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
@@ -1115,19 +1096,6 @@ function timeSince_formatted(date) {
     }
     return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
-function setupInboxFox() {
-    window.InboxFox = new WebPal();
-    InboxFox.pokeFunction = () => {
-        InboxFox.playAnimation('Wave1');
-        InboxFox.ask('What\s up?', ['Extend Streak!', 'Coin!'], (choice) => {
-            if (choice.includes('Streak')) {
-                InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
-            } else {
-                InboxFox.playLargeRive('coin1.riv', 'State Machine 1');
-            }
-        }, true);
-    }
-}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
@@ -1140,6 +1108,6 @@ window.addEventListener("load", (e) => {
     } catch (e) { }
     if (FoxEnabled) {
         setupInboxFox();
+        handleDailyAndShiftlyNotifications();
     }
-    handleDailyAndShiftlyNotifications();
 });
