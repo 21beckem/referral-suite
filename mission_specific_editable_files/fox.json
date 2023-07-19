@@ -3,5 +3,8 @@
         "begin with prayer" : [true, 0, 0.2],
         "end with reporting" : [true, 0.8, 1],
         "do daily standards" : [false, null, null]
+    },
+    "links" : {
+        "daily scripture table" : "https://docs.google.com/spreadsheets/d/16z4_8dK-2N7wr-CyuDZik7IB9KOQ00GGkH920QAn9Oc/edit#gid=0"
     }
 }

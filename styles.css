@@ -235,6 +235,11 @@ a.uline {
     outline: none;
     background-color: var(--white);
 }
+.scriptureOfDay {
+    background-color: #f5f5f5;
+    padding: 5px;
+    margin: 0px;
+}
 
 #leaderboardBtn {
     background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);

@@ -103,7 +103,17 @@ function handleDailyAndShiftlyNotifications() {
     remindThisWithFox('begin with prayer', () => {
         InboxFox.playAnimation('Wave1');
         InboxFox.ask("Let's do some inboxing! Have you started with a prayer?", ['Yes!', 'Just did it!'], (choice) => {
-            InboxFox.say("Awesome! Here's the scripture of the day!");
+            let scrs = getCookieJSON('fox_daily_scriptures');
+            let i = 0;
+            while (true) {
+                i = Math.floor(Math.random() * scrs.length);
+                if (i!=localFox.yesterdaysVerse) {
+                    break;
+                }
+            }
+            localFox.yesterdaysVerse = i;
+            setCookieJSON('localFox', localFox);
+            InboxFox.say("Awesome! Here's the scripture of the day!" + '<p class="scriptureOfDay">' + scrs[i][1] + "</p><p>" + scrs[i][0] + "</p>");
         }, false);
     });
 
@@ -127,7 +137,8 @@ function handleDailyAndShiftlyNotifications() {
 }
 async function SYNC_foxVars() {
     // get fox config
-    SYNC_getFoxConfig(_CONFIG()['InboxFox']['fox config']);
+    await SYNC_getFoxConfig(_CONFIG()['InboxFox']['fox config']);
+    await SYNC_getDailyScriptureList();
     parseStreakStatus();
 }
 async function SYNC_getFoxConfig(lank) {
@@ -138,6 +149,13 @@ async function SYNC_getFoxConfig(lank) {
             FOX_CONFIG = json;
             return json;
         });
+}
+async function SYNC_getDailyScriptureList() {
+    const rawLink = FOX_CONFIG['links']['daily scripture table'];
+    let thisLink = rawLink.substr(0, rawLink.lastIndexOf("/"));
+    let thisSheetId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+    let this_res = await G_Sheets_Query(thisLink, thisSheetId, 'SELECT *', 'A1:B');
+    setCookieJSON('fox_daily_scriptures', this_res);
 }
 function setupInboxFox() {
     window.InboxFox = new WebPal();
