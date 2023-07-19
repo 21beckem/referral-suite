@@ -180,7 +180,7 @@ function parseStreakStatus() {
         // maybe lost streak, but check claimed referrals
         if (thisData.area_specific_data.my_referrals.length == 0) {
             let yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() + 1);
+            yesterday.setDate(yesterday.getDate() - 1);
             thisData.fox.streak.unshift( yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate() );
             setCookieJSON('dataSync', thisData);
             alert('Streak saved by no referrals!');
