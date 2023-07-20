@@ -2,7 +2,8 @@ let FOX_CONFIG = getCookieJSON('FOX_CONFIG') || null;
 let localFox = getCookieJSON('localFox') || {
     "yesterdaysVerse" : 0,
     "todaysDate" : new Date(),
-    "notificationsGivenToday" : []
+    "notificationsGivenToday" : [],
+    "canExtendStreakStatus" : null
 }
 
 
@@ -72,6 +73,10 @@ function isMoreThanDaysOld(thisD, days) {
     return thisD.getTime() < d.getTime();
 }
 function remindThisWithFox(remId, ifShouldFunction) {
+    if (!FOX_CONFIG.reminders.hasOwnProperty(remId)) {
+        console.error("This fox reminder: (\""+remId+"\") doesn't exist. Skipping past it");
+        return;
+    }
     const rem = FOX_CONFIG.reminders[remId]
     if (!rem[0]) {
         return false;
@@ -83,11 +88,18 @@ function remindThisWithFox(remId, ifShouldFunction) {
         return true;
     }
     if (howFarThroughShift() > rem[1] && howFarThroughShift() < rem[2]) {
-        ifShouldFunction();
-        localFox.notificationsGivenToday.push(remId);
-        setCookieJSON('localFox', localFox);
+        if (!window.variableToShowFoxIfFoxIsAlreadyShowingANotificationOnRefresh) {
+            window.variableToShowFoxIfFoxIsAlreadyShowingANotificationOnRefresh = true;
+            ifShouldFunction();
+            localFox.notificationsGivenToday.push(remId);
+            setCookieJSON('localFox', localFox);
+        }
     }
     return true;
+}
+function resetFoxNotifications() {
+    localFox.notificationsGivenToday = Array();
+    setCookieJSON('localFox', localFox);
 }
 function handleDailyAndShiftlyNotifications() {
     // check todays date in local data
@@ -115,6 +127,14 @@ function handleDailyAndShiftlyNotifications() {
             setCookieJSON('localFox', localFox);
             InboxFox.say("Awesome! Here's the scripture of the day!" + '<p class="scriptureOfDay">' + scrs[i][1] + "</p><p>" + scrs[i][0] + "</p>");
         }, false);
+    });
+
+    // reminder to contact all claimed
+    remindThisWithFox('contact all claimed', () => {
+        InboxFox.playAnimation('Wave1');
+        InboxFox.ask("You've been doing so well so far! Have you contacted all your claimed referrals though? 👀", ['Oops, take me there!'], (choice) => {
+            safeRedirect('contact_book.html');
+        }, true);
     });
 
     // remember to end with reporting
@@ -175,7 +195,7 @@ function parseStreakStatus() {
     if (thisData.fox.streak.length == 0) {
         return;
     } else if (dateIsToday(new Date(thisData.fox.streak[0]), -1)) {
-        alert('You can extend your streak!');
+        localFox.canExtendStreakStatus = 'can extend';
     } else if (isMoreThanDaysOld(new Date(thisData.fox.streak[0]), 2)) {
         // maybe lost streak, but check claimed referrals
         if (thisData.area_specific_data.my_referrals.length == 0) {
@@ -183,13 +203,16 @@ function parseStreakStatus() {
             yesterday.setDate(yesterday.getDate() - 1);
             thisData.fox.streak.unshift( yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate() );
             setCookieJSON('dataSync', thisData);
-            alert('Streak saved by no referrals!');
+            localFox.canExtendStreakStatus = 'can extend';
         } else {
             thisData.fox.streak = Array();
             setCookieJSON('dataSync', thisData);
-            alert('STREAK LOST?!');
+            localFox.canExtendStreakStatus = null;
         }
+    } else {
+        localFox.canExtendStreakStatus = 'done for today';
     }
+    setCookieJSON('localFox', localFox);
 }
 
 async function fillInLeaderboardPage() {

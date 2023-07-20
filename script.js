@@ -109,10 +109,10 @@ async function SYNC(loadingCover = true) {
     }
 
     sortSyncDataByDates();
-
-    await SYNC_foxVars();
-
+    
     saveUnchangedSyncData();
+    
+    await SYNC_foxVars();
 
     //take away overlay
     if (loadingCover) {
@@ -697,6 +697,22 @@ function fillInHomePage() {
     setHomeBigBtnLink('3_log');
     setHomeBigBtnLink('4_message');
     setHomeBigBtnLink('5_comments');
+
+    let streakBoxFilter = '';
+    switch (localFox.canExtendStreakStatus) {
+        case 'done for today':
+            streakBoxFilter = '';
+            break;
+        case 'can extend':
+            streakBoxFilter = 'grayscale(0.8) opacity(0.8)';
+            break;
+    
+        default:
+            streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
+    }
+    _('streakBox').style.filter = streakBoxFilter;
+    _('streakBoxNum').innerHTML = data.fox.streak.length;
+    _('inbucksValue').innerHTML = data.fox.points;
 }
 function sendToReportingForm() {
     let link = CONFIG['home page links']['6_report'].replace("{Area}", area);
