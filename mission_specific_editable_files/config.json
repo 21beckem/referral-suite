@@ -56,7 +56,6 @@
         "readonly data sheet link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc/edit#gid=1482684192",
         "table type" : "sql",
         "login pin" : "1022",
-        "enable FH referrals" : false,
         "enable follow ups" : true,
         "tell backend system which area is inboxing" : true,
         "most common language in mission" : "Swedish"
