@@ -689,7 +689,7 @@ function fillInHomePage() {
     } else {
         _("agebyday").innerHTML = '0/' + maxRefAge;
     }
-    _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
+    _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
     _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
     setHomeBigBtnLink('1_sync');
