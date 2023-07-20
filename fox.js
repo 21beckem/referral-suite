@@ -29,6 +29,10 @@ function howFarThroughShift() {
     // it must be during at this point. return percentage of how far we are through the shift
     return ((dTime - dateFrom) / (dateTo - dateFrom));
 }
+function randomFoxSayingOnTopic(thisTopic) {
+    let i = Math.floor(Math.random() * FOX_CONFIG.sayings[thisTopic].length);
+    return FOX_CONFIG.sayings[thisTopic][i];
+}
 function didIJustContactEveryoneINeedToForToday() {
     let yes = true;
     for (let i = 0; i < data.area_specific_data.my_referrals.length; i++) {
@@ -114,7 +118,7 @@ function handleDailyAndShiftlyNotifications() {
     // remember to pray
     remindThisWithFox('begin with prayer', () => {
         InboxFox.playAnimation('Wave1');
-        InboxFox.ask("Let's do some inboxing! Have you started with a prayer?", ['Yes!', 'Just did it!'], (choice) => {
+        InboxFox.ask( randomFoxSayingOnTopic('prayer') , ['Yes!', 'Just did it!'], (choice) => {
             let scrs = getCookieJSON('fox_daily_scriptures');
             let i = 0;
             while (true) {
@@ -125,14 +129,14 @@ function handleDailyAndShiftlyNotifications() {
             }
             localFox.yesterdaysVerse = i;
             setCookieJSON('localFox', localFox);
-            InboxFox.say("Awesome! Here's the scripture of the day!" + '<p class="scriptureOfDay">' + scrs[i][1] + "</p><p>" + scrs[i][0] + "</p>");
+            InboxFox.say( randomFoxSayingOnTopic('scripture') + '<p class="scriptureOfDay">' + scrs[i][1] + "</p><p>" + scrs[i][0] + "</p>");
         }, false);
     });
 
     // reminder to contact all claimed
     remindThisWithFox('contact all claimed', () => {
         InboxFox.playAnimation('Wave1');
-        InboxFox.ask("You've been doing so well so far! Have you contacted all your claimed referrals though? 👀", ['Oops, take me there!'], (choice) => {
+        InboxFox.ask( randomFoxSayingOnTopic('contact claimed') , ['Take me there!'], (choice) => {
             safeRedirect('contact_book.html');
         }, true);
     });
@@ -140,9 +144,9 @@ function handleDailyAndShiftlyNotifications() {
     // remember to end with reporting
     remindThisWithFox('end with reporting', () => {
         InboxFox.playAnimation('Wave1');
-        InboxFox.ask("Let's go! This has been a great Inbox Shift! Have you reported yet?", ['Yes!', 'Take me to it!'], (choice) => {
+        InboxFox.ask( randomFoxSayingOnTopic('report') , ['Yes!', 'Take me to it!'], (choice) => {
             if (choice.includes('Yes')) {
-                InboxFox.say("Härligt! Kör på i tro då!");
+                InboxFox.say( randomFoxSayingOnTopic('encouragement') );
             } else {
                 sendToReportingForm();
             }
