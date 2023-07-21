@@ -71,7 +71,22 @@ let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
+const DEBUG_MODE = localStorage.getItem('debug-mode')=='true' || false;
 const FoxEnabled = (document.currentScript.getAttribute('no-fox') == null && CONFIG != null && CONFIG['InboxFox']['enable']);
+
+if (DEBUG_MODE) {
+    window.onerror = function(msg, url, linenumber) {
+        if (_('debug-table')) {
+            const DB = _('debug-table');
+            DB.classList.add('active');
+            DB.innerHTML += `<div class="item">
+                <div class="msg">` + msg + `</div>
+                <div class="link">` + url.replace(/^.*[\\\/]/, '') + ':' + String(linenumber) + `</div>
+            </div>`;
+        }
+        return false;
+    }
+}
 
 if ((area == null || CONFIG == null) && document.currentScript.getAttribute('dont-redirect') == null) {
     safeRedirect('login.html');
@@ -842,7 +857,14 @@ function sendToCompletionPage(smsOrEmail, el) {
     setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
     safeRedirect(smsOrEmail + '_completer.html');
 }
+function setDebugMode(yesNo) {
+    localStorage.setItem('debug-mode', String(yesNo));
+    window.location.reload();
+}
 function syncPageFillIn() {
+    if (DEBUG_MODE) {
+        _('debug-mode-switch').setAttribute('checked', '');
+    }
     let syncDate = new Date(data.area_specific_data.last_sync);
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
@@ -1122,6 +1144,9 @@ window.addEventListener("load", (e) => {
     try {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch (e) { }
+    if (DEBUG_MODE) {
+        document.body.innerHTML += `<div id="debug-table"></div>`;
+    }
     if (FoxEnabled) {
         setupInboxFox();
         handleDailyAndShiftlyNotifications();
