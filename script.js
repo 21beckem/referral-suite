@@ -827,35 +827,31 @@ function prettyPrintRefOrigin(x) {
     }
 }
 async function fillMessageExamples(folderName, pasteBox) {
-    try {
-        let areaEmail = getCookie('areaUserEmail') || null;
-        const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
-        let requestType = person[CONFIG['tableColumns']['type']];
-        const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[CONFIG['tableColumns']['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
-        const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[CONFIG['tableColumns']['phone']])) + '?body=') : emailLink;
-        const _destination = (folderName == 'sms') ? '_parent' : '_blank';
-        _('startBlankBtn').href = link_beginning;
-        _('startBlankBtn').target = _destination;
-        const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
-        //console.log(reqMssgUrl);
-        const rawFetch = await safeFetch(reqMssgUrl);
-        const rawTxt = await rawFetch.text();
-    
-        const Messages = rawTxt.split(/\n{4,}/gm);
-        //console.log(Messages);
-        let output = "";
-        for (let i = 0; i < Messages.length; i++) {
-            if (Messages[i].match(/{[^}]*}/gm) == null) {
-                const this_url = link_beginning + encodeURI(Messages[i]);
-                output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
-            } else {
-                output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
-            }
+    let areaEmail = getCookie('areaUserEmail') || null;
+    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let requestType = person[CONFIG['tableColumns']['type']];
+    const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[CONFIG['tableColumns']['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+    const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[CONFIG['tableColumns']['phone']])) + '?body=') : emailLink;
+    const _destination = (folderName == 'sms') ? '_parent' : '_blank';
+    _('startBlankBtn').href = link_beginning;
+    _('startBlankBtn').target = _destination;
+    const reqMssgUrl = 'templates/' + folderName + '/' + encodeURI(requestType) + '.txt';
+    //console.log(reqMssgUrl);
+    const rawFetch = await safeFetch(reqMssgUrl);
+    const rawTxt = await rawFetch.text();
+
+    const Messages = rawTxt.split(/\n{4,}/gm);
+    //console.log(Messages);
+    let output = "";
+    for (let i = 0; i < Messages.length; i++) {
+        if (Messages[i].match(/{[^}]*}/gm) == null) {
+            const this_url = link_beginning + encodeURI(Messages[i]);
+            output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><a href="' + this_url + '"><div class="useThisTemplateBtn">Use This Template</div></a></div>'
+        } else {
+            output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + folderName + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
         }
-        pasteBox.innerHTML = output;
-    } catch (error) {
-        alert(error);
     }
+    pasteBox.innerHTML = output;
 }
 function sendToCompletionPage(smsOrEmail, el) {
     setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
