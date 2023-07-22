@@ -4,6 +4,11 @@ require __DIR__ . '/sql_tools.php';
 
 $your_referral_table_name = 'All_Referrals';
 
+
+if (isset($_GET['pingNF'])) {
+    die (strval( count(GETPeopleData('Unclaimed')) ));
+}
+
 // if no area is defined, just cancel
 if (!isset($_GET['area'])) {
     die('error. Missing info');
