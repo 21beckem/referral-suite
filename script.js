@@ -714,7 +714,7 @@ function fillInHomePage() {
     setHomeBigBtnLink('5_comments');
 
     let streakBoxFilter = '';
-    switch (localFox.canExtendStreakStatus) {
+    switch (foxStreakExtendingStatus()) {
         case 'done for today':
             streakBoxFilter = '';
             break;

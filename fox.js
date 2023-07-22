@@ -2,8 +2,7 @@ let FOX_CONFIG = getCookieJSON('FOX_CONFIG') || null;
 let localFox = getCookieJSON('localFox') || {
     "yesterdaysVerse" : 0,
     "todaysDate" : new Date(),
-    "notificationsGivenToday" : [],
-    "canExtendStreakStatus" : null
+    "notificationsGivenToday" : []
 }
 
 
@@ -199,7 +198,7 @@ function parseStreakStatus() {
     if (thisData.fox.streak.length == 0) {
         return;
     } else if (dateIsToday(new Date(thisData.fox.streak[0]), -1)) {
-        localFox.canExtendStreakStatus = 'can extend';
+        // can extend
     } else if (isMoreThanDaysOld(new Date(thisData.fox.streak[0]), 2)) {
         // maybe lost streak, but check claimed referrals
         if (thisData.area_specific_data.my_referrals.length == 0) {
@@ -207,16 +206,27 @@ function parseStreakStatus() {
             yesterday.setDate(yesterday.getDate() - 1);
             thisData.fox.streak.unshift( yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate() );
             setCookieJSON('dataSync', thisData);
-            localFox.canExtendStreakStatus = 'can extend';
         } else {
             thisData.fox.streak = Array();
             setCookieJSON('dataSync', thisData);
-            localFox.canExtendStreakStatus = null;
         }
-    } else {
-        localFox.canExtendStreakStatus = 'done for today';
     }
     setCookieJSON('localFox', localFox);
+}
+function foxStreakExtendingStatus() {
+    if (data.fox.streak.length == 0) {
+        return null;
+    } else if (dateIsToday(new Date(data.fox.streak[0]), -1)) {
+        return 'can extend';
+    } else if (isMoreThanDaysOld(new Date(data.fox.streak[0]), 2)) {
+        // maybe lost streak, but check claimed referrals
+        if (data.area_specific_data.my_referrals.length == 0) {
+            return 'can extend';
+        } else {
+            return null;
+        }
+    }
+    return 'done for today';
 }
 
 async function fillInLeaderboardPage() {

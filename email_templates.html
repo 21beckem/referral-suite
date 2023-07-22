@@ -115,9 +115,10 @@
 
     </div>
 	<script>
-const messageExamples = _('messageExamples');
-
-fillMessageExamples('email', messageExamples);
+setTimeout(async ()=> {
+  const messageExamples = _('messageExamples');
+  await fillMessageExamples('email', messageExamples);
+}, 10);
 	</script>
 
   </body>
