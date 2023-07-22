@@ -53,6 +53,7 @@ die( json_encode($myObj) );
 // functions!! #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
 function SETPeopleData($changed_people, $sCol) {
+    global $your_referral_table_name;
     foreach ($changed_people as $person) {
         if ( !updateTableRowFromArray($your_referral_table_name, '`id`='.$person[$sCol], $person) ) {
             return FALSE;
@@ -63,9 +64,11 @@ function str_includes($haystack, $needle) {
     return $needle !== '' && mb_strpos($haystack, $needle) !== false;
 }
 function GETFollowUpPeople() {
+    global $your_referral_table_name;
     return readSQL('SELECT * FROM `'.$your_referral_table_name.'` WHERE `Next Follow Up` <= CURRENT_TIME'); // sql to get EVERY referral for any area that needs to be followed up on
 }
 function GETPeopleData($area) {
+    global $your_referral_table_name;
     return readSQL('SELECT * FROM `'.$your_referral_table_name.'` WHERE `Claimed`="'.$area.'" AND `Referral Sent`="Not sent"'); // sql to get person that this inboxing area has claimed
 }
 

@@ -3,6 +3,7 @@
 $YOUR_DATABASE_NAME = 'your_database_name'; // the name of the database you're accessing
 
 function readSQL($sqlStr, $convertRowsToArrays=TRUE) {
+    global $YOUR_DATABASE_NAME;
     // create SQL connection
     $conn = mysqli_connect("localhost", "sql_user_name - must have at least read access", "sql_password", $YOUR_DATABASE_NAME); // don't forget to add your own SQL sign-in info
     if ($conn === false) {
@@ -26,6 +27,7 @@ function readSQL($sqlStr, $convertRowsToArrays=TRUE) {
     return $out;
 }
 function writeSQL($sqlStr) {
+    global $YOUR_DATABASE_NAME;
     // create SQL connection
     $conn = mysqli_connect("localhost", "sql_user_name - must have writing access", "sql_password", $YOUR_DATABASE_NAME); // don't forget to add your own SQL sign-in info
     if ($conn === false) {
@@ -39,6 +41,7 @@ function writeSQL($sqlStr) {
 }
 
 function updateTableRowFromArray($tableName, $rowSelector, $arr, $debug=false) {
+    global $YOUR_DATABASE_NAME;
 	// get a list of the names of each column
 	$tableHeaders = readSQL("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".$YOUR_DATABASE_NAME."' AND TABLE_NAME = '".$tableName."'");
 	
