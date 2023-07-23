@@ -1,4 +1,7 @@
 {
+    "general" : {
+        "delay between checking for new referrals (sec)" : 20
+    },
     "reminders" : {
         "begin with prayer" : [true, 0, 0.2],
         "end with reporting" : [true, 0.8, 1],

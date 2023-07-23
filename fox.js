@@ -157,6 +157,11 @@ function handleDailyAndShiftlyNotifications() {
         localStorage.removeItem('justAttemptedContact');
         didIJustContactEveryoneINeedToForToday();
     }
+
+    // set interval for checking for new referrals
+    setInterval(() => {
+        //let newRefs = checkForNewReferrals();
+    }, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
 }
 async function SYNC_foxVars() {
     // get fox config
