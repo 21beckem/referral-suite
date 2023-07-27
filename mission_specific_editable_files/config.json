@@ -23,6 +23,7 @@
     "follow ups" : {
         "initial delay after sent" : 7,
         "status delays" : {
+            "😭 Can't get in contact" : "Grey",
             "😢 Not interested in contact" : "Grey",
             "😫 Hasn't been contacted" : 3,
             "🤔 Hasn't responded" : 5,
