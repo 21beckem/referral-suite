@@ -453,7 +453,7 @@ function GetTodaysSchedule() {
     let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
     return SheetMap.vars.tableDataNOW.map(x => x[iOfToday]);
 }
-function getCurrentInboxingArea(detailed=false) {
+function getCurrentInboxingArea() {
     SheetMap.load();
     let dagensSchedule = GetTodaysSchedule();
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
@@ -475,6 +475,29 @@ async function SYNC_setCurrentInboxingArea() {
     let areaEmail = _CONFIG()['inboxers'][0];
     const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch(reqUrl);
+}
+async function INSTANTSYNC_pingNF(thisDebug=false) {
+    if (CONFIG['overall settings']['table type'].toLowerCase().includes('sql')) {
+        // SQL
+        let fetchURL = CONFIG['overall settings']['table Query link'] + '?pingNF=1';
+        if (thisDebug) {
+            console.log(fetchURL);
+        }
+        return await safeFetch(fetchURL)
+            .then((response) => response.text())
+            .then((txt) => {
+                //console.log('G_query-res', txt);
+                return txt.includes('1');
+            });
+    } else {
+        // Google Sheets
+        const rawLink = CONFIG['overall settings']['table Query link'];
+        let thisId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+        let thisLink = rawLink.substr(0, rawLink.lastIndexOf("/"));
+        let claimedCol = GoogleColumnToLetter(CONFIG['tableColumns']['claimed area'] + 1);
+        let res = await G_Sheets_Query(thisLink, thisId, "select * where " + claimedCol + " = 'Unclaimed'");
+        return res.length > 0;
+    }
 }
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
