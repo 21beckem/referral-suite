@@ -159,14 +159,16 @@ function handleDailyAndShiftlyNotifications() {
     }
 
     // set interval for checking for new referrals
-    window.intervalToPingNF = setInterval(async () => {
-        let newRefs = await INSTANTSYNC_pingNF();
-        if (newRefs) {
-            clearInterval(window.intervalToPingNF);
-            InboxFox.playAnimation('Wave1');
-            InboxFox.say(randomFoxSayingOnTopic('new referral'));
-        }
-    }, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
+    FoxPingNF();
+    window.intervalToPingNF = setInterval(FoxPingNF, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
+}
+async function FoxPingNF() {
+    let newRefs = await INSTANTSYNC_pingNF();
+    if (newRefs) {
+        clearInterval(window.intervalToPingNF);
+        InboxFox.playAnimation('Wave1');
+        InboxFox.say(randomFoxSayingOnTopic('new referral'));
+    }
 }
 async function SYNC_foxVars() {
     // get fox config
