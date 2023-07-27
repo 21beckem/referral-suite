@@ -869,10 +869,11 @@ function syncPageFillIn() {
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function FORCEsyncPageFillIn() {
+    let syncDate = '';
     if (data != null) {
-        let syncDate = new Date(data.area_specific_data.last_sync);
-        _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
+        syncDate = new Date(data.area_specific_data.last_sync).toLocaleString();
     }
+    _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate + '</div>';
 }
 function syncButton(el) {
     SYNC().then(() => {
