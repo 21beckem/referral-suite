@@ -163,6 +163,10 @@ function handleDailyAndShiftlyNotifications() {
     window.intervalToPingNF = setInterval(FoxPingNF, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
 }
 async function FoxPingNF() {
+    let thruShift = howFarThroughShift();
+    if (thruShift < 0 || thruShift > 1) {
+        return;
+    }
     let newRefs = await INSTANTSYNC_pingNF();
     if (newRefs) {
         clearInterval(window.intervalToPingNF);
