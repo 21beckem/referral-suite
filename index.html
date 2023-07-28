@@ -205,6 +205,42 @@
     <script>
       fillInHomePage()
     </script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-messaging.js";
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCqb3dbn8ClLsfTi33GOx3-KhSqdUYPyCc",
+    authDomain: "referral-suite-9e544.firebaseapp.com",
+    projectId: "referral-suite-9e544",
+    storageBucket: "referral-suite-9e544.appspot.com",
+    messagingSenderId: "425848188789",
+    appId: "1:425848188789:web:e10e275d1cda13c4f42d3c"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+  getToken(messaging, {vapidKey: "BLYwZimaOhrlp3XQz-_TSm5BH09lg0ZCQSvB3-7-b-I7RyDwI-egxgYBF2kHxl00IWE_yvw7ibwiF_lHWKQ0fjM"});
+  console.log(messaging);
+  requestPermission();
+
+  onMessage(messaging, (payload) => {
+    console.log('Message received. ', payload);
+    // ...
+  });
+
+  function requestPermission() {
+    console.log('Requesting permission...');
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      }
+    });
+  }
+</script>
     
   </body>
 </html>
