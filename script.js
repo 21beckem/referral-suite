@@ -12,10 +12,13 @@ Array.prototype.indexOfAll = function (searchItem) {
     return indexes;
 }
 function verifySentInSMOEsAB(el) {
-    const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
-    if (yesno) {
-        safeRedirect(el.getAttribute('href'));
-    }
+    setCookie('nextRedirectLoc', el.getAttribute('href'));
+    let customAlert = new JSAlert("Have you already sent this person in the SMOEs Area Book? 👀");
+    customAlert.addButton("Yes").then(function() {
+        safeRedirect(getCookie('nextRedirectLoc'));
+    });
+    customAlert.addButton("No");
+    customAlert.show();
 }
 function safeRedirect(ref) {
     if (!inIframe()) {
@@ -40,7 +43,7 @@ document.addEventListener('click', e => {
     if (origin) {
         //console.log(origin);
         if (origin.hasAttribute("target") || !origin.hasAttribute("href")) {
-            //alert('has target');
+            //JSAlert.alert('has target');
             return;
         }
         e.preventDefault();
@@ -222,6 +225,9 @@ async function SYNC_getPrakedNumbersList() {
         prankNumberList[ v[0] ] = v[1];
     });
     setCookieJSON('prankNumberList', prankNumberList);
+}
+function showPrankedNumberInfoBox(date) {
+    JSAlert.alert('This number has been marked as pranked on ' + date + '. Proceed with caution; trust the spirit.');
 }
 async function SYNC_getConfig() {
     return await safeFetch('mission_specific_editable_files/config.json')
@@ -771,10 +777,17 @@ function fillInContactInfo() {
     //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
+    const numb = person[CONFIG['tableColumns']['phone']].trim();
+    const isPrankedNum = getCookieJSON('prankNumberList').hasOwnProperty(numb);
 
     _('referraltype').innerHTML = person[CONFIG['tableColumns']['type']].replaceAll('_', ' ');
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[CONFIG['tableColumns']['referral origin']]);
-    _('phonenumber').innerHTML = person[CONFIG['tableColumns']['phone']];
+    if (isPrankedNum) {
+        let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
+        _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
+    } else {
+        _('phonenumber').innerHTML = numb;
+    }
     _('email').innerHTML = person[CONFIG['tableColumns']['email']];
     let addStr = person[CONFIG['tableColumns']['street address']] + ' ' + person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
     _('address').innerHTML = addStr;
@@ -915,7 +928,7 @@ function syncButton(el) {
 function sendToAnotherArea() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const newArea = document.getElementById('areadropdown').value;
@@ -955,7 +968,7 @@ function fillInFollowUpOptions(el) {
 function saveFollowUpForm() {
     let person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const status = document.getElementById('statusdropdown').value;
@@ -1075,14 +1088,18 @@ function fillInAttemptLog() {
 function sendToDeceasePage(el) {
     safeRedirect(el.getAttribute('href'));
 }
+function confirmDeceasePerson() {
+    let customAlert = new JSAlert("Are you sure you want to decease this person? This cannot be undone");
+    customAlert.addButton("Yes").then(function() {
+        deceasePerson();
+    });
+    customAlert.addButton("No");
+    customAlert.show();
+}
 function deceasePerson() {
-    let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
-    if (!youSure) {
-        return;
-    }
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
 
@@ -1106,7 +1123,7 @@ function deceasePerson() {
 function claimPerson() {
     let person = data.overall_data.new_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
         return;
     }
@@ -1118,11 +1135,13 @@ function claimPerson() {
     safeRedirect('force-sync.html');
 }
 function doubleCheckSignOut(el) {
-    let youSure = confirm("Are you sure you want to log out? All unsynced changes will be lost");
-    if (!youSure) {
-        return;
-    }
-    safeRedirect(el.getAttribute('href'));
+    setCookie('nextRedirectLoc', el.getAttribute('href'));
+    let customAlert = new JSAlert("Are you sure you want to log out? All unsynced changes will be lost");
+    customAlert.addButton("Yes").then(function() {
+        safeRedirect(getCookie('nextRedirectLoc'));
+    });
+    customAlert.addButton("No");
+    customAlert.show();
 }
 function timeSince_formatted(date) {
     var seconds = Math.floor((new Date() - date) / 1000);

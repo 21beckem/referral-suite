@@ -159,7 +159,10 @@ a.uline {
     color: var(--black) !important;
     background-color: var(--white) !important;
 }
-
+.prankedNumberWarning {
+    text-decoration: line-through 2px var(--warning-red);
+    opacity: 0.5;
+}
 #debug-table {
     position: fixed;
     width: 100%;
