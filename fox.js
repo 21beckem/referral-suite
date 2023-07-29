@@ -8,25 +8,33 @@ let localFox = getCookieJSON('localFox') || {
 
 function howFarThroughShift() {
     SheetMap.load();
-    const todaysShiftI = GetTodaysSchedule().indexOf(area);
-    if (todaysShiftI < 0) {
+    const todaysShiftIs = GetTodaysSchedule().indexOfAll(area);
+    if (todaysShiftIs.length == 0) {
         return null;
     }
-    const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
+    let lastAfterNum;
     const d = new Date();
     const dTime = d.getTime();
     const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-    const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
-    const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
-    
-    if (dTime < dateFrom) {
-        return Math.floor(((dTime - dateFrom)/1000)/60); // minutes before shift starts
-    } else if (dTime > dateTo) {
-        return Math.floor(((dTime - dateTo)/1000)/60); // minutes after shift ended
-    }
+    for (let i = 0; i < todaysShiftIs.length; i++) {
+        const todaysShiftI = todaysShiftIs[i];
 
-    // it must be during at this point. return percentage of how far we are through the shift
-    return ((dTime - dateFrom) / (dateTo - dateFrom));
+        const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
+        const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
+        const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
+        //console.table([todaysShiftTimes, todaysShiftI, dTime, dateFrom, dateTo]);
+        
+        if (dTime < dateFrom) {
+            return Math.floor(((dTime - dateFrom)/1000)/60); // minutes before shift starts
+        } else if (dTime > dateTo) {
+            lastAfterNum = Math.floor(((dTime - dateTo)/1000)/60); // minutes after shift ended
+        } else {
+            // it must be during at this point. return percentage of how far we are through the shift
+            return ((dTime - dateFrom) / (dateTo - dateFrom));
+        }
+    
+    }
+    return lastAfterNum;
 }
 function randomFoxSayingOnTopic(thisTopic) {
     let i = Math.floor(Math.random() * FOX_CONFIG.sayings[thisTopic].length);
@@ -108,7 +116,7 @@ function handleDailyAndShiftlyNotifications() {
     // check todays date in local data
     const d = new Date();
     let tStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-    if (localFox.todaysDate != tStr) {
+    if (localFox.todaysDate != tStr || howFarThroughShift() < 0) {
         localFox.todaysDate = tStr;
         localFox.notificationsGivenToday = Array();
         setCookieJSON('localFox', localFox);

@@ -2,6 +2,15 @@ function inIframe() { try { return window.self !== window.top; } catch (e) { ret
 HTMLCollection.prototype.forEach = function (x) {
     return Array.from(this).forEach(x);
 }
+Array.prototype.indexOfAll = function (searchItem) {
+    let i = this.indexOf(searchItem);
+    let indexes = [];
+    while (i !== -1) {
+        indexes.push(i);
+        i = this.indexOf(searchItem, ++i);
+    }
+    return indexes;
+}
 function verifySentInSMOEsAB(el) {
     const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
     if (yesno) {
