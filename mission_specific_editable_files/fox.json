@@ -1,6 +1,7 @@
 {
     "general" : {
-        "delay between checking for new referrals (sec)" : 20
+        "delay between checking for new referrals (sec)" : 20,
+        "minimum delay between notifications (sec)" : 10
     },
     "reminders" : {
         "begin with prayer" : [true, 0, 0.2],

@@ -2,6 +2,7 @@ let FOX_CONFIG = getCookieJSON('FOX_CONFIG') || null;
 let localFox = getCookieJSON('localFox') || {
     "yesterdaysVerse" : 0,
     "todaysDate" : new Date(),
+    "lastNotificationGiven" : new Date('2002-10-22'),
     "notificationsGivenToday" : []
 }
 
@@ -83,7 +84,16 @@ function isMoreThanDaysOld(thisD, days) {
     d.setDate(d.getDate() - days);
     return thisD.getTime() < d.getTime();
 }
+function secondsSinceDate(before) {
+    return (new Date().getTime() - new Date(before).getTime()) / 1000;
+}
+function beenEnoughTimeSinceLastNotification() {
+    return secondsSinceDate(localFox.lastNotificationGiven) > FOX_CONFIG['general']['minimum delay between notifications (sec)'];
+}
 function remindThisWithFox(remId, ifShouldFunction) {
+    if (!beenEnoughTimeSinceLastNotification()) {
+        return;
+    }
     if (!FOX_CONFIG.reminders.hasOwnProperty(remId)) {
         console.error("This fox reminder: (\""+remId+"\") doesn't exist. Skipping past it");
         return;
@@ -103,6 +113,7 @@ function remindThisWithFox(remId, ifShouldFunction) {
             window.variableToShowFoxIfFoxIsAlreadyShowingANotificationOnRefresh = true;
             ifShouldFunction();
             localFox.notificationsGivenToday.push(remId);
+            localFox.lastNotificationGiven = new Date();
             setCookieJSON('localFox', localFox);
         }
     }
@@ -171,6 +182,11 @@ function handleDailyAndShiftlyNotifications() {
     window.intervalToPingNF = setInterval(FoxPingNF, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
 }
 async function FoxPingNF() {
+    console.log('ping');
+    if (!beenEnoughTimeSinceLastNotification()) {
+        return;
+    }
+    console.log('still pinging');
     let thruShift = howFarThroughShift();
     if (thruShift < 0 || thruShift > 1) {
         return;
@@ -180,6 +196,8 @@ async function FoxPingNF() {
         clearInterval(window.intervalToPingNF);
         InboxFox.playAnimation('Wave1');
         InboxFox.say(randomFoxSayingOnTopic('new referral'));
+        localFox.lastNotificationGiven = new Date();
+        setCookieJSON('localFox', localFox);
     }
 }
 async function SYNC_foxVars() {
