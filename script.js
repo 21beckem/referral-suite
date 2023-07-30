@@ -500,7 +500,7 @@ async function INSTANTSYNC_pingNF(thisDebug=false) {
             .then((response) => response.text())
             .then((txt) => {
                 //console.log('G_query-res', txt);
-                return txt.includes('1');
+                return parseInt(txt) > 0;
             });
     } else {
         // Google Sheets

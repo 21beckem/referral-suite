@@ -182,11 +182,9 @@ function handleDailyAndShiftlyNotifications() {
     window.intervalToPingNF = setInterval(FoxPingNF, FOX_CONFIG['general']['delay between checking for new referrals (sec)'] * 1000);
 }
 async function FoxPingNF() {
-    console.log('ping');
     if (!beenEnoughTimeSinceLastNotification()) {
         return;
     }
-    console.log('still pinging');
     let thruShift = howFarThroughShift();
     if (thruShift < 0 || thruShift > 1) {
         return;
