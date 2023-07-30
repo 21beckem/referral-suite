@@ -287,7 +287,7 @@
                     }))
                 })), this.textFields[0].elem.focus()), this.buttons.length > 0 && (this.elems.buttons = document.createElement("div"), this.elems.buttons.style.cssText = "display: block; display: flex; justify-content: space-around; align-items: center; text-align: right; border-top: 1px solid #EEE; margin-top: 10px; ", this.elems.window.appendChild(this.elems.buttons), this.buttons.forEach((M => {
                     var N = document.createElement("div");
-                    N.style.cssText = "display: inline-block; font-family: Helvetica, Arial; font-size: 15px; font-weight: 200; color: var(--light-blue); padding: 10px 20px; padding-bottom: 0px; cursor: pointer; ", N.innerText = M.text, this.elems.buttons.appendChild(N), this.addTouchHandler(N, (() => {
+                    N.style.cssText = "display: inline-block; font-family: Helvetica, Arial; font-size: 15px; font-weight: bold; color: var(--light-blue); padding: 10px 20px; padding-bottom: 0px; cursor: pointer; ", N.innerText = M.text, this.elems.buttons.appendChild(N), this.addTouchHandler(N, (() => {
                         M.callback && M.callback(M.value), "cancel" == M.type && (this.cancelled = !0), this.dismiss(M.value)
                     }))
                 })))
