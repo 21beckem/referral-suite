@@ -191,10 +191,7 @@ function moveAllChangedDataToASeparateAreaOfData() {
     //fox
     if (JSON.stringify(unchangedSyncData.fox) !== JSON.stringify(data.fox)) {
         let strEn = JSON.stringify(data.fox);
-        data.fox.new_fox_data = btoa(encodeURIComponent(strEn).replace(/%([0-9A-F]{2})/g,
-                function toSolidBytes(match, p1) {
-                    return String.fromCharCode('0x' + p1);
-            }));
+        data.fox.new_fox_data = CryptoJS.AES.encrypt(strEn, area) + '';
     }
     console.log('old', getCookieJSON('dataSync'));
     console.log('new', data);
@@ -349,6 +346,7 @@ function decodeFox(arr) {
         return defaultFox;
     } else {
         try {
+            return JSON.parse( CryptoJS.AES.decrypt(arr[0], arr[1]).toString(CryptoJS.enc.Utf8) );
             return JSON.parse(
                 decodeURIComponent(atob(arr[0]).split('').map(function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);

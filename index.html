@@ -26,6 +26,19 @@
   background-repeat: no-repeat;
   background-color: rgba(158,0,0,1);
 }
+#inbucksValue {
+  color: #508d00;
+}
+#inbucksValue::before {
+  font-size: 15px;
+  content: "$";
+  color: #508d009c;
+}
+#inbucksValue::after {
+  font-size: 15px;
+  content: "$";
+  color: transparent;
+}
     </style>
   </head>
   <body>
@@ -76,8 +89,8 @@
           </td>
           <td style="width: 5%;"></td>
           <td style="width: 30%; font-size: 25px;">
-            <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50px">
-            <a id="inbucksValue">0</a>
+            <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
+            <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
           </td>
         </tr>
       </table>

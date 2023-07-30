@@ -263,13 +263,18 @@ async function fillInLeaderboardPage() {
     let newFoxList = foxListData.map(x => {
         return decodeFox(x);
     });
+    let masterList = foxListData.map((item,i) => [item,newFoxList[i]]);
+
+    let sortedByStreak = [...masterList].sort((a, b) => b[1].streak.length - a[1].streak.length);
+    console.log(sortedByStreak);
+    let sortedByPoints = [...masterList].sort((a, b) => b[1].points - a[1].points);
+    console.log(sortedByStreak);
 
     SheetMap.load();
 
     let streakOutput = '';
-    let pointsOutput = '';
-    for (let i = 0; i < foxListData.length; i++) {
-        const areaName = foxListData[i][1];
+    for (let i = 0; i < sortedByStreak.length; i++) {
+        const areaName = sortedByStreak[i][0][1];
         if (!CONFIG.inboxers.hasOwnProperty(areaName)) {
             continue;
         }
@@ -279,16 +284,26 @@ async function fillInLeaderboardPage() {
         <div class="leaderboardResult">
             <div><img class="areaCircle" src="` + imgLink + `"></div>
             <div class="name">` + areaName + `</div>
-            <div class="amount">` + newFoxList[i].streak.length + `</div>
+            <div class="amount">` + sortedByStreak[i][1].streak.length + `</div>
         </div>`;
+    }
+    _('streakResultsContainer').innerHTML = streakOutput;
+
+    let pointsOutput = '';
+    for (let i = 0; i < sortedByPoints.length; i++) {
+        const areaName = sortedByPoints[i][0][1];
+        if (!CONFIG.inboxers.hasOwnProperty(areaName)) {
+            continue;
+        }
+        const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
+        const imgLink = 'https://ui-avatars.com/api/?name=' + areaName.charAt(0) +'&' + colStr;
         pointsOutput += `
         <div class="leaderboardResult">
             <div><img class="areaCircle" src="` + imgLink + `"></div>
             <div class="name">` + areaName + `</div>
-            <div class="amount">` + newFoxList[i].points + `</div>
+            <div class="amount">` + sortedByPoints[i][1].points + `</div>
         </div>`;
     }
-    _('streakResultsContainer').innerHTML = streakOutput;
     _('pointsResultsContainer').innerHTML = pointsOutput;
 
     _('loadingAnim').style.display = 'none';
