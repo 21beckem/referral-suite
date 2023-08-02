@@ -520,11 +520,6 @@ function makeListUNclaimedPeople() {
         let dotStyle = `<div class="w3-bar-item w3-circle">
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
         </div>`;
-        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
-            dotStyle = `<div class="w3-bar-item w3-circle">
-                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
-            </div>`;
-        }
         const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['date']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="claim_the_referral.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">` + dotStyle + `
@@ -545,11 +540,6 @@ function makeListClaimedPeople(arr) {
         let dotStyle = `<div class="w3-bar-item w3-circle">
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
         let nextPage = 'contact_info.html';
-        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
-            dotStyle = `<div class="w3-bar-item w3-circle">
-                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>`;
-            nextPage = 'fh_referral_info.html';
-        }
         if (!hasPersonBeenContactedToday(per)) {
             dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
         }
@@ -776,11 +766,15 @@ function fillInContactInfo() {
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
     const numb = person[CONFIG['tableColumns']['phone']].trim();
-    const isPrankedNum = getCookieJSON('prankNumberList').hasOwnProperty(numb);
 
     _('referraltype').innerHTML = person[CONFIG['tableColumns']['type']].replaceAll('_', ' ');
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[CONFIG['tableColumns']['referral origin']]);
-    if (isPrankedNum) {
+    if (numb == '') {
+        // no number
+        _('phonenumber').innerHTML = 'Undefined';
+        _('telnumber').classList.add('disabled');
+        _('smsnumber').classList.add('disabled');
+    } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
         let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
         _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
     } else {
@@ -793,6 +787,9 @@ function fillInContactInfo() {
     _('adName').innerHTML = person[CONFIG['tableColumns']['ad name']];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
     _('prefSprak').innerHTML = (person[CONFIG['tableColumns']['lang']] == "") ? "Undeclared" : person[CONFIG['tableColumns']['lang']];
+    if (person[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
+        _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
+    }
     fillInAttemptLog();
 }
 function openGoogleSlides(link) {
@@ -996,7 +993,7 @@ function saveFollowUpForm() {
 function hasPersonBeenContactedToday(per) {
     try {
         let todaysI = getTodaysInxdexOfAttempts(per);
-        if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return true }
+        if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return false }
         let log = JSON.parse(per[ CONFIG['tableColumns']['attempt log'] ])[todaysI];
         return !(log[0]==0 && log[1]==0 && log[2]==0);
     } catch (e) {}
@@ -1034,7 +1031,11 @@ function logAttemptBeforeSendingToLink(el, type) {
 function logAttempt(y) {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     let x = getTodaysInxdexOfAttempts(person);
-    let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    console.log(x);
+    let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
+    try {
+        al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    } catch(e) {}
     al[x][y] = 1;
     person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
 
