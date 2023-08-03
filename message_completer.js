@@ -10,31 +10,29 @@ const MessageOutput = _('MessageOutput');
 let newTmpMssg = templateMssg;
 let inputsOutput = '';
 newTmpMssg = templateMssg.replace(/{[^}]*}/gm, function (x) {
-	return '<span class="ljus completerViewThing_'+x+'">' + x + '</span>';
+	return '<span class="ljus completerViewThing_'+x.replace(' ', '_')+'">' + x + '</span>';
 });
 for (let i = 0; i < ThingsToComplete.length; i++) {
 	const el = ThingsToComplete[i];
 	//newTmpMssg = newTmpMssg.replace(el, '<span id="completerViewThing_'+String(el)+'" class="ljus">'+el+'</span>');
 	elShort = el.substring(1, el.length - 1);
-	inputsOutput += '<label for="' + elShort + '">' + elShort + ' </label><br><input id="completerInputFor_'+el+'" autocomplete="nope" oninput="updateField(this)" onfocus="focusThisFieldInMssg(this)" name="' + elShort + '" type="text"><br>';
+	inputsOutput += '<label for="' + elShort + '">' + elShort.toTitleCase() + ' </label><br><input id="completerInputFor_'+el+'" autocomplete="nope" oninput="updateField(this)" onfocus="focusThisFieldInMssg(this)" name="' + elShort + '" type="text"><br>';
 }
 newTmpMssg = newTmpMssg.replace(/(?:\r\n|\r|\n)/g, '<br>');
 MessageOutput.innerHTML = newTmpMssg;
 _('completerItemsParent').innerHTML = inputsOutput;
 
 function focusThisFieldInMssg(el) {
-	let allCompleters = MessageOutput.querySelectorAll('.ljus');
-	for (let i = 0; i < allCompleters.length; i++) {
-		const e = allCompleters[i];
-		e.classList.remove('selected');
-	}
-	document.getElementsByClassName('completerViewThing_{'+el.name+'}').forEach((x) => {
+	document.getElementsByClassName('ljus').forEach((el) => {
+		el.classList.remove('selected');
+	});
+	document.getElementsByClassName('completerViewThing_{'+el.name.replace(' ', '_')+'}').forEach((x) => {
 		x.classList.add('selected');
 	});
 }
 
 function updateField(el) {
-	document.getElementsByClassName('completerViewThing_{'+el.name+'}').forEach((x) => {
+	document.getElementsByClassName('completerViewThing_{'+el.name.replace(' ', '_')+'}').forEach((x) => {
 		x.innerHTML = (el.value == '') ? '{'+el.name+'}' : el.value;
 	});
 }
@@ -67,5 +65,10 @@ function trySetValue(el, val) {
 		updateField(el);
 	} catch (e) {}
 }
-trySetValue(_('completerInputFor_{Name}'), person[ CONFIG['tableColumns']['first name'] ]);
-trySetValue(_('completerInputFor_{insert their number}'), person[ CONFIG['tableColumns']['phone'] ]);
+window.onload = () => {
+	Object.keys(CONFIG['tableColumns']).forEach((colName) => {
+		trySetValue(_('completerInputFor_{'+colName+'}'), person[ CONFIG['tableColumns'][colName] ]);
+	});
+	let addStr = person[CONFIG['tableColumns']['street address']] + ' ' + person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
+	trySetValue(_('completerInputFor_{address}'), addStr);
+}

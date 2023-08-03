@@ -1,13 +1,13 @@
-Hej {Name}! Tack så mycket för att du svarade vår annons om {insert ad theme}! Vi har några representanter i {Area} som kan hjälpa dig med dina frågor om {insert ad theme}. När är en bra tid för de att komma förbi och prata med dig om dina frågor? Om hembesök inte funkar för dig kan de också ta kontakt med dig där ni tillsammans kan planera en tid att kanske ta en fika.
+Hej {first name}! Tack så mycket för att du svarade vår annons om {insert ad theme}! Vi har några representanter i {Area} som kan hjälpa dig med dina frågor om {insert ad theme}. När är en bra tid för de att komma förbi och prata med dig om dina frågor? Om hembesök inte funkar för dig kan de också ta kontakt med dig där ni tillsammans kan planera en tid att kanske ta en fika.
 
 
 
-Hej {Name}! Tack så mycket för att du svarade vår annons om {insert ad theme}! Vi har några representanter i {Area} som kan hjälpa dig med dina frågor om {insert ad theme}! Det här är de representanterna som är placerade närmast ditt område även om de bor långt bort. När kan de kontakta dig för att besvara dina frågor?
+Hej {first name}! Tack så mycket för att du svarade vår annons om {insert ad theme}! Vi har några representanter i {Area} som kan hjälpa dig med dina frågor om {insert ad theme}! Det här är de representanterna som är placerade närmast ditt område även om de bor långt bort. När kan de kontakta dig för att besvara dina frågor?
 
 
 
-Hej {Name}! Jag jobbar med Vandra i tro och ser att du svarade på en av våra webbtjänster. Tack så mycket! Vi ser att du efterfrågade att prata med några av våra missionärer. Vi har några missionärer i {Area} som kan hjälpa dig med dina frågor om. När är en bra tid för de att komma och prata med dig om dina frågor? Om hembesök inte funkar för dig kan de också ta kontakt med dig och planera en tid då ni kanske kan ta en fika.
+Hej {first name}! Jag jobbar med Vandra i tro och ser att du svarade på en av våra webbtjänster. Tack så mycket! Vi ser att du efterfrågade att prata med några av våra missionärer. Vi har några missionärer i {Area} som kan hjälpa dig med dina frågor om. När är en bra tid för de att komma och prata med dig om dina frågor? Om hembesök inte funkar för dig kan de också ta kontakt med dig och planera en tid då ni kanske kan ta en fika.
 
 
 
-Hej {Name}! Jag jobbar med Vandra i tro och ser att du svarade på en av våra webbtjänster. Tack så mycket! Vi ser att du efterfrågade att prata med några av våra missionärer. Vi har några missionärer i {Area} som kan hjälpa dig med dina frågor om! Det här är de missionärerna som är placerade närmast ditt område även om de bor långt bort. När kan de kontakta dig för att besvara dina frågor?
+Hej {first name}! Jag jobbar med Vandra i tro och ser att du svarade på en av våra webbtjänster. Tack så mycket! Vi ser att du efterfrågade att prata med några av våra missionärer. Vi har några missionärer i {Area} som kan hjälpa dig med dina frågor om! Det här är de missionärerna som är placerade närmast ditt område även om de bor långt bort. När kan de kontakta dig för att besvara dina frågor?

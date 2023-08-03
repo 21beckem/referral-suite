@@ -2,6 +2,16 @@ function inIframe() { try { return window.self !== window.top; } catch (e) { ret
 HTMLCollection.prototype.forEach = function (x) {
     return Array.from(this).forEach(x);
 }
+String.prototype.toTitleCase = function() {
+    var splitStr = this.toLowerCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        // You do not need to check if i is larger than splitStr length, as your for does that for you
+        // Assign it back to the array
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    }
+    // Directly return the joined string
+    return splitStr.join(' '); 
+}
 Array.prototype.indexOfAll = function (searchItem) {
     let i = this.indexOf(searchItem);
     let indexes = [];
