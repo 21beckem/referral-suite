@@ -296,7 +296,6 @@ async function fillInLeaderboardPage() {
         if (!CONFIG.inboxers.hasOwnProperty(areaName)) {
             continue;
         }
-        const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
         const imgLink = 'img/fox_profile_pics/' + CONFIG['inboxers'][areaName]['color'] + '.svg';
         streakOutput += `
         <div class="leaderboardResult">
@@ -313,7 +312,6 @@ async function fillInLeaderboardPage() {
         if (!CONFIG.inboxers.hasOwnProperty(areaName)) {
             continue;
         }
-        const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
         const imgLink = 'img/fox_profile_pics/' + CONFIG['inboxers'][areaName]['color'] + '.svg';
         pointsOutput += `
         <div class="leaderboardResult">
