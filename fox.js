@@ -2,6 +2,7 @@ let FOX_CONFIG = getCookieJSON('FOX_CONFIG') || null;
 let localFox = getCookieJSON('localFox') || {
     "yesterdaysVerse" : 0,
     "todaysDate" : new Date(),
+    "dailyPointsReceived" : [],
     "lastNotificationGiven" : new Date('2002-10-22'),
     "notificationsGivenToday" : []
 }
@@ -130,6 +131,7 @@ function handleDailyAndShiftlyNotifications() {
     if (localFox.todaysDate != tStr || howFarThroughShift() < 0) {
         localFox.todaysDate = tStr;
         localFox.notificationsGivenToday = Array();
+        localFox.dailyPointsReceived = Array();
         setCookieJSON('localFox', localFox);
     }
 
@@ -295,7 +297,7 @@ async function fillInLeaderboardPage() {
             continue;
         }
         const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
-        const imgLink = 'https://ui-avatars.com/api/?name=' + areaName.charAt(0) +'&' + colStr;
+        const imgLink = 'img/fox_profile_pics/' + CONFIG['inboxers'][areaName]['color'] + '.svg';
         streakOutput += `
         <div class="leaderboardResult">
             <div><img class="areaCircle" src="` + imgLink + `"></div>

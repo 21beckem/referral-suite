@@ -766,6 +766,12 @@ function fillInHomePage() {
     _('inbucksValue').innerHTML = data.fox.points;
 }
 function sendToReportingForm() {
+    if (!localFox.dailyPointsReceived.includes('reported')) {
+        data.fox.points += 5;
+        localFox.dailyPointsReceived.push('reported');
+        setCookieJSON('localFox', localFox);
+        setCookieJSON('dataSync', data);
+    }
     let link = CONFIG['home page links']['6_report'].replace("{Area}", area);
     window.open(link, '_BLANK')
 }
@@ -942,6 +948,10 @@ function sendToAnotherArea() {
     person[CONFIG['tableColumns']['sent status']] = 'Sent';
     person[CONFIG['tableColumns']['teaching area']] = newArea;
 
+    //givePoints
+    data.fox.points += 10;
+    setCookieJSON('dataSync', data);
+
     // follow up
     let nextFU = new Date();
     person[CONFIG['tableColumns']['sent date']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
@@ -977,6 +987,10 @@ function saveFollowUpForm() {
         safeRedirect('index.html');
     }
     const status = document.getElementById('statusdropdown').value;
+
+    //givePoints
+    data.fox.points += 3;
+    setCookieJSON('dataSync', data);
 
     let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[parseInt(status)];
     let delay = CONFIG['follow ups']['status delays'][clickedOption];
@@ -1136,6 +1150,23 @@ function claimPerson() {
         safeRedirect('index.html');
         return;
     }
+
+    // give points
+    let pnts = 5;
+    let timeDiff = secondsSinceDate(new Date(person[ CONFIG['tableColumns']['date'] ])) / 60;
+    if (timeDiff < 1) {
+        pnts = 40;
+    } else if (timeDiff < 3) {
+        pnts = 20;
+    } else if (timeDiff < 5) {
+        pnts = 10;
+    } else if (timeDiff < 10) {
+        pnts = 7;
+    } else if (timeDiff < 20) {
+        pnts = 6;
+    }
+    data.fox.points += pnts;
+    setCookieJSON('dataSync', data);
 
     person[CONFIG['tableColumns']['claimed area']] = area;
     data.overall_data.new_referrals[getCookieJSON('linkPages')] = person;
