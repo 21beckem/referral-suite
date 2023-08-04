@@ -1,15 +1,14 @@
 {
     "inboxers" : {
-        "Hägersten" : { "email": "500367156@missionary.org", "color": "purple" },
-        "Borås" : { "email": "8868634@missionary.org", "color": "red" },
-        "Uppsala" : { "email": "115495100@missionary.org", "color": "purple" },
-        "Skellefteå" : { "email": "8868621@missionary.org", "color": "red" },
-        "Linköping" : { "email": "115496405@missionary.org", "color": "purple" },
-        "Kristianstad" : { "email": "49896900@missionary.org", "color": "red" },
-        "Trollhättan" : { "email": "8868627@missionary.org", "color": "purple" },
-        "Örnsköldsvik" : { "email": "8868624@missionary.org", "color": "red" },
-        "Gävle" : { "email": "115495285@missionary.org", "color": "purple" },
-        "SMOEs" : { "email": "141877743@missionary.org", "color": "red" }
+        "Hägersten" : { "email": "500367156@missionary.org", "color": "teal" },
+        "Borås" : { "email": "8868634@missionary.org", "color": "green" },
+        "Uppsala" : { "email": "115495100@missionary.org", "color": "red" },
+        "Skellefteå" : { "email": "8868621@missionary.org", "color": "orange" },
+        "Linköping" : { "email": "115496405@missionary.org", "color": "yellow" },
+        "Kristianstad" : { "email": "49896900@missionary.org", "color": "purple" },
+        "Örnsköldsvik" : { "email": "8868624@missionary.org", "color": "lavender" },
+        "Gävle" : { "email": "115495285@missionary.org", "color": "pink" },
+        "SMOEs" : { "email": "141877743@missionary.org", "color": "light-green" }
     },
     "decease reasons" : {
         "📵 Can't get in contact with them" : "can't contact",
