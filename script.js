@@ -242,8 +242,8 @@ async function SYNC_getConfig() {
         .then((json) => {
             setCookieJSON('CONFIG', json);
             if (area != null) {
-                setCookie('areaUserEmail', json['inboxers'][area][0]);
-                leaders = (json['inboxers'][area].length > 1 && json['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
+                setCookie('areaUserEmail', json['inboxers'][area]['email']);
+                leaders = (json['follow ups']['area to take care of dead inboxing area follow ups'] == area) ? '1' : '0';
                 setCookie('areaIsLeaders', leaders);
             }
             return json;
@@ -308,7 +308,7 @@ async function sortOfSYNC_QueryMyself() {
     // read for this area
     let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = '" + area + "' AND " + sentStatusCol + " = 'Not sent'");
 
-    if (_CONFIG()['overall settings']['enable follow ups']) {
+    if (_CONFIG()['follow ups']['enable follow ups']) {
 
         // read ALL follow ups
         let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
@@ -322,7 +322,7 @@ async function sortOfSYNC_QueryMyself() {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
-            let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+            let areaIsITLs = _CONFIG()['follow ups']['area to take care of dead inboxing area follow ups'] == area;
             if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
@@ -449,7 +449,7 @@ async function sortOfSYNC_UseSQL() {
             newFUs.push(per);
             continue;
         }
-        let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+        let areaIsITLs = _CONFIG()['follow ups']['area to take care of dead inboxing area follow ups'] == area;
         if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
             newFUs.push(per);
             continue;

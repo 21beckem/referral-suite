@@ -221,7 +221,7 @@ async function SYNC_getDailyScriptureList() {
     setCookieJSON('fox_daily_scriptures', this_res);
 }
 function setupInboxFox() {
-    window.InboxFox = new WebPal();
+    window.InboxFox = new WebPal( CONFIG['inboxers'][area]['color'] );
     InboxFox.pokeFunction = () => {
         InboxFox.playAnimation('Wave1');
         InboxFox.ask('What\s up?', ['Extend Streak!', 'Coin!'], (choice) => {
