@@ -77,6 +77,19 @@
             "MORE! I WANT MORE!",
             "I am impressed. You are pretty good at this.",
             "This is epic! Don't stop now!"
+        ],
+        "streak extended" : [
+            "Well done! Your streak has been extended!",
+            "Look at that beautiful streak! Nice job.",
+            "A contact a day keeps the streak okay!",
+            "Like the eagle, your streak flies onward. Good work.",
+            "Yet another extended streak! You're on a roll.",
+            "Keep up the good work. Your streak seems to like it!",
+            "Another streak extended, all in a day's work for you, huh?",
+            "Woo, your streak is long, great, yay.",
+            "Good job growing your streak. Be careful not to lose it!",
+            "I guess you want me to extend your streak. Fine. There you go.",
+            "Look at you, extending that streak. I am so proud!"
         ]
     }
 }

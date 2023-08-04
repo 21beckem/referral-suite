@@ -68,7 +68,7 @@ function didIJustContactEveryoneINeedToForToday() {
     data.fox.streak.unshift( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
     setCookieJSON('dataSync', data);
     InboxFox.playAnimation('Wave1');
-    InboxFox.say("Let's go!! Good job, you extended your streak! Go sync to save it!");
+    InboxFox.say( randomFoxSayingOnTopic('streak extended') + "<br>Go sync to save it!");
 }
 const dateIsToday = (someDate, dayOffset=0) => {
     if (String(someDate.getFullYear()).includes('1970')) {
