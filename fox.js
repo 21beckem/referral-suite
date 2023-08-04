@@ -68,7 +68,7 @@ function didIJustContactEveryoneINeedToForToday() {
     data.fox.streak.unshift( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
     setCookieJSON('dataSync', data);
     InboxFox.playAnimation('Wave1');
-    InboxFox.say("Let's go!! Good job, you extended your streak!")
+    InboxFox.say("Let's go!! Good job, you extended your streak! Go sync to save it!");
 }
 const dateIsToday = (someDate, dayOffset=0) => {
     if (String(someDate.getFullYear()).includes('1970')) {
@@ -314,7 +314,7 @@ async function fillInLeaderboardPage() {
             continue;
         }
         const colStr = SheetMap.vars.conditional_lookup[areaName].replace('background-color:#', 'background=').replace('color:#', 'color=').replaceAll(';','&');
-        const imgLink = 'https://ui-avatars.com/api/?name=' + areaName.charAt(0) +'&' + colStr;
+        const imgLink = 'img/fox_profile_pics/' + CONFIG['inboxers'][areaName]['color'] + '.svg';
         pointsOutput += `
         <div class="leaderboardResult">
             <div><img class="areaCircle" src="` + imgLink + `"></div>
