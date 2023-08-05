@@ -67,7 +67,8 @@ function didIJustContactEveryoneINeedToForToday() {
     const d = new Date();
     data.fox.streak.unshift( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
     setCookieJSON('dataSync', data);
-    InboxFox.playAnimation('Wave1');
+    InboxFox.playAnimation('Excited');
+    InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
     InboxFox.say( randomFoxSayingOnTopic('streak extended') + "<br>Go sync to save it!");
 }
 const dateIsToday = (someDate, dayOffset=0) => {
@@ -149,13 +150,14 @@ function handleDailyAndShiftlyNotifications() {
             }
             localFox.yesterdaysVerse = i;
             setCookieJSON('localFox', localFox);
+            InboxFox.playAnimation('Read and Encourage to read');
             InboxFox.say( randomFoxSayingOnTopic('scripture') + '<p class="scriptureOfDay">' + scrs[i][1] + "</p><p>" + scrs[i][0] + "</p>");
         }, false);
     });
 
     // reminder to contact all claimed
     remindThisWithFox('contact all claimed', () => {
-        InboxFox.playAnimation('Wave1');
+        InboxFox.playAnimation('Check your time');
         InboxFox.ask( randomFoxSayingOnTopic('contact claimed') , ['Take me there!'], (choice) => {
             safeRedirect('contact_book.html');
         }, true);
@@ -163,7 +165,7 @@ function handleDailyAndShiftlyNotifications() {
 
     // remember to end with reporting
     remindThisWithFox('end with reporting', () => {
-        InboxFox.playAnimation('Wave1');
+        InboxFox.playAnimation('Have you reported?');
         InboxFox.ask( randomFoxSayingOnTopic('report') , ['Yes!', 'Take me to it!'], (choice) => {
             if (choice.includes('Yes')) {
                 InboxFox.say( randomFoxSayingOnTopic('encouragement') );
@@ -194,7 +196,7 @@ async function FoxPingNF() {
     let newRefs = await INSTANTSYNC_pingNF();
     if (newRefs) {
         clearInterval(window.intervalToPingNF);
-        InboxFox.playAnimation('Wave1');
+        InboxFox.playAnimation('Excited');
         InboxFox.say(randomFoxSayingOnTopic('new referral'));
         localFox.lastNotificationGiven = new Date();
         setCookieJSON('localFox', localFox);
