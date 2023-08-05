@@ -228,11 +228,13 @@ function setupInboxFox() {
     window.InboxFox = new WebPal( CONFIG['inboxers'][area]['color'] );
     InboxFox.pokeFunction = () => {
         InboxFox.playAnimation('Wave1');
-        InboxFox.ask('What\s up?', ['Extend Streak!', 'Coin!'], (choice) => {
-            if (choice.includes('Streak')) {
-                InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
+        InboxFox.ask('What\s up? Need any help?', ["I'm good!", 'Yes please!'], (choice) => {
+            if (choice.includes('Yes')) {
+                InboxFox.ask('I know a guy... ;)', ["Take me to him!"], (choice) => {
+                    window.open('https://www.facebook.com/21mbecker');
+                }, true);
             } else {
-                InboxFox.playLargeRive('coin1.riv', 'State Machine 1');
+                InboxFox.say("Sounds good! If you ever need anything, I'm here!");
             }
         }, true);
     }
