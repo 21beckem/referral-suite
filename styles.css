@@ -8,6 +8,7 @@
     --all-good-green: #058d00;
     --light-blue: #462c6a;
     --dul-accent: #bca7da;
+    --toggle-accent: #b58af1;
     --email-color: #ff6a6a;
     --sms-color: #2196F3;
     --call-color: #4CAF50;
@@ -158,6 +159,46 @@ a.uline {
     color: var(--black) !important;
     background-color: var(--white) !important;
 }
+.prankedNumberWarning {
+    text-decoration: line-through 2px var(--warning-red);
+    opacity: 0.5;
+}
+#debug-table {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99999999999999999999999999999999999999999999;
+    background-color: transparent;
+    pointer-events: none;
+    color: black;
+    padding: 0;
+    font-size: 10px;
+}
+#debug-table.active {
+    background-color: rgba(195, 195, 195, 0.747);
+}
+#debug-table .item {
+    margin: 0;
+    display: flex;
+    padding: 2px 10px;
+}
+#debug-table .item:nth-child(odd) {
+    background-color: rgba(255, 255, 255, .61);
+}
+#debug-table .item .msg {
+    flex: 1;
+}
+#debug-table .item .link {
+    text-decoration: underline;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}
 
 #bigBtnsTable {
     width: 100%;
@@ -223,17 +264,32 @@ a.uline {
     text-align: center;
     opacity: 0.6;
 }
-#attemptLog tr:not(:first-child) td:not(:first-child) button {
+#attemptLog .attemptDot {
     margin-left: 5px;
     border: 1px solid #cccccc;
-    border-radius: 40px;
+    border-radius: 8px;
     text-align: center;
     margin-left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     outline: none;
     background-color: var(--white);
+}
+.scriptureOfDay {
+    background-color: #f5f5f5;
+    padding: 5px;
+    margin: 0px;
+}
+
+#leaderboardBtn {
+    background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
+    background-color: #BBA7DA;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    color: #fff;
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
 }
 
 #pin-code.shake {
@@ -304,6 +360,39 @@ tr.spaceUnder>td {
     100% {
       transform: rotate(360deg);
     }
+}
+.switch {
+    position: relative;
+    height: 1.5rem;
+    width: 3rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 9999px;
+    background-color: rgba(100, 116, 139, 0.377);
+    transition: background-color .3s ease;
+}
+.switch:checked {
+    background-color: var(--toggle-accent);
+}
+.switch::before {
+    position: absolute;
+    content: "";
+    left: calc(1.5rem - 1.6rem);
+    top: calc(1.5rem - 1.6rem);
+    display: block;
+    height: 1.6rem;
+    width: 1.6rem;
+    cursor: pointer;
+    border: 1px solid rgba(100, 116, 139, 0.527);
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(100, 116, 139, 0.327);
+    transition: transform .3s ease;
+}
+.switch:checked:before {
+    transform: translateX(100%);
+    border-color: var(--toggle-accent);
 }
 
 

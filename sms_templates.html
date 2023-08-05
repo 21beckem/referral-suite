@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
+    <script src="jsalert.js"></script>
     <script src="script.js"></script>
     <script src="fox.js"></script>
         <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
@@ -64,7 +65,7 @@
     </div>
     <div style="height: 80px;"></div>
     <div class="w3-container w3-white w3-padding w3-card-subtle">
-        <a id="startBlankBtn" href="#" target="_parent" class="w3-button w3-sms-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
+        <a id="startBlankBtn" onclick="logAttemptBeforeSendingToLink(this,1)" href="#" target="_parent" class="w3-button w3-sms-color w3-large w3-round" style="margin-right: 10px;">Start a Blank Message</a>OR
     </div>
     
     <div id="messageExamples">
@@ -121,9 +122,10 @@
 
     </div>
 	<script>
-const messageExamples = _('messageExamples');
-
-fillMessageExamples('sms', messageExamples);	
+setTimeout(async ()=> {
+  const messageExamples = _('messageExamples');
+  await fillMessageExamples('sms', messageExamples);	
+}, 10);
 	</script>
 
   </body>

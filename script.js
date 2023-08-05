@@ -2,11 +2,33 @@ function inIframe() { try { return window.self !== window.top; } catch (e) { ret
 HTMLCollection.prototype.forEach = function (x) {
     return Array.from(this).forEach(x);
 }
-function verifySentInSMOEsAB(el) {
-    const yesno = confirm("Have you already sent this person in the SMOEs Area Book? 👀");
-    if (yesno) {
-        safeRedirect(el.getAttribute('href'));
+String.prototype.toTitleCase = function() {
+    var splitStr = this.toLowerCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        // You do not need to check if i is larger than splitStr length, as your for does that for you
+        // Assign it back to the array
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
     }
+    // Directly return the joined string
+    return splitStr.join(' '); 
+}
+Array.prototype.indexOfAll = function (searchItem) {
+    let i = this.indexOf(searchItem);
+    let indexes = [];
+    while (i !== -1) {
+        indexes.push(i);
+        i = this.indexOf(searchItem, ++i);
+    }
+    return indexes;
+}
+function verifySentInSMOEsAB(el) {
+    setCookie('nextRedirectLoc', el.getAttribute('href'));
+    let customAlert = new JSAlert("Have you already sent this person in the SMOEs Area Book? 👀");
+    customAlert.addButton("Yes").then(function() {
+        safeRedirect(getCookie('nextRedirectLoc'));
+    });
+    customAlert.addButton("No");
+    customAlert.show();
 }
 function safeRedirect(ref) {
     if (!inIframe()) {
@@ -31,7 +53,7 @@ document.addEventListener('click', e => {
     if (origin) {
         //console.log(origin);
         if (origin.hasAttribute("target") || !origin.hasAttribute("href")) {
-            //alert('has target');
+            //JSAlert.alert('has target');
             return;
         }
         e.preventDefault();
@@ -71,7 +93,22 @@ let su_refs = getCookieJSON('suSync') || null;
 let su_done = getCookieJSON('suDone') || [];
 let CONFIG = getCookieJSON('CONFIG') || null;
 let ITLs = (getCookie('areaIsLeaders') == "1");
+const DEBUG_MODE = localStorage.getItem('debug-mode')=='true' || false;
 const FoxEnabled = (document.currentScript.getAttribute('no-fox') == null && CONFIG != null && CONFIG['InboxFox']['enable']);
+
+if (DEBUG_MODE) {
+    window.onerror = function(msg, url, linenumber) {
+        if (_('debug-table')) {
+            const DB = _('debug-table');
+            DB.classList.add('active');
+            DB.innerHTML += `<div class="item">
+                <div class="msg">` + msg + `</div>
+                <div class="link">` + url.replace(/^.*[\\\/]/, '') + ':' + String(linenumber) + `</div>
+            </div>`;
+        }
+        return false;
+    }
+}
 
 if ((area == null || CONFIG == null) && document.currentScript.getAttribute('dont-redirect') == null) {
     safeRedirect('login.html');
@@ -109,8 +146,10 @@ async function SYNC(loadingCover = true) {
     }
 
     sortSyncDataByDates();
-
+    
     saveUnchangedSyncData();
+    
+    await SYNC_foxVars();
 
     //take away overlay
     if (loadingCover) {
@@ -162,10 +201,7 @@ function moveAllChangedDataToASeparateAreaOfData() {
     //fox
     if (JSON.stringify(unchangedSyncData.fox) !== JSON.stringify(data.fox)) {
         let strEn = JSON.stringify(data.fox);
-        data.fox.new_fox_data = btoa(encodeURIComponent(strEn).replace(/%([0-9A-F]{2})/g,
-                function toSolidBytes(match, p1) {
-                    return String.fromCharCode('0x' + p1);
-            }));
+        data.fox.new_fox_data = CryptoJS.AES.encrypt(strEn, area) + '';
     }
     console.log('old', getCookieJSON('dataSync'));
     console.log('new', data);
@@ -197,14 +233,17 @@ async function SYNC_getPrakedNumbersList() {
     });
     setCookieJSON('prankNumberList', prankNumberList);
 }
+function showPrankedNumberInfoBox(date) {
+    JSAlert.alert('This number has been marked as pranked on ' + date + '. Proceed with caution; trust the spirit.');
+}
 async function SYNC_getConfig() {
     return await safeFetch('mission_specific_editable_files/config.json')
         .then((response) => response.json())
         .then((json) => {
             setCookieJSON('CONFIG', json);
             if (area != null) {
-                setCookie('areaUserEmail', json['inboxers'][area][0]);
-                leaders = (json['inboxers'][area].length > 1 && json['inboxers'][area][1].toLowerCase().includes('leader')) ? "1" : "0";
+                setCookie('areaUserEmail', json['inboxers'][area]['email']);
+                leaders = (json['follow ups']['area to take care of dead inboxing area follow ups'] == area) ? '1' : '0';
                 setCookie('areaIsLeaders', leaders);
             }
             return json;
@@ -269,7 +308,7 @@ async function sortOfSYNC_QueryMyself() {
     // read for this area
     let myFers_wait = G_Sheets_Query(qURL, tabId, "select * where " + claimedCol + " = '" + area + "' AND " + sentStatusCol + " = 'Not sent'");
 
-    if (_CONFIG()['overall settings']['enable follow ups']) {
+    if (_CONFIG()['follow ups']['enable follow ups']) {
 
         // read ALL follow ups
         let nxtFU_Col = GoogleColumnToLetter(_CONFIG()['tableColumns']['next follow up'] + 1);
@@ -283,7 +322,7 @@ async function sortOfSYNC_QueryMyself() {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
             }
-            let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+            let areaIsITLs = _CONFIG()['follow ups']['area to take care of dead inboxing area follow ups'] == area;
             if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
                 newSyncData.overall_data.follow_ups.push(per);
                 continue;
@@ -293,39 +332,38 @@ async function sortOfSYNC_QueryMyself() {
     // wait for all fetches to finish
     newSyncData.overall_data.new_referrals = await newRefs_wait;
     newSyncData.area_specific_data.my_referrals = await myFers_wait;
-    newSyncData.fox = decodeFox(await areaFoxStat_wait);
+    newSyncData.fox = decodeFox((await areaFoxStat_wait)[0]);
 
     console.log('newly received package', newSyncData);
 
     setCookieJSON('dataSync', newSyncData);
 }
 function decodeFox(arr) {
+    const defaultFox = {
+        "points" : 0,
+        "streak" : []
+    };
     let restart = false;
-    let str = '';
+    if (arr == undefined) {
+        return defaultFox;
+    }
     if (arr.length == 0) {
         restart = true;
-    } else if (arr[0][0] == '') {
+    } else if (arr[0] == '') {
         restart = true;
     }
     if (restart) {
-        return {
-            "points" : 0,
-            "streak" : 0,
-            "lastStreakDay" : null
-        }
+        return defaultFox;
     } else {
         try {
+            return JSON.parse( CryptoJS.AES.decrypt(arr[0], arr[1]).toString(CryptoJS.enc.Utf8) );
             return JSON.parse(
-                decodeURIComponent(atob(arr[0][0]).split('').map(function(c) {
+                decodeURIComponent(atob(arr[0]).split('').map(function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''))
             );
         } catch (e) {
-            return {
-                "points" : 0,
-                "streak" : 0,
-                "lastStreakDay" : null
-            }
+            return defaultFox;
         }
     }
 }
@@ -411,14 +449,14 @@ async function sortOfSYNC_UseSQL() {
             newFUs.push(per);
             continue;
         }
-        let areaIsITLs = (_CONFIG()['inboxers'][area].length > 1 && _CONFIG()['inboxers'][area][1].toLowerCase().includes('leader'));
+        let areaIsITLs = _CONFIG()['follow ups']['area to take care of dead inboxing area follow ups'] == area;
         if (!Object.keys(_CONFIG()['inboxers']).includes(per_claimed) && areaIsITLs) {
             newFUs.push(per);
             continue;
         }
     }
     syncRes.overall_data.follow_ups = newFUs;
-    syncRes.fox = decodeFox(await areaFoxStat_wait);
+    syncRes.fox = decodeFox((await areaFoxStat_wait)[0]);
 
     console.log('newly received package', syncRes);
     //save to cookie
@@ -438,7 +476,7 @@ function GetTodaysSchedule() {
     let iOfToday = SheetMap.vars.tableDataNOW[0].indexOf(niceDate);
     return SheetMap.vars.tableDataNOW.map(x => x[iOfToday]);
 }
-function getCurrentInboxingArea(detailed=false) {
+function getCurrentInboxingArea() {
     SheetMap.load();
     let dagensSchedule = GetTodaysSchedule();
     let scheduleTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]]);
@@ -454,34 +492,35 @@ function getCurrentInboxingArea(detailed=false) {
     }
     return '';
 }
-function howFarThroughShift() {
-    SheetMap.load();
-    const todaysShiftI = GetTodaysSchedule().indexOf(area);
-    if (todaysShiftI < 0) {
-        return null;
-    }
-    const todaysShiftTimes = SheetMap.vars.tableDataNOW.map(x => [x[0], x[1]])[todaysShiftI];
-    const d = new Date();
-    const dTime = d.getTime();
-    const time_beginning = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-    const dateFrom = new Date(time_beginning + ' ' + todaysShiftTimes[0].trim() + ':00.000').getTime();
-    const dateTo = new Date(time_beginning + ' ' + todaysShiftTimes[1].trim() + ':00.000').getTime();
-    
-    if (dTime < dateFrom) {
-        return Math.floor(((dTime - dateFrom)/1000)/60) * -1; // minutes before shift starts
-    } else if (dTime > dateTo) {
-        return Math.floor(((dTime - dateTo)/1000)/60) * -1; // minutes after shift ended
-    }
-
-    // it must be during at this point. return percentage of how far we are through the shift
-    return ((dTime - dateFrom) / (dateTo - dateFrom));
-}
 async function SYNC_setCurrentInboxingArea() {
     let thisArea = getCurrentInboxingArea();
 
     let areaEmail = _CONFIG()['inboxers'][0];
     const reqUrl = _CONFIG()['overall settings']['table scribe link'] + '?currentInboxer=' + encodeURI(thisArea) + '&email=' + encodeURI(areaEmail);
     await safeFetch(reqUrl);
+}
+async function INSTANTSYNC_pingNF(thisDebug=false) {
+    if (CONFIG['overall settings']['table type'].toLowerCase().includes('sql')) {
+        // SQL
+        let fetchURL = CONFIG['overall settings']['table Query link'] + '?pingNF=1';
+        if (thisDebug) {
+            console.log(fetchURL);
+        }
+        return await safeFetch(fetchURL)
+            .then((response) => response.text())
+            .then((txt) => {
+                //console.log('G_query-res', txt);
+                return parseInt(txt) > 0;
+            });
+    } else {
+        // Google Sheets
+        const rawLink = CONFIG['overall settings']['table Query link'];
+        let thisId = new URLSearchParams(new URL(rawLink).hash.replace('#', '?')).get('gid');
+        let thisLink = rawLink.substr(0, rawLink.lastIndexOf("/"));
+        let claimedCol = GoogleColumnToLetter(CONFIG['tableColumns']['claimed area'] + 1);
+        let res = await G_Sheets_Query(thisLink, thisId, "select * where " + claimedCol + " = 'Unclaimed'");
+        return res.length > 0;
+    }
 }
 function makeListUNclaimedPeople() {
     const arr = data.overall_data.new_referrals;
@@ -491,11 +530,6 @@ function makeListUNclaimedPeople() {
         let dotStyle = `<div class="w3-bar-item w3-circle">
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
         </div>`;
-        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
-            dotStyle = `<div class="w3-bar-item w3-circle">
-                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>
-            </div>`;
-        }
         const elapsedTime = timeSince_formatted(new Date(per[CONFIG['tableColumns']['date']]));
         output += `<aa onclick="saveBeforeInfoPage(` + i + `, this)" href="claim_the_referral.html" class="person-to-click">
           <div class="w3-bar" style="display: flex;">` + dotStyle + `
@@ -516,11 +550,6 @@ function makeListClaimedPeople(arr) {
         let dotStyle = `<div class="w3-bar-item w3-circle">
             <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
         let nextPage = 'contact_info.html';
-        if (per[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
-            dotStyle = `<div class="w3-bar-item w3-circle">
-                <div class="w3-left-align w3-large w3-text-green" style="width:20px;height:20px; margin-top: 27px;"><b>FH</b></div>`;
-            nextPage = 'fh_referral_info.html';
-        }
         if (!hasPersonBeenContactedToday(per)) {
             dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
         }
@@ -553,7 +582,7 @@ function makeListFollowUpPeople(arr) {
             <div class="w3-bar-item">
               <span class="w3-large">` + per[CONFIG['tableColumns']['first name']] + ' ' + per[CONFIG['tableColumns']['last name']] + `</span><br>
               <span>` + elapsedTime + `</span><br>
-              <span>` + per[CONFIG['tableColumns']['type']].replaceAll('_', ' ') + `</span>
+              <span>` + per[CONFIG['tableColumns']['teaching area']] + `</span>
             </div>
           </div>
         </aa>`;
@@ -711,15 +740,40 @@ function fillInHomePage() {
     } else {
         _("agebyday").innerHTML = '0/' + maxRefAge;
     }
-    _('MB_deliverLink').href = CONFIG['home page links']['book or mormon delivery form'];
+    _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
-    _('gToBusSuite').href = CONFIG['home page links']['business suite help']
+    _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
     setHomeBigBtnLink('1_sync');
     setHomeBigBtnLink('2_contact');
     setHomeBigBtnLink('3_log');
     setHomeBigBtnLink('4_message');
     setHomeBigBtnLink('5_comments');
-    setHomeBigBtnLink('6_report');
+
+    let streakBoxFilter = '';
+    switch (foxStreakExtendingStatus()) {
+        case 'done for today':
+            streakBoxFilter = '';
+            break;
+        case 'can extend':
+            streakBoxFilter = 'grayscale(0.8) opacity(0.8)';
+            break;
+    
+        default:
+            streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
+    }
+    _('streakBox').style.filter = streakBoxFilter;
+    _('streakBoxNum').innerHTML = data.fox.streak.length;
+    _('inbucksValue').innerHTML = data.fox.points;
+}
+function sendToReportingForm() {
+    if (!localFox.dailyPointsReceived.includes('reported')) {
+        data.fox.points += 5;
+        localFox.dailyPointsReceived.push('reported');
+        setCookieJSON('localFox', localFox);
+        setCookieJSON('dataSync', data);
+    }
+    let link = CONFIG['home page links']['6_report'].replace("{Area}", area);
+    window.open(link, '_BLANK')
 }
 function fillInContactInfo() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
@@ -727,10 +781,21 @@ function fillInContactInfo() {
     //_('telnumber').href = 'tel:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ CONFIG['tableColumns']['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
+    const numb = person[CONFIG['tableColumns']['phone']].trim();
 
     _('referraltype').innerHTML = person[CONFIG['tableColumns']['type']].replaceAll('_', ' ');
     _('referralorigin').innerHTML = prettyPrintRefOrigin(person[CONFIG['tableColumns']['referral origin']]);
-    _('phonenumber').innerHTML = person[CONFIG['tableColumns']['phone']];
+    if (numb == '') {
+        // no number
+        _('phonenumber').innerHTML = 'Undefined';
+        _('telnumber').classList.add('disabled');
+        _('smsnumber').classList.add('disabled');
+    } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
+        let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
+        _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
+    } else {
+        _('phonenumber').innerHTML = numb;
+    }
     _('email').innerHTML = person[CONFIG['tableColumns']['email']];
     let addStr = person[CONFIG['tableColumns']['street address']] + ' ' + person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
     _('address').innerHTML = addStr;
@@ -738,6 +803,9 @@ function fillInContactInfo() {
     _('adName').innerHTML = person[CONFIG['tableColumns']['ad name']];
     _('adDeck').href = CONFIG['home page links']['ad deck'];
     _('prefSprak').innerHTML = (person[CONFIG['tableColumns']['lang']] == "") ? "Undeclared" : person[CONFIG['tableColumns']['lang']];
+    if (person[CONFIG['tableColumns']['type']].toLowerCase().includes('family history')) {
+        _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
+    }
     fillInAttemptLog();
 }
 function openGoogleSlides(link) {
@@ -759,6 +827,8 @@ function setHomeBigBtnLink(elId) {
 }
 function callThenGoBack() {
     const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    logAttempt(0);
+    localStorage.setItem('justAttemptedContact', '1');
     window.open('tel:+' + person[CONFIG['tableColumns']['phone']], '_blank');
     safeRedirect('contact_info.html');
 }
@@ -843,15 +913,23 @@ function sendToCompletionPage(smsOrEmail, el) {
     setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
     safeRedirect(smsOrEmail + '_completer.html');
 }
+function setDebugMode(yesNo) {
+    localStorage.setItem('debug-mode', String(yesNo));
+    window.location.reload();
+}
 function syncPageFillIn() {
+    if (DEBUG_MODE) {
+        _('debug-mode-switch').setAttribute('checked', '');
+    }
     let syncDate = new Date(data.area_specific_data.last_sync);
     _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
 }
 function FORCEsyncPageFillIn() {
+    let syncDate = '';
     if (data != null) {
-        let syncDate = new Date(data.area_specific_data.last_sync);
-        _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate.toLocaleString() + '</div>';
+        syncDate = new Date(data.area_specific_data.last_sync).toLocaleString();
     }
+    _('infobox').innerHTML = area + '<div class="w3-opacity">Last sync: ' + syncDate + '</div>';
 }
 function syncButton(el) {
     SYNC().then(() => {
@@ -861,7 +939,7 @@ function syncButton(el) {
 function sendToAnotherArea() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const newArea = document.getElementById('areadropdown').value;
@@ -869,6 +947,10 @@ function sendToAnotherArea() {
     // set new area in data and save to cookie
     person[CONFIG['tableColumns']['sent status']] = 'Sent';
     person[CONFIG['tableColumns']['teaching area']] = newArea;
+
+    //givePoints
+    data.fox.points += 10;
+    setCookieJSON('dataSync', data);
 
     // follow up
     let nextFU = new Date();
@@ -901,10 +983,14 @@ function fillInFollowUpOptions(el) {
 function saveFollowUpForm() {
     let person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
     const status = document.getElementById('statusdropdown').value;
+
+    //givePoints
+    data.fox.points += 3;
+    setCookieJSON('dataSync', data);
 
     let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[parseInt(status)];
     let delay = CONFIG['follow ups']['status delays'][clickedOption];
@@ -931,7 +1017,7 @@ function saveFollowUpForm() {
 function hasPersonBeenContactedToday(per) {
     try {
         let todaysI = getTodaysInxdexOfAttempts(per);
-        if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return true }
+        if (per[ CONFIG['tableColumns']['attempt log'] ] == '') { return false }
         let log = JSON.parse(per[ CONFIG['tableColumns']['attempt log'] ])[todaysI];
         return !(log[0]==0 && log[1]==0 && log[2]==0);
     } catch (e) {}
@@ -942,23 +1028,47 @@ function getTodaysInxdexOfAttempts(per) {
     sentDate.setHours(0,0,0,0);
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
-function logAttempt(el, y, x) {
+function clearTodaysAttempts() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let x = getTodaysInxdexOfAttempts(person);
     let al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
-    let nowAttempted = !(al[x][y] == 1);
-    al[x][y] = (nowAttempted) ? 1 : 0;
+    al[x][0] = 0;
+    al[x][1] = 0;
+    al[x][2] = 0;
     person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
-
-    if (nowAttempted) {
-        el.classList.add('contactDotBeenAttempted');
-    } else {
-        el.classList.remove('contactDotBeenAttempted');
-    }
+    try {
+        _('attemptLogDot_0,'+x).classList.remove('contactDotBeenAttempted');
+        _('attemptLogDot_1,'+x).classList.remove('contactDotBeenAttempted');
+        _('attemptLogDot_2,'+x).classList.remove('contactDotBeenAttempted');
+    } catch (e) {}
     // save this change
     data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
     setCookieJSON('dataSync', data);
+}
+function logAttemptBeforeSendingToLink(el, type) {
+    logAttempt(type);
+    setTimeout(() => {
+        safeRedirect('contact_info.html');
+    }, 10);
+    localStorage.setItem('justAttemptedContact', '1');
+}
+function logAttempt(y) {
+    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let x = getTodaysInxdexOfAttempts(person);
+    console.log(x);
+    let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
+    try {
+        al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
+    } catch(e) {}
+    al[x][y] = 1;
+    person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
 
-    didIJustContactEveryoneINeedToForToday();
+    try {
+        _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
+    } catch (e) {}
+    // save this change
+    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    setCookieJSON('dataSync', data);
 }
 function fillInAttemptLog() {
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
@@ -983,8 +1093,6 @@ function fillInAttemptLog() {
         for (let j = 0; j < al[i].length; j++) {
             if (al[i][j] == 1) {
                 _('attemptLogDot_' + j + ',' + i).classList.add('contactDotBeenAttempted');
-            } else {
-                
             }
         }
     }
@@ -993,19 +1101,28 @@ function fillInAttemptLog() {
     try {
         let todaysI = getTodaysInxdexOfAttempts(person);
         _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
+        for (let i = 0; i < 7; i++) {
+            _('attemptLogDot_0,' + i).disabled = (i!=todaysI);
+            _('attemptLogDot_1,' + i).disabled = (i!=todaysI);
+            _('attemptLogDot_2,' + i).disabled = (i!=todaysI);
+        }
     } catch (e) {}
 }
 function sendToDeceasePage(el) {
     safeRedirect(el.getAttribute('href'));
 }
+function confirmDeceasePerson() {
+    let customAlert = new JSAlert("Are you sure you want to decease this person? This cannot be undone");
+    customAlert.addButton("Yes").then(function() {
+        deceasePerson();
+    });
+    customAlert.addButton("No");
+    customAlert.show();
+}
 function deceasePerson() {
-    let youSure = confirm("Are you sure you want to decease this person? This cannot be undone");
-    if (!youSure) {
-        return;
-    }
     let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
     }
 
@@ -1029,10 +1146,27 @@ function deceasePerson() {
 function claimPerson() {
     let person = data.overall_data.new_referrals[getCookieJSON('linkPages')];
     if (person == null) {
-        alert('something went wrong. Try again');
+        JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
         return;
     }
+
+    // give points
+    let pnts = 5;
+    let timeDiff = secondsSinceDate(new Date(person[ CONFIG['tableColumns']['date'] ])) / 60;
+    if (timeDiff < 1) {
+        pnts = 40;
+    } else if (timeDiff < 3) {
+        pnts = 20;
+    } else if (timeDiff < 5) {
+        pnts = 10;
+    } else if (timeDiff < 10) {
+        pnts = 7;
+    } else if (timeDiff < 20) {
+        pnts = 6;
+    }
+    data.fox.points += pnts;
+    setCookieJSON('dataSync', data);
 
     person[CONFIG['tableColumns']['claimed area']] = area;
     data.overall_data.new_referrals[getCookieJSON('linkPages')] = person;
@@ -1041,11 +1175,13 @@ function claimPerson() {
     safeRedirect('force-sync.html');
 }
 function doubleCheckSignOut(el) {
-    let youSure = confirm("Are you sure you want to log out? All unsynced changes will be lost");
-    if (!youSure) {
-        return;
-    }
-    safeRedirect(el.getAttribute('href'));
+    setCookie('nextRedirectLoc', el.getAttribute('href'));
+    let customAlert = new JSAlert("Are you sure you want to log out? All unsynced changes will be lost");
+    customAlert.addButton("Yes").then(function() {
+        safeRedirect(getCookie('nextRedirectLoc'));
+    });
+    customAlert.addButton("No");
+    customAlert.show();
 }
 function timeSince_formatted(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
@@ -1090,19 +1226,6 @@ function timeSince_formatted(date) {
     }
     return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
-function setupInboxFox() {
-    window.InboxFox = new WebPal();
-    InboxFox.pokeFunction = () => {
-        InboxFox.playAnimation('Wave1');
-        InboxFox.ask('Hey! Need any help?', ['Yes Please!', 'No Thanks'], (choice) => {
-            if (choice.includes('No')) {
-                InboxFox.say('Okay, just let me know :)');
-            } else {
-                location.href = 'https://www.google.com/search?q=i+need+help';
-            }
-        }, true);
-    }
-}
 /////   #   #   #   #   #   #   #   #
 /////     Stuff to do on every page
 /////   #   #   #   #   #   #   #   #
@@ -1113,8 +1236,11 @@ window.addEventListener("load", (e) => {
     try {
         _('followup_reddot').style.display = (data.overall_data.follow_ups.length > 0) ? 'block' : 'none';
     } catch (e) { }
+    if (DEBUG_MODE) {
+        document.body.innerHTML += `<div id="debug-table"></div>`;
+    }
     if (FoxEnabled) {
         setupInboxFox();
+        handleDailyAndShiftlyNotifications();
     }
-    handleDailyAndShiftlyNotifications();
 });

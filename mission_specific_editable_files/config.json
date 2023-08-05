@@ -1,15 +1,14 @@
 {
     "inboxers" : {
-        "Hägersten" : ["500367156@missionary.org"],
-        "Handen" : ["216905511@missionary.org"],
-        "Vendelsö" : ["197971517@missionary.org"],
-        "Skellefteå" : ["8868621@missionary.org"],
-        "Alingsås" : ["66744624@missionary.org"],
-        "Kungsbacka" : ["500365898@missionary.org"],
-        "Trollhättan" : ["8868627@missionary.org"],
-        "Örnsköldsvik" : ["8868624@missionary.org"],
-        "Gävle" : ["115495285@missionary.org"],
-        "SMOEs" : ["141877743@missionary.org", "leader"]
+        "Hägersten" : { "email": "500367156@missionary.org", "color": "teal" },
+        "Borås" : { "email": "8868634@missionary.org", "color": "green" },
+        "Uppsala" : { "email": "115495100@missionary.org", "color": "red" },
+        "Skellefteå" : { "email": "8868621@missionary.org", "color": "orange" },
+        "Linköping" : { "email": "115496405@missionary.org", "color": "yellow" },
+        "Kristianstad" : { "email": "49896900@missionary.org", "color": "purple" },
+        "Örnsköldsvik" : { "email": "8868624@missionary.org", "color": "lavender" },
+        "Gävle" : { "email": "115495285@missionary.org", "color": "pink" },
+        "SMOEs" : { "email": "141877743@missionary.org", "color": "light-green" }
     },
     "decease reasons" : {
         "📵 Can't get in contact with them" : "can't contact",
@@ -21,8 +20,11 @@
         "📨 Item sent. They don't want contact" : "sent. want no contact"
     },
     "follow ups" : {
+        "enable follow ups" : true,
+        "area to take care of dead inboxing area follow ups" : "SMOEs",
         "initial delay after sent" : 7,
         "status delays" : {
+            "😭 Can't get in contact" : "Grey",
             "😢 Not interested in contact" : "Grey",
             "😫 Hasn't been contacted" : 3,
             "🤔 Hasn't responded" : 5,
@@ -37,8 +39,8 @@
         "4_message" : "https://docs.google.com/presentation/d/e/2PACX-1vSHTK-uV0xA990FekTpa9FrhO3SrhmqqFiP35ZW-0K2WSVK8I_wGWjUfHTvJYlMTomQNQZwTJ8hlUTe/pub?start=false&loop=false&delayms=3000",
         "5_comments" : "https://docs.google.com/presentation/d/e/2PACX-1vT62wTklkcNQivMqHtcI-no5CYLONuQFf4EXUFc69b-hDPJkJg4qYnH-nleWAee39QrwMs-WAk6djvg/pub?start=false&loop=false&delayms=3000",
         "6_report" : "https://docs.google.com/forms/d/e/1FAIpQLSdaxJWINeGqdQuNWPwCffSH5nT9txcjTr1IuB5IVWnBvspp9g/viewform?usp=pp_url&entry.1849769618={Area}",
-
-        "book or mormon delivery form" : "https://forms.gle/UH2vA9VrdA2jswpZ9",
+        
+        "book of mormon delivery form" : "https://forms.gle/UH2vA9VrdA2jswpZ9",
         "ad deck" : "https://docs.google.com/presentation/d/1vojptft9tOnyYQ2xpVd02hoqJ57liQlbXF0G5KAZTjI/edit?usp=sharing",
         "business suite help" : "https://docs.google.com/presentation/d/1ouB-232e9T56QpYYfWxIAjJeXRIVWB2KnUbWvh4F2cE/edit?usp=sharing"
     },
@@ -56,8 +58,6 @@
         "readonly data sheet link" : "https://docs.google.com/spreadsheets/d/1FqUcP4QpyKuk0-cywrrg1HDSXg5qgbPmlcFXHqBmVEc/edit#gid=1482684192",
         "table type" : "sql",
         "login pin" : "1022",
-        "enable FH referrals" : false,
-        "enable follow ups" : true,
         "tell backend system which area is inboxing" : true,
         "most common language in mission" : "Swedish"
     },
@@ -69,7 +69,8 @@
         "schedule range" : "C2:BI"
     },
     "InboxFox" : {
-        "enable" : false
+        "enable" : true,
+        "fox config" : "mission_specific_editable_files/fox.json"
     },
     "tableColumns" : {
         "type" : 0,

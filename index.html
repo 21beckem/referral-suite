@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
+    <script src="jsalert.js"></script>
     <script src="script.js"></script>
     <script src="fox.js"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
@@ -24,6 +25,19 @@
   background-size: 80vw;
   background-repeat: no-repeat;
   background-color: rgba(158,0,0,1);
+}
+#inbucksValue {
+  color: #508d00;
+}
+#inbucksValue::before {
+  font-size: 15px;
+  content: "$";
+  color: #508d009c;
+}
+#inbucksValue::after {
+  font-size: 15px;
+  content: "$";
+  color: transparent;
 }
     </style>
   </head>
@@ -64,6 +78,26 @@
       </table>
       <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
     </div>
+    <div class="w3-border-bottom w3-container" style="padding-bottom: 5px;">
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 60%; position: relative;">
+            <div id="streakBox">
+              <img src="img/streak1.png" alt="streak_ico" style="width: 100%;">
+              <a id="streakBoxNum" style="position:absolute; top: 0; left: 27px; font-size: 30px; color: #F203FF;">0</a>
+            </div>
+          </td>
+          <td style="width: 5%;"></td>
+          <td style="width: 30%; font-size: 25px;">
+            <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
+            <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
+          </td>
+        </tr>
+      </table>
+      <center>
+        <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
+      </center>
+    </div>
 
     <div class="w3-center w3-xlarge" style="margin-top: 15px;">Welcome to Referral Suite!</div>
     <div class="" style="text-align: center;">Here is a list of things to check (in order) during your inbox shift!</div>
@@ -98,7 +132,7 @@
               </a>
             </td>
             <td>
-              <a id="6_report" href="#">
+              <a id="6_report" onclick="sendToReportingForm()">
                 <div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');"></div>
               </a>
             </td>

@@ -1,0 +1,95 @@
+{
+    "general" : {
+        "delay between checking for new referrals (sec)" : 20,
+        "minimum delay between notifications (sec)" : 10
+    },
+    "reminders" : {
+        "begin with prayer" : [true, 0, 0.2],
+        "end with reporting" : [true, 0.8, 1],
+        "contact all claimed" : [true, 0.3, 9999],
+        "do daily standards" : [false, null, null]
+    },
+    "links" : {
+        "daily scripture table" : "https://docs.google.com/spreadsheets/d/16z4_8dK-2N7wr-CyuDZik7IB9KOQ00GGkH920QAn9Oc/edit#gid=0"
+    },
+
+    "sayings" : {
+        "prayer" : [
+            "Welcome to your inbox shift. Aren't you excited? I sure am! Have you started with a prayer?",
+            "It's time to get started inboxing! Let's get started with a prayer. Have you prayed yet?",
+            "Another day, another chance to serve! Let's get started. Have you begun with a prayer yet?",
+            "Oh boy, you again. I guess we're inboxing. Have you started with a prayer or what?",
+            "Let's get this shift started! No better way than with a prayer. Have you prayed yet?",
+            "Good, you're back! There are referrals who need you! Have you begun with a prayer?",
+            "More inboxing! What fun. Praying to start your shift is also fun. Want to give it a try?",
+            "I guess I'm stuck helping you again. Only if you've prayed into your shift. You have, haven't you?"
+        ],
+        "scripture" : [
+            "Okay! This is the Daily Scripture:",
+            "Great. Now we can read the Daily Scripture:",
+            "Perfect. Let's have a look at today's Daily Scripture:",
+            "Might as well look read today's Daily Scripture:",
+            "It's a bird, it's a plane, it's the Daily Scripture:",
+            "Behold, the Daily Scripture:",
+            "Scripture power! Try this Daily Scripture on for size:",
+            "Twould be cool if you read this Daily Scripture:"
+        ],
+        "new referral": [
+            "You have a new referral! You can claim it and get to contacting!",
+            "Quick, we have a new referral! Get it claimed and get it contacted!",
+            "Oh look, a new referral! Time to claim and contact them!",
+            "That's the new referral alarm! Quick, claim them and start contacting!",
+            "AAH! NEW REFERRAL! DON'T PANIC! Just claim and contact!",
+            "A new referral came in! Don't worry, claim and contact!",
+            "New referral! Remember your training! Get to contacting!",
+            "What are you doing?!? We have a new referral here! Hurry and contact them!",
+            "Oh cool, a new referral! Be sure to claim and contact them quick!"
+        ],
+        "contact claimed" : [
+            "Be sure to contact your claimed referrals! They need the gospel too!",
+            "Have you contacted your claimed referrals today? That sounds like a great idea!",
+            "You have a nice streak. Would be a shame if you lost it… Should contact all your referrals…",
+            "Contact a claimed referral, extend a streak. It's that easy. You should try it!",
+            "That sounds like uncontacted claimed referrals. They sound sad. You should say hi!",
+            "Contact your claimed referrals. Now.",
+            "You like your streak, I like referrals to be contacted. It's a win-win situation here…",
+            "I think you should contact your claimed referrals. They need your help!",
+            "Every referral counts, even your already claimed ones. You should contact them today!"
+        ],
+        "report" : [
+            "What an amazing shift. Don't forget to report!",
+            "Be sure to report so that we can record this awesome shift.",
+            "You know what would make this shift even better? Reporting it!",
+            "Thank you for such a great shift. Make sure you report it!",
+            "I am proud of you. Good work! How about you report it?",
+            "I am almost appeased by this inbox shift. I just need that report to be satisfied.",
+            "God is good, inboxing is fun, and reporting needs to be done. Get on it!",
+            "Another shift down! Well almost. You just need a report to finish it off!",
+            "Let's sing about how great reporting is! OOOOOH…."
+        ],
+        "encouragement" : [
+            "Excellent! Well done!",
+            "Nice! You deserve a cookie.",
+            "Keep up the good work!",
+            "You are doing great. Keep it up!",
+            "I would have done it differently, but whatever. Good job!",
+            "Good job! You are a pro at this!",
+            "MORE! I WANT MORE!",
+            "I am impressed. You are pretty good at this.",
+            "This is epic! Don't stop now!"
+        ],
+        "streak extended" : [
+            "Well done! Your streak has been extended!",
+            "Look at that beautiful streak! Nice job.",
+            "A contact a day keeps the streak okay!",
+            "Like the eagle, your streak flies onward. Good work.",
+            "Yet another extended streak! You're on a roll.",
+            "Keep up the good work. Your streak seems to like it!",
+            "Another streak extended, all in a day's work for you, huh?",
+            "Woo, your streak is long, great, yay.",
+            "Good job growing your streak. Be careful not to lose it!",
+            "I guess you want me to extend your streak. Fine. There you go.",
+            "Look at you, extending that streak. I am so proud!"
+        ]
+    }
+}

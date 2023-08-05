@@ -1,0 +1,20 @@
+Hej {first name}! Tack för att du svarade på vår annons om gratis hjälp med släktforskning! För att få kontakt med våra lokala representanter i {Area} behöver vi bara bekräfta din e-post. Är det: {email}?
+
+Mvh
+Vandra i tro
+
+
+
+
+Hej {first name}! Tack för att du svarade på vår annons om att få gratis hjälp med släktforskning. För att hänvisa dig till dina lokala representanter behöver vi bara bekräfta din adress. Bor du i {address}?
+
+Mvh
+Vandra i tro
+
+
+
+
+Hej {first name}! Är du fortfarande intresserad av att få gratis hjälp med släktforskning?
+
+Mvh
+Vandra i tro
