@@ -510,7 +510,7 @@ async function INSTANTSYNC_pingNF(thisDebug=false) {
             .then((response) => response.text())
             .then((txt) => {
                 //console.log('G_query-res', txt);
-                return parseInt(txt) > 0;
+                return parseInt(txt) > 0 && data.overall_data.new_referrals.length == 0;
             });
     } else {
         // Google Sheets
