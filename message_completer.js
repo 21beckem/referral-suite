@@ -4,7 +4,6 @@ const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')] 
 const templateMssg = (getCookie('completeThisMessage'));
 
 const ThingsToComplete = [...new Set( templateMssg.match(/{[^}]*}/gm) )];
-const MessageOutput = _('MessageOutput');
 
 //make a formated message ready to edit
 let newTmpMssg = templateMssg;
@@ -19,7 +18,7 @@ for (let i = 0; i < ThingsToComplete.length; i++) {
 	inputsOutput += '<label for="' + elShort + '">' + elShort.toTitleCase() + ' </label><br><input id="completerInputFor_'+el+'" autocomplete="nope" oninput="updateField(this)" onfocus="focusThisFieldInMssg(this)" name="' + elShort + '" type="text"><br>';
 }
 newTmpMssg = newTmpMssg.replace(/(?:\r\n|\r|\n)/g, '<br>');
-MessageOutput.innerHTML = newTmpMssg;
+_('MessageOutput').innerHTML = newTmpMssg;
 _('completerItemsParent').innerHTML = inputsOutput;
 
 function focusThisFieldInMssg(el) {
@@ -39,7 +38,7 @@ function updateField(el) {
 
 function sendTheMessage() {
 	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
-	const sendLink = link_beginning + encodeURI(MessageOutput.innerText);
+	const sendLink = link_beginning + encodeURI(_('MessageOutput').innerText);
 	_('fakeLinkToClickToSend').href = sendLink;
 	let listOfIns = _('completerItemsParent').querySelectorAll('INPUT');
 	let send = true;
