@@ -982,7 +982,7 @@ function FORCEsyncPageFillIn() {
 }
 function syncButton(el) {
     SYNC().then(() => {
-        //safeRedirect(el.getAttribute('href'));
+        safeRedirect(el.getAttribute('href'));
     });
 }
 function sendToAnotherArea() {
