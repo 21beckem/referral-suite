@@ -95,31 +95,33 @@ function clearAllLocalSyncDataAndSync() {
     customAlert.addButton("No");
     customAlert.show();
 }
-window.console.log = function () {
-    if (_('debug-table')) {
-        let argsArr = Array();
-        let OBJ_ids = Array();
-        for (const message of arguments) {
-            if (typeof message == 'object') {
-                let i = window.numForLoggingThings || 0;
-                argsArr.push( '<div id="loggingOBJs_'+i+'"><div>' );
-                OBJ_ids.push(['loggingOBJs_'+i, message]);
-                window.numForLoggingThings = i + 1;
-            } else {
-                argsArr.push( message );
+function setConsoleDotLogToDebug() {
+    window.console.log = function () {
+        if (_('debug-table')) {
+            let argsArr = Array();
+            let OBJ_ids = Array();
+            for (const message of arguments) {
+                if (typeof message == 'object') {
+                    let i = window.numForLoggingThings || 0;
+                    argsArr.push( '<div id="loggingOBJs_'+i+'"><div>' );
+                    OBJ_ids.push(['loggingOBJs_'+i, message]);
+                    window.numForLoggingThings = i + 1;
+                } else {
+                    argsArr.push( message );
+                }
             }
+            const DB = _('debug-table');
+            DB.classList.add('active');
+            DB.innerHTML += `<div class="item">
+                <div class="msg">` + argsArr.join(', ') + `</div>
+                <div class="link">log</div>
+            </div>`;
+            OBJ_ids.forEach((x)=> {
+                new JsonViewer({
+                    value: x[1]
+                }).render(x[0]);
+            });
         }
-        const DB = _('debug-table');
-        DB.classList.add('active');
-        DB.innerHTML += `<div class="item">
-            <div class="msg">` + argsArr.join(', ') + `</div>
-            <div class="link">log</div>
-        </div>`;
-        OBJ_ids.forEach((x)=> {
-            new JsonViewer({
-                value: x[1]
-            }).render(x[0]);
-        });
     }
 }
 function _(x) { return document.getElementById(x); }
@@ -171,7 +173,7 @@ async function SYNC(loadingCover = true) {
 
     // if debug mode, print EVERYTHING
     if (DEBUG_MODE) {
-        setConsoleDotLogToDebug();
+        //setConsoleDotLogToDebug();
     }
 
     await SYNC_getConfig();
