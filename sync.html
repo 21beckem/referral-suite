@@ -16,17 +16,22 @@
     <script src="script.js"></script>
     <script src="fox.js"></script>
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@textea/json-viewer@3"></script> -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
     <style>
-#debug-mode-box {
-  margin-top: 40px;
+.sync-page-extra {
+  margin-top: 25px;
   color: var(--black);
   display: flex;
 }
-#debug-mode-box label {
+.sync-page-extra label {
   flex: 1;
+  opacity: 0.7;
+}
+.sync-page-extra .help {
+  flex: 2;
   opacity: 0.7;
 }
     </style>
@@ -53,12 +58,19 @@
     
 
     <!-- Claim button -->
-    <div class="w3-container w3-center" style="margin-top:90px">
+    <div class="w3-container w3-center" style="margin-top:90px; margin-bottom:50px">
         <button id="syncBtn" onclick="syncButton(this)" href="index.html"></button>
     </div>
 
-    <div id="debug-mode-box" class="w3-container">
+    <div class="sync-page-extra w3-container">
       <label for="debug-mode-switch">Enable debug mode</label><input id="debug-mode-switch" name="debug-mode-switch" class="switch" type="checkbox" oninput="setDebugMode(this.checked)">
+    </div>
+    <div class="sync-page-extra w3-container">
+      <label for="debug-mode-switch">Full Reset</label>
+      <div class="help">
+        <i class="fa-solid fa-circle-question" onclick="JSAlert.alert('This completely clears all the info your phone has locally downloaded in Referral Suite. Use this if you\'re having syncing issues.')"></i>
+      </div>
+      <button onclick="clearAllLocalSyncDataAndSync()">Go</button>
     </div>
 
     <!-- Bottom Nav Bar -->

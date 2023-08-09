@@ -80,6 +80,48 @@ function saveBeforeInfoPage(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
+function clearAllLocalSyncDataAndSync() {
+    let customAlert = new JSAlert("Are you sure? This will erase all locally changed data and force Referral Suite to re-sync.");
+    customAlert.addButton("Yes").then(function() {
+        SheetMap.load();
+        SheetMap.setChangedCells({});
+        localStorage.removeItem('localFox');
+        localStorage.removeItem('debug-mode');
+        setCookie('dataSync', null);
+        //setCookie('areaUser', '');
+        //setCookie('areaUserEmail', '');
+        safeRedirect('force-sync.html');
+    });
+    customAlert.addButton("No");
+    customAlert.show();
+}
+window.console.log = function () {
+    if (_('debug-table')) {
+        let argsArr = Array();
+        let OBJ_ids = Array();
+        for (const message of arguments) {
+            if (typeof message == 'object') {
+                let i = window.numForLoggingThings || 0;
+                argsArr.push( '<div id="loggingOBJs_'+i+'"><div>' );
+                OBJ_ids.push(['loggingOBJs_'+i, message]);
+                window.numForLoggingThings = i + 1;
+            } else {
+                argsArr.push( message );
+            }
+        }
+        const DB = _('debug-table');
+        DB.classList.add('active');
+        DB.innerHTML += `<div class="item">
+            <div class="msg">` + argsArr.join(', ') + `</div>
+            <div class="link">log</div>
+        </div>`;
+        OBJ_ids.forEach((x)=> {
+            new JsonViewer({
+                value: x[1]
+            }).render(x[0]);
+        });
+    }
+}
 function _(x) { return document.getElementById(x); }
 function _CONFIG() {
     return getCookieJSON('CONFIG') || null;
@@ -125,6 +167,11 @@ async function SYNC(loadingCover = true) {
     }
     if (loadingCover) {
         _('loadingcover').style.display = '';
+    }
+
+    // if debug mode, print EVERYTHING
+    if (DEBUG_MODE) {
+        setConsoleDotLogToDebug();
     }
 
     await SYNC_getConfig();
@@ -933,7 +980,7 @@ function FORCEsyncPageFillIn() {
 }
 function syncButton(el) {
     SYNC().then(() => {
-        safeRedirect(el.getAttribute('href'));
+        //safeRedirect(el.getAttribute('href'));
     });
 }
 function sendToAnotherArea() {

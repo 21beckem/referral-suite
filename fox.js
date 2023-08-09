@@ -166,7 +166,7 @@ function handleDailyAndShiftlyNotifications() {
     // remember to end with reporting
     remindThisWithFox('end with reporting', () => {
         InboxFox.playAnimation('Have you reported?');
-        InboxFox.ask( randomFoxSayingOnTopic('report') , ['Yes!', 'Take me to it!'], (choice) => {
+        InboxFox.ask( randomFoxSayingOnTopic('report') , ['Already Done!', 'Take me to it!'], (choice) => {
             if (choice.includes('Yes')) {
                 InboxFox.say( randomFoxSayingOnTopic('encouragement') );
             } else {
