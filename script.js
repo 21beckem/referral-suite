@@ -670,7 +670,7 @@ function getOldestClaimedPerson() {
     let currentOldest = peeps[0];
     for (let i = 0; i < peeps.length; i++) {
         const per = peeps[i];
-        if (new Date(per[CONFIG['tableColumns']['date']]) < currentOldest[CONFIG['tableColumns']['date']]) {
+        if (new Date(per[CONFIG['tableColumns']['date']]).getTime() < new Date(currentOldest[CONFIG['tableColumns']['date']]).getTime()) {
             currentOldest = per;
         }
     }
