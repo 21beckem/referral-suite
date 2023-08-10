@@ -65,7 +65,8 @@ function didIJustContactEveryoneINeedToForToday() {
     }
     // increase streak num and last day
     const d = new Date();
-    data.fox.streak.unshift( d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate() );
+    data.fox.new_streak = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    data.fox.streak.unshift( data.fox.new_streak );
     setCookieJSON('dataSync', data);
     InboxFox.playAnimation('Excited');
     InboxFox.playLargeRive('streak-maintained1.riv', 'State Machine 1');
@@ -91,6 +92,13 @@ function secondsSinceDate(before) {
 }
 function beenEnoughTimeSinceLastNotification() {
     return secondsSinceDate(localFox.lastNotificationGiven) > FOX_CONFIG['general']['minimum delay between notifications (sec)'];
+}
+function setAddFoxPoints(num) {
+    data.fox.points += num;
+    if (!data.fox.hasOwnProperty('new_points')) {
+        data.fox.new_points = 0;
+    }
+    data.fox.new_points += num;
 }
 function remindThisWithFox(remId, ifShouldFunction) {
     if (!beenEnoughTimeSinceLastNotification()) {

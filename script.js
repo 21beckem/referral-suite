@@ -405,12 +405,10 @@ function decodeFox(arr) {
         return defaultFox;
     } else {
         try {
-            return JSON.parse( CryptoJS.AES.decrypt(arr[0], arr[1]).toString(CryptoJS.enc.Utf8) );
-            return JSON.parse(
-                decodeURIComponent(atob(arr[0]).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''))
-            );
+            const j = JSON.parse( CryptoJS.AES.decrypt(arr[0], arr[1]).toString(CryptoJS.enc.Utf8) );
+            delete j.new_points;
+            delete j.new_streak;
+            return j;
         } catch (e) {
             return defaultFox;
         }
@@ -816,7 +814,7 @@ function fillInHomePage() {
 }
 function sendToReportingForm() {
     if (!localFox.dailyPointsReceived.includes('reported')) {
-        data.fox.points += 5;
+        setAddFoxPoints(5);
         localFox.dailyPointsReceived.push('reported');
         setCookieJSON('localFox', localFox);
         setCookieJSON('dataSync', data);
@@ -998,7 +996,7 @@ function sendToAnotherArea() {
     person[CONFIG['tableColumns']['teaching area']] = newArea;
 
     //givePoints
-    data.fox.points += 10;
+    setAddFoxPoints(10);
     setCookieJSON('dataSync', data);
 
     // follow up
@@ -1038,7 +1036,7 @@ function saveFollowUpForm() {
     const status = document.getElementById('statusdropdown').value;
 
     //givePoints
-    data.fox.points += 3;
+    setAddFoxPoints(3);
     setCookieJSON('dataSync', data);
 
     let clickedOption = Object.keys(CONFIG['follow ups']['status delays'])[parseInt(status)];
@@ -1214,7 +1212,7 @@ function claimPerson() {
     } else if (timeDiff < 20) {
         pnts = 6;
     }
-    data.fox.points += pnts;
+    setAddFoxPoints(pnts);
     setCookieJSON('dataSync', data);
 
     person[CONFIG['tableColumns']['claimed area']] = area;
