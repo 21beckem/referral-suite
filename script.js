@@ -301,6 +301,7 @@ async function SYNC_getConfig() {
 async function SYNC_referralSuiteStuff() {
     if (data != null) {
         delete data.overall_data;
+        delete data.area_specific_data;
     }
     if (_CONFIG()['overall settings']['table type'].toLowerCase().includes('sql')) {
         await sortOfSYNC_UseSQL();
