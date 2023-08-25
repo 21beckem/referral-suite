@@ -1108,6 +1108,9 @@ function logAttempt(y) {
     try {
         al = JSON.parse(person[CONFIG['tableColumns']['attempt log']]);
     } catch(e) {}
+    if (x > al.length) {
+        return false; // person is older than the amount of days in attempt log
+    }
     al[x][y] = 1;
     person[CONFIG['tableColumns']['attempt log']] = JSON.stringify(al);
 
