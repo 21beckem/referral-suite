@@ -14,12 +14,15 @@
     --call-color: #4CAF50;
     --light-grey: #f1f1f1;
 }
-.w3-spin-centered{
-    animation: w3-spin-centered 2s infinite cubic-bezier(0.52, -0.41, 0.45, 1.42);
-}
-@keyframes w3-spin-centered {
-    0%{transform:translate(-50%, -50%) rotate(0deg)}
-    100%{transform:translate(-50%, -50%) rotate(359deg)}
+.purpleBtn {
+    background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
+    background-color: #BBA7DA;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 3px;
+    color: #fff;
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
 }
 #loadingcover > div {
     height: 100%;

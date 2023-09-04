@@ -1,3 +1,6 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,8 +15,6 @@
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
-    <script src="script.js"></script>
-    <script src="fox.js"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
