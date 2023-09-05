@@ -3,6 +3,7 @@
     --black: black;
     --white: white;
     --red: rgb(158,0,0);
+    --pure-red: rgb(225, 0, 0);
     --warning-red: #d42121;
     --warning-orange: #d87300;
     --all-good-green: #058d00;
@@ -15,19 +16,35 @@
     --light-grey: #f1f1f1;
 }
 .business-suite {
-    padding-top: 34px;
+    margin-top: 3px;
+    padding-bottom: 0px;
     font-style: normal;
-    font-size: 24px;
     display: block;
-    width: 1.2em;
-    height: 1em;
+    width: 100%;
+    height: 35px;
     background-image: url(img/business-suite.svg);
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center 4px;
+    background-position: center;
 }
 .w3-text-area-blue a .business-suite {
     filter: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
+}
+.bottomNavBtnParent {
+    text-align: center;
+    float: left;
+    width: calc(100% / 5);
+    font-size: 27px;
+}
+#BottomNavBar {
+    background-color: #f1f1f1;
+    color: #000;
+    bottom: -5px;
+    position: fixed;
+    width: 100%;
+}
+.bottomNavBtnParent a div {
+    opacity: 0 !important;
 }
 .purpleBtn {
     background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
@@ -120,10 +137,10 @@
     background-color: var(--light-blue) !important;
 }
 .w3-red {
-    background-color: var(--red) !important;
+    background-color: var(--pure-red) !important;
 }
 .w3-text-red {
-    color: var(--red) !important;
+    color: var(--pure-red) !important;
 }
 
 .w3-dot {
@@ -143,7 +160,8 @@
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    transform: translate(7px, -31px);    
+    transform: translate(12px, -36px);
+    box-shadow: 0px 0px 10px -2px black;
 }
 
 .w3-sync-claim {
