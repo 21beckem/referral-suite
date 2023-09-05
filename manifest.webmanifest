@@ -1,8 +1,8 @@
 {
-    "description": "Manage SSM Referrals so simply!",
-    "name": "Referral Suite Manager",
+    "description": "Manage Social-Media Referrals so simply!",
+    "name": "Referral Suite",
     "short_name": "Referral Suite",
-    "start_url": "index.html",
+    "start_url": "index.php",
     "display": "standalone",
     "background_color": "#7347B2",
     "orientation": "portrait-primary",

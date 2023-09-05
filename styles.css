@@ -14,6 +14,21 @@
     --call-color: #4CAF50;
     --light-grey: #f1f1f1;
 }
+.business-suite {
+    padding-top: 34px;
+    font-style: normal;
+    font-size: 24px;
+    display: block;
+    width: 1.2em;
+    height: 1em;
+    background-image: url(img/business-suite.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center 4px;
+}
+.w3-text-area-blue a .business-suite {
+    filter: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
+}
 .purpleBtn {
     background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
     background-color: #BBA7DA;
