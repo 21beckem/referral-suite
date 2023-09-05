@@ -1,5 +1,7 @@
 <?php
 require_once('require_area.php');
+
+$myrefs = getClaimed();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +17,7 @@ require_once('require_area.php');
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
+    <script src="everyPageFunctions.js"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
@@ -174,7 +177,7 @@ require_once('require_area.php');
     <div id="BottomNavBar">
 
       <div class="bottomNavBtnParent w3-text-area-blue">
-        <a href="index.html">
+        <a href="index.php">
           <i class="fa fa-home"></i>
           <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
         </a>
@@ -218,7 +221,73 @@ require_once('require_area.php');
 
 
     <script>
-      fillInHomePage()
+const my_referrals = <?php echo(json_encode($myrefs)); ?>;
+let maxRefsAllowed = 15;
+const currentRefCount = my_referrals.length;
+
+
+let totReferralsBar = _("totReferralsBar");
+let totReferrals = _("totReferrals");
+
+totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
+
+totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
+
+if (currentRefCount >= maxRefsAllowed) {
+    totReferrals.classList.add('w3-text-red');
+}
+let maxRefAge = 7;
+if (my_referrals.length > 0) {
+    let oldReferralBar = _("oldReferralBar");
+    let oldReferral = getOldestClaimedPerson()[2];
+    let today = new Date();
+    let oldDate = new Date(oldReferral);
+    let dayDifference = Math.round((today.getTime() - oldDate.getTime()) / (1000 * 60 * 60 * 24));
+    oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
+
+    _("agebyday").innerHTML = dayDifference + '/' + maxRefAge;
+
+    if (dayDifference >= maxRefAge) {
+        _("agebyday").classList.add('w3-text-red');
+    }
+} else {
+    _("agebyday").innerHTML = '0/' + maxRefAge;
+}
+// _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
+// _('adDeck').href = CONFIG['home page links']['ad deck'];
+// _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
+// setHomeBigBtnLink('1_sync');
+// setHomeBigBtnLink('2_contact');
+// setHomeBigBtnLink('3_log');
+// setHomeBigBtnLink('4_message');
+// setHomeBigBtnLink('5_comments');
+
+/*let streakBoxFilter = '';
+switch (foxStreakExtendingStatus()) {
+    case 'done for today':
+        streakBoxFilter = '';
+        break;
+    case 'can extend':
+        streakBoxFilter = 'grayscale(0.8) opacity(0.8)';
+        break;
+
+    default:
+        streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
+}
+_('streakBox').style.filter = streakBoxFilter;*/
+_('streakBoxNum').innerHTML = <?php echo(json_encode($__TEAM->fox_streak)); ?>.length;
+_('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
+
+function getOldestClaimedPerson() {
+    let currentOldest = my_referrals[0];
+    for (let i = 0; i < my_referrals.length; i++) {
+        const per = my_referrals[i];
+        if (new Date(per[2]).getTime() < new Date(currentOldest[2]).getTime()) {
+            currentOldest = per;
+        }
+    }
+    return currentOldest;
+}
     </script>
     
   </body>
