@@ -274,7 +274,7 @@ switch (foxStreakExtendingStatus()) {
         streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
 }
 _('streakBox').style.filter = streakBoxFilter;*/
-_('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>.length;
+_('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>;
 _('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
 function setHomeBigBtnLink(elId) {
