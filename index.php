@@ -199,7 +199,7 @@ $myrefs = getClaimed();
       </div>
 
       <div class="bottomNavBtnParent">
-        <a href="unclaimed_referrals.html">
+        <a href="unclaimed_referrals.php">
           <i class="fa fa-bell"></i>
           <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
         </a>
@@ -274,7 +274,7 @@ switch (foxStreakExtendingStatus()) {
         streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
 }
 _('streakBox').style.filter = streakBoxFilter;*/
-_('streakBoxNum').innerHTML = <?php echo(json_encode($__TEAM->fox_streak)); ?>.length;
+_('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>.length;
 _('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
 function setHomeBigBtnLink(elId) {

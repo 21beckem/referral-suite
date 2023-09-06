@@ -68,3 +68,34 @@ function setCookieJSON(x, y) {
     return setCookie(x, JSON.stringify(y));
 }
 function _(x) { return document.getElementById(x); }
+function saveToLinkPagesThenRedirect(person, el) {
+    setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
+}
+const TableColumns = {
+    "type" : 0,
+    "id" : 1,
+    "date" : 2,
+    "sent status" : 3,
+    "claimed area" : 4,
+    "teaching area" : 5,
+    "AB status" : 6,
+    "first name" : 7,
+    "last name" : 8,
+    "phone" : 9,
+    "email" : 10,
+    "street address" : 11,
+    "city" : 12,
+    "zip" : 13,
+    "lang" : 14,
+    "referral origin" : 15,
+    "ad name" : 16,
+    "next follow up" : 17,
+    "follow up status" : 18,
+    "amount of times followed up" : 19,
+    "sent date" : 20,
+    "not interested reason" : 21,
+    "attempt log" : 22,
+    "help request" : 23,
+    "experience" : 24
+}
