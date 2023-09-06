@@ -99,3 +99,19 @@ const TableColumns = {
     "help request" : 23,
     "experience" : 24
 }
+
+// not so EVERYpage functions but nice to have on every page
+function hasPersonBeenContactedToday(per) {
+    try {
+        let todaysI = getTodaysInxdexOfAttempts(per);
+        if (per[ TableColumns['attempt log'] ] == '') { return false }
+        let log = JSON.parse(per[ TableColumns['attempt log'] ])[todaysI];
+        return !(log[0]==0 && log[1]==0 && log[2]==0);
+    } catch (e) {}
+    return true;
+}
+function getTodaysInxdexOfAttempts(per) {
+    let sentDate = new Date(per[ TableColumns['date'] ]);
+    sentDate.setHours(0,0,0,0);
+    return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
+}

@@ -44,7 +44,8 @@
         return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Referral Sent`="Not sent" AND `Claimed`="'.$__TEAM->id.'"');
     }
     function getFollowUps() {
-
+        global $__MISSIONINFO, $__TEAM;
+        return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Next Follow Up` <= CURRENT_TIME');
     }
 
 ?>
