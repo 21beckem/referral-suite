@@ -251,15 +251,15 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
-const CONFIG = <?php echo(json_encode($myrefs)); ?>;
-// _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
-// _('adDeck').href = CONFIG['home page links']['ad deck'];
-// _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
-// setHomeBigBtnLink('1_sync');
-// setHomeBigBtnLink('2_contact');
-// setHomeBigBtnLink('3_log');
-// setHomeBigBtnLink('4_message');
-// setHomeBigBtnLink('5_comments');
+const CONFIG = <?php echo(json_encode($__CONFIG)); ?>;
+_('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
+_('adDeck').href = CONFIG['home page links']['ad deck'];
+_('gToBusSuite').href = CONFIG['home page links']['business suite help'];
+setHomeBigBtnLink('1_sync');
+setHomeBigBtnLink('2_contact');
+setHomeBigBtnLink('3_log');
+setHomeBigBtnLink('4_message');
+setHomeBigBtnLink('5_comments');
 
 /*let streakBoxFilter = '';
 switch (foxStreakExtendingStatus()) {
@@ -277,6 +277,23 @@ _('streakBox').style.filter = streakBoxFilter;*/
 _('streakBoxNum').innerHTML = <?php echo(json_encode($__TEAM->fox_streak)); ?>.length;
 _('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
+function setHomeBigBtnLink(elId) {
+    let link = CONFIG['home page links'][elId];
+    const el = _(elId);
+    if (link.includes('www.canva.com') || link.includes('docs.google.com/presentation')) {
+        el.setAttribute('onclick', "openGoogleSlides('" + link + "')");
+    } else if (!link.startsWith('http')) {
+        el.href = link;
+    } else {
+        console.log('Unrecognized presentation link. Will open in new tab:' + link);
+        el.href = link.replace("{Area}", area);
+        el.setAttribute('target', '_blank');
+    }
+}
+function openGoogleSlides(link) {
+    setCookie('openThisSlides', link);
+    safeRedirect('view_google_slides.html');
+}
 function getOldestClaimedPerson() {
     let currentOldest = my_referrals[0];
     for (let i = 0; i < my_referrals.length; i++) {
