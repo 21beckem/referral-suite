@@ -1,6 +1,7 @@
 <?php
   session_start();
   setcookie('teamId', '', -1, '/');
+  setcookie('__TEAM', '', -1, '/');
   if (!isset($_COOKIE['missionInfo'])) {
     header('location: sign_in.php');
   }
@@ -78,7 +79,7 @@ function signOutOfMission() {
     if (res) {
       location.href = 'sign_in.php';
     }
-  })
+  });
 }
     </script>
   </body>

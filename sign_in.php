@@ -17,7 +17,7 @@ if (!empty($_POST)) {
                 setcookie('missionInfo', json_encode((object) [
                     "name" => $readRes[0][1],
                     "mykey" => $readRes[0][3]
-                ]), time() + (10 * 365 * 24 * 60 * 60), '/');
+                ]), time() + (86400 * 365), "/"); // 86400 = 1 day
                 //var_dump($_COOKIE['missionInfo']);
                 header('location: login.php');
             }

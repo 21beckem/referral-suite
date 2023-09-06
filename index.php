@@ -166,10 +166,8 @@ $myrefs = getClaimed();
       </a>
     </div>
 
-    <!-- Sign Out Button -->
-    <button onclick="doubleCheckSignOut(this)" href="login.html" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">
-      Sign Out
-    </button>
+    <!-- Logout Button -->
+    <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
 
 
     <!-- Bottom Nav Bar -->
@@ -253,6 +251,7 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
+const CONFIG = <?php echo(json_encode($myrefs)); ?>;
 // _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
 // _('adDeck').href = CONFIG['home page links']['ad deck'];
 // _('gToBusSuite').href = CONFIG['home page links']['business suite help'];
@@ -287,6 +286,13 @@ function getOldestClaimedPerson() {
         }
     }
     return currentOldest;
+}
+function doubleCheckLogout() {
+  JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {
+    if (res) {
+      location.href = 'login.php';
+    }
+  });
 }
     </script>
     

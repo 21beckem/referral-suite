@@ -44,7 +44,7 @@
     width: 100%;
 }
 .bottomNavBtnParent a div {
-    opacity: 0 !important;
+    display: none;
 }
 .purpleBtn {
     background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
