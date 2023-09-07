@@ -116,12 +116,6 @@ function getTodaysInxdexOfAttempts(per) {
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
 window.addEventListener("load", (e) => {
-    try {
-        _('reddot').style.display = (parseInt(document.currentScript.getAttribute('unclaimed')) > 0) ? 'block' : 'none';
-    } catch (e) { }
-    try {
-        _('followup_reddot').style.display = (parseInt(document.currentScript.getAttribute('follow-ups')) > 0) ? 'block' : 'none';
-    } catch (e) { }
     // if (DEBUG_MODE) {
     //     document.body.innerHTML += `<div id="debug-table"></div>`;
     // }
