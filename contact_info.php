@@ -1,3 +1,6 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +16,7 @@
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
-    <script src="everyPageFunctions.js"></script>
+    <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
@@ -167,53 +170,87 @@
 
 
 
-   <!-- Bottom Nav Bar -->
-   <div style="height: 80px;"></div>
-   <div id="BottomNavBar">
+  <!-- Bottom Nav Bar -->
+  <?php
+  require_once('make_bottom_nav.php');
+  make_bottom_nav(1);
+  ?>
+  <script>
+function fillInAttemptLog() {
+  let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+  let al = Array(7).fill([0, 0, 0]);
+  try {
+    al = JSON.parse(person[TableColumns['attempt log']]);
+  } catch (e) {
+    person[TableColumns['attempt log']] = JSON.stringify(al);
+  }
 
-     <div class="bottomNavBtnParent">
-       <a href="index.php">
-         <i class="fa fa-home"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-       </a>
-     </div>
+  // make days of the week start on right day
+  let startDay = new Date(person[TableColumns['date']]);
+  const shorterDays = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun', 'mon'];
+  let daysString = '<td></td>';
+  for (let i = 0; i < 7; i++) {
+    daysString += '<td>' + shorterDays[startDay.getDay() + i] + '</td>';
+  }
+  _('attemptLog_weekdays').innerHTML = daysString;
 
-     <div class="bottomNavBtnParent">
-       <a href="schedule.html">
-         <i class="fa fa-calendar-o"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-       </a>
-     </div>
+  //set dot colors
+  for (let i = 0; i < al.length; i++) {
+    for (let j = 0; j < al[i].length; j++) {
+      if (al[i][j] == 1) {
+        _('attemptLogDot_' + j + ',' + i).classList.add('contactDotBeenAttempted');
+      }
+    }
+  }
 
-     <div class="bottomNavBtnParent w3-text-area-blue">
-       <a href="contact_book.php">
-         <i class="fa fa-address-book"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-       </a>
-       <div style="height: 0; width: 100%;">
-         <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-       </div>
-     </div>
+  //highlight todays thing
+  try {
+    let todaysI = getTodaysInxdexOfAttempts(person);
+    _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
+    for (let i = 0; i < 7; i++) {
+      _('attemptLogDot_0,' + i).disabled = (i!=todaysI);
+      _('attemptLogDot_1,' + i).disabled = (i!=todaysI);
+      _('attemptLogDot_2,' + i).disabled = (i!=todaysI);
+    }
+  } catch (e) {}
+}
+function fillInContactInfo() {
+  const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+  _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
+  //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
+  //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
+  //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
+  const numb = person[TableColumns['phone']].trim();
 
-     <div class="bottomNavBtnParent">
-       <a href="unclaimed_referrals.php">
-         <i class="fa fa-bell"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-       </a>
-       <div style="height: 0; width: 100%;">
-         <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-       </div>
-     </div>
+  _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
+  _('referralorigin').innerHTML = prettyPrintRefOrigin(person[TableColumns['referral origin']]);
+  if (numb == '') {
+    // no number
+    _('phonenumber').innerHTML = 'Undefined';
+    _('telnumber').classList.add('disabled');
+    _('smsnumber').classList.add('disabled');
+  } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
+    let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
+    _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
+  } else {
+    _('phonenumber').innerHTML = numb;
+  }
+  _('email').innerHTML = person[TableColumns['email']];
+  let addStr = person[TableColumns['street address']] + ' ' + person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
+  _('address').innerHTML = addStr;
+  _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
+  _('adName').innerHTML = person[TableColumns['ad name']];
+  _('adDeck').href = CONFIG['home page links']['ad deck'];
+  _('prefSprak').innerHTML = (person[TableColumns['lang']] == "") ? "Undeclared" : person[TableColumns['lang']];
+  if (person[TableColumns['type']].toLowerCase().includes('family history')) {
+    _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
+  }
+  fillInAttemptLog();
+}
 
-     <div class="bottomNavBtnParent">
-       <a href="sync.html">
-         <i class="business-suite"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-       </a>
-     </div>
 
-   </div>
-   <script>fillInContactInfo()</script>
+fillInContactInfo()  
+  </script>
 
   </body>
 </html>

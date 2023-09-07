@@ -15,7 +15,7 @@ require_once('require_area.php');
   <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
   <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
   <script src="jsalert.js"></script>
-  <script src="everyPageFunctions.js"></script>
+  <script src="everyPageFunctions.php"></script>
   <script src="fox.js"></script>
   <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -56,10 +56,9 @@ require_once('require_area.php');
     make_bottom_nav(4);
     ?>
   <script>
-const arr = <?php echo(json_encode( getUnclaimed() )); ?>;
 let output = '';
-for (let i = 0; i < arr.length; i++) {
-  const per = arr[i];
+for (let i = 0; i < UNCLAIMED.length; i++) {
+  const per = UNCLAIMED[i];
   let dotStyle = `<div class="w3-bar-item w3-circle">
       <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
   </div>`;

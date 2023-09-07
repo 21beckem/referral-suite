@@ -1,7 +1,5 @@
 <?php
 require_once('require_area.php');
-
-$myrefs = getClaimed();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +15,7 @@ $myrefs = getClaimed();
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
-    <script src="everyPageFunctions.js"></script>
+    <script src="everyPageFunctions.php"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
@@ -177,7 +175,7 @@ $myrefs = getClaimed();
     ?>
 
     <script>
-const my_referrals = <?php echo(json_encode($myrefs)); ?>;
+const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;
 const currentRefCount = my_referrals.length;
 
@@ -209,7 +207,6 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
-const CONFIG = <?php echo(json_encode($__CONFIG)); ?>;
 _('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
 _('adDeck').href = CONFIG['home page links']['ad deck'];
 _('gToBusSuite').href = CONFIG['home page links']['business suite help'];

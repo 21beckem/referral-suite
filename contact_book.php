@@ -15,7 +15,7 @@ require_once('require_area.php');
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
-    <script src="everyPageFunctions.js"></script>
+    <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
@@ -46,10 +46,8 @@ require_once('require_area.php');
 
    </div>
    <script>
-const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
-const follow_ups = <?php echo(json_encode( getFollowUps() )); ?>;
-makeListClaimedPeople(my_referrals);
-makeListFollowUpPeople(follow_ups);
+makeListClaimedPeople(CLAIMED);
+makeListFollowUpPeople(FOLLOW_UPS);
 
 function makeListClaimedPeople(arr) {
   let output = '';
@@ -57,7 +55,7 @@ function makeListClaimedPeople(arr) {
     const per = arr[i];
     let dotStyle = `<div class="w3-bar-item w3-circle">
         <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
-    let nextPage = 'contact_info.html';
+    let nextPage = 'contact_info.php';
     if (!hasPersonBeenContactedToday(per)) {
         dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
     }

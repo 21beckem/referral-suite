@@ -1,3 +1,15 @@
+<?php
+require_once('require_area.php');
+header('Content-Type: application/javascript');
+?>;
+const MISSIONINFO = <?php echo(json_encode( $__MISSIONINFO )) ?>;
+const TEAM = <?php echo(json_encode( $__TEAM )) ?>;
+const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
+const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
+const CLAIMED = <?php echo(json_encode( getClaimed() )) ?>;
+const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
+
+
 function inIframe() { try { return window.self !== window.top; } catch (e) { return true; } }
 HTMLCollection.prototype.forEach = function (x) {
     return Array.from(this).forEach(x);
@@ -114,6 +126,9 @@ function getTodaysInxdexOfAttempts(per) {
     let sentDate = new Date(per[ TableColumns['date'] ]);
     sentDate.setHours(0,0,0,0);
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
+}
+function idToReferral(id) {
+    return 
 }
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {
