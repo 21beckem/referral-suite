@@ -93,7 +93,29 @@
 
    </div>
    <script>
-fillInHelpBeforeCallPage();
+const person = idToReferral(getCookieJSON('linkPages'));
+let link = CONFIG['tips before calling'][person[TableColumns['type']]];
+if (link == undefined) {
+  _('loadingAnim').innerHTML = '<center><h3>No Help Presentation</h3><p>Contact your team leader to get one added!</p><center>';
+} else {
+  if (link.includes('www.canva.com')) {
+    link = link.substr(0, link.lastIndexOf("/")) + '/view?embed';
+  } else if (link.includes('docs.google.com')) {
+    link = link.substr(0, link.lastIndexOf("/")) + '/embed';
+  } else {
+    console.error('Unrecognized presentation link. Will open in new tab:' + link);
+  }
+  
+  _('google_slides_import').src = link;
+}
+function callThenGoBack() {
+  const person = idToReferral(getCookieJSON('linkPages'));
+  logAttempt(0);
+  localStorage.setItem('justAttemptedContact', '1');
+  window.open('tel:+' + person[TableColumns['phone']], '_blank');
+  safeRedirect('contact_info.html');
+}
+
    </script>
 
   </body>

@@ -61,7 +61,7 @@ function makeListClaimedPeople(arr) {
     }
     dotStyle += `</div>`;
     const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-    output += `<aa onclick="saveToLinkPagesThenRedirect(` + i + `, this)" href="` + nextPage + `" class="person-to-click">
+    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="` + nextPage + `" class="person-to-click">
       <div class="w3-bar" style="display: flex;">` + dotStyle + `
         <div class="w3-bar-item">
           <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
@@ -78,7 +78,7 @@ function makeListFollowUpPeople(arr) {
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
     const elapsedTime = timeSince_formatted(new Date(per[TableColumns['next follow up']]));
-    output += `<aa onclick="saveToLinkPagesThenRedirect(` + i + `, this)" href="follow_up_on.html" class="person-to-click">
+    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.html" class="person-to-click">
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
           <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">

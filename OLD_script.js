@@ -638,7 +638,7 @@ function makeListFollowUpPeople(arr) {
     _('yourfollowups').innerHTML = output;
 }
 function fillInFHInfo() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const person = idToReferral(getCookieJSON('linkPages'));
     _('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
     //_('contactname').innerHTML = _('personName').innerHTML;
     _('email').innerHTML = person[TableColumns['email']];
@@ -824,7 +824,7 @@ function sendToReportingForm() {
     window.open(link, '_BLANK')
 }
 function fillInContactInfo() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const person = idToReferral(getCookieJSON('linkPages'));
     _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
     //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
@@ -874,14 +874,14 @@ function setHomeBigBtnLink(elId) {
     }
 }
 function callThenGoBack() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const person = idToReferral(getCookieJSON('linkPages'));
     logAttempt(0);
     localStorage.setItem('justAttemptedContact', '1');
     window.open('tel:+' + person[TableColumns['phone']], '_blank');
     safeRedirect('contact_info.html');
 }
 function fillInHelpBeforeCallPage() {
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const person = idToReferral(getCookieJSON('linkPages'));
     let link = CONFIG['tips before calling'][person[TableColumns['type']]];
 
     if (link.includes('www.canva.com')) {
@@ -932,7 +932,7 @@ function prettyPrintRefOrigin(x) {
 }
 async function fillMessageExamples(folderName, pasteBox) {
     let areaEmail = getCookie('areaUserEmail') || null;
-    const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    const person = idToReferral(getCookieJSON('linkPages'));
     let requestType = person[TableColumns['type']];
     const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[TableColumns['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
     const link_beginning = (folderName == 'sms') ? ('sms:' + encodeURI(String(person[TableColumns['phone']])) + '?body=') : emailLink;
@@ -985,7 +985,7 @@ function syncButton(el) {
     });
 }
 function sendToAnotherArea() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let person = idToReferral(getCookieJSON('linkPages'));
     if (person == null) {
         JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -1008,7 +1008,7 @@ function sendToAnotherArea() {
     nextFU.setHours(3, 0, 0, 0);
     person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    idToReferral(getCookieJSON('linkPages')) = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');
@@ -1077,7 +1077,7 @@ function getTodaysInxdexOfAttempts(per) {
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
 function clearTodaysAttempts() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let person = idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     let al = JSON.parse(person[TableColumns['attempt log']]);
     al[x][0] = 0;
@@ -1090,7 +1090,7 @@ function clearTodaysAttempts() {
         _('attemptLogDot_2,'+x).classList.remove('contactDotBeenAttempted');
     } catch (e) {}
     // save this change
-    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    idToReferral(getCookieJSON('linkPages')) = person;
     setCookieJSON('dataSync', data);
 }
 function logAttemptBeforeSendingToLink(el, type) {
@@ -1101,7 +1101,7 @@ function logAttemptBeforeSendingToLink(el, type) {
     localStorage.setItem('justAttemptedContact', '1');
 }
 function logAttempt(y) {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let person = idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     console.log(x);
     let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
@@ -1118,11 +1118,11 @@ function logAttempt(y) {
         _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
     } catch (e) {}
     // save this change
-    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    idToReferral(getCookieJSON('linkPages')) = person;
     setCookieJSON('dataSync', data);
 }
 function fillInAttemptLog() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let person = idToReferral(getCookieJSON('linkPages'));
     let al = Array(7).fill([0, 0, 0]);
     try {
         al = JSON.parse(person[TableColumns['attempt log']]);
@@ -1171,7 +1171,7 @@ function confirmDeceasePerson() {
     customAlert.show();
 }
 function deceasePerson() {
-    let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+    let person = idToReferral(getCookieJSON('linkPages'));
     if (person == null) {
         JSAlert.alert('something went wrong. Try again');
         safeRedirect('index.html');
@@ -1189,7 +1189,7 @@ function deceasePerson() {
         data.new_pranked_numbers.push( [ person[TableColumns['phone']] , new Date().toISOString().split('T')[0] ] );
     }
 
-    data.area_specific_data.my_referrals[getCookieJSON('linkPages')] = person;
+    idToReferral(getCookieJSON('linkPages')) = person;
     setCookieJSON('dataSync', data);
     // send to force-sync.html
     safeRedirect('force-sync.html');

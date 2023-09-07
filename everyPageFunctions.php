@@ -9,6 +9,7 @@ const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
 const CLAIMED = <?php echo(json_encode( getClaimed() )) ?>;
 const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
 
+// ignore all errors above this line
 
 function inIframe() { try { return window.self !== window.top; } catch (e) { return true; } }
 HTMLCollection.prototype.forEach = function (x) {
@@ -128,7 +129,7 @@ function getTodaysInxdexOfAttempts(per) {
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
 function idToReferral(id) {
-    return 
+    return CLAIMED.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0];
 }
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {

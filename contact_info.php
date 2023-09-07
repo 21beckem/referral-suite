@@ -173,11 +173,11 @@ require_once('require_area.php');
   <!-- Bottom Nav Bar -->
   <?php
   require_once('make_bottom_nav.php');
-  make_bottom_nav(1);
+  make_bottom_nav(3);
   ?>
   <script>
 function fillInAttemptLog() {
-  let person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+  let person = idToReferral(getCookie('linkPages'));
   let al = Array(7).fill([0, 0, 0]);
   try {
     al = JSON.parse(person[TableColumns['attempt log']]);
@@ -215,7 +215,7 @@ function fillInAttemptLog() {
   } catch (e) {}
 }
 function fillInContactInfo() {
-  const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')];
+  const person = idToReferral(getCookie('linkPages'));
   _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
   //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
@@ -229,9 +229,9 @@ function fillInContactInfo() {
     _('phonenumber').innerHTML = 'Undefined';
     _('telnumber').classList.add('disabled');
     _('smsnumber').classList.add('disabled');
-  } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
-    let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
-    _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
+  // } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
+  //   let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
+  //   _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
   } else {
     _('phonenumber').innerHTML = numb;
   }
@@ -246,6 +246,20 @@ function fillInContactInfo() {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
   }
   fillInAttemptLog();
+}
+function prettyPrintRefOrigin(x) {
+    switch (x.toLowerCase()) {
+        case 'fb':
+            return 'Facebook';
+        case 'web':
+            return 'Mission Website';
+        case 'wix':
+            return 'Mission Website';
+        case 'ig':
+            return 'Instagram';
+        default:
+            return x;
+    }
 }
 
 
