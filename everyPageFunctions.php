@@ -131,6 +131,10 @@ function getTodaysInxdexOfAttempts(per) {
 function idToReferral(id) {
     return CLAIMED.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0];
 }
+async function savePerson(perArr) {
+    const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
+    return response.text();
+}
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {
     //     document.body.innerHTML += `<div id="debug-table"></div>`;

@@ -825,7 +825,7 @@ function sendToReportingForm() {
 }
 function fillInContactInfo() {
     const person = idToReferral(getCookieJSON('linkPages'));
-    _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
+    _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
     //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
     //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
     //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
@@ -896,7 +896,7 @@ function fillInHelpBeforeCallPage() {
 }
 function fillInFollowUpInfo() {
     const person = data.overall_data.follow_ups[getCookieJSON('linkPages')];
-    _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
+    _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
     _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
     _('lastAtt').innerHTML = new Date(person[TableColumns['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     let fuTimes = person[TableColumns['amount of times followed up']];

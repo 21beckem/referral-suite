@@ -216,7 +216,7 @@ function fillInAttemptLog() {
 }
 function fillInContactInfo() {
   const person = idToReferral(getCookie('linkPages'));
-  _('contactname').innerHTML = person[TableColumns['first name']] + person[TableColumns['last name']];
+  _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
   //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
