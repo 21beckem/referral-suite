@@ -1,10 +1,13 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Complete Email</title>
+        <title>Complete SMS</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
@@ -30,16 +33,23 @@
 }
 .googleMessage {
     width: 100%;
-    background-color: var(--white);
+    background-color: rgb(111, 221, 255);
     padding: 10px 15px;
-    /* border-radius: 20px; */
+    border-radius: 20px;
+	  white-space: pre-line;
+    color: var(--black);
+}
+@media (prefers-color-scheme: dark) {
+  .googleMessage {
+    background-color: rgb(23 158 199);
+  }
 }
 .useThisTemplateBtn {
     padding: 5px 20px;
     border-radius: 3px;
     margin-top: 10px;
     border: 0;
-    background-color: var(--email-color);
+    background-color: var(--sms-color);
     color: white;
     width: max-content;
 }
@@ -47,10 +57,10 @@ input[type="text"] {
   width: 100%;
 }
 .ljus {
-	background-color: #75d6ff7a;
+	background-color: #c5f2ff71;
 }
 .ljus.selected {
-	background-color: #b37eff8f;
+	background-color: #cfaeff;
 }
     </style>
   </head>
@@ -59,7 +69,7 @@ input[type="text"] {
     <div id="topHeaderBar" class="w3-top">
         <div class="w3-cell-row w3-area-blue">
             <div style="padding: 0px!important;">
-                <a>Complete Email</a>
+                <a>Complete SMS</a>
             </div>
         </div>
     </div>
@@ -71,56 +81,15 @@ input[type="text"] {
 		<div id="MessageOutput" class="googleMessage"></div>
 		<button onclick="sendTheMessage()" class="useThisTemplateBtn">Send</button>
     </div>
-	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_blank"></a>
+	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_parent"></a>
 
-  <script src="message_completer.js" current-page="email"></script>
+    <script src="message_completer.js" current-page="sms"></script>
 
     <!-- Bottom Nav Bar -->
-    <div style="height: 60px;"></div>
-    <div id="BottomNavBar">
-
-      <div class="bottomNavBtnParent">
-        <a href="index.php">
-          <i class="fa fa-home"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="schedule.html">
-          <i class="fa fa-calendar-o"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent w3-text-area-blue">
-        <a href="contact_book.php">
-          <i class="fa fa-address-book"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="unclaimed_referrals.php">
-          <i class="fa fa-bell"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="sync.html">
-          <i class="business-suite"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-        </a>
-      </div>
-
-    </div>
+  <?php
+  require_once('make_bottom_nav.php');
+  make_bottom_nav(3);
+  ?>
 
   </body>
 </html>

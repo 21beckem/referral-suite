@@ -43,7 +43,7 @@ require_once('require_area.php');
 
         <div class="w3-cell-row w3-padding-16">
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="telnumber" href="help_before_call.html" target="_parent">
+                <a id="telnumber" href="help_before_call.php" target="_parent">
                     <i class="fa fa-phone-square w3-text-call-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Call</div>
                     </i>
@@ -51,7 +51,7 @@ require_once('require_area.php');
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="smsnumber" href="sms_templates.html">
+                <a id="smsnumber" href="sms_templates.php">
                     <i class="fa fa-comment w3-text-sms-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">SMS</div>
                     </i>
@@ -59,7 +59,7 @@ require_once('require_area.php');
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="emailcontact" href="email_templates.html">
+                <a id="emailcontact" href="email_templates.php">
                     <i class="fa fa-envelope w3-text-email-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Email</div>
                     </i>

@@ -51,7 +51,7 @@ function sendTheMessage() {
 		logAttempt((current_page == 'sms') ? 1 : 2);
 		localStorage.setItem('justAttemptedContact', '1');
 		_('fakeLinkToClickToSend').click();
-		safeRedirect('contact_info.html');
+		safeRedirect('contact_info.php');
 	} else {
 		alert('Please fill out the required info 🙃');
 	}

@@ -1,3 +1,6 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -76,56 +79,48 @@
 
 
     <!-- Bottom Nav Bar -->
-    <div style="height: 80px;"></div>
-    <div id="BottomNavBar">
-
-      <div class="bottomNavBtnParent">
-        <a href="index.php">
-          <i class="fa fa-home"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="schedule.html">
-          <i class="fa fa-calendar-o"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent w3-text-area-blue">
-        <a href="contact_book.php">
-          <i class="fa fa-address-book"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="unclaimed_referrals.php">
-          <i class="fa fa-bell"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="sync.html">
-          <i class="business-suite"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-        </a>
-      </div>
-
-    </div>
+  <?php
+  require_once('make_bottom_nav.php');
+  make_bottom_nav(3);
+  ?>
 	<script>
 setTimeout(async ()=> {
   const messageExamples = _('messageExamples');
   await fillMessageExamples('sms', messageExamples);	
 }, 10);
+async function logAttemptBeforeSendingToLink(el, type) {
+  await logAttempt(type);
+  setTimeout(() => {
+    safeRedirect('contact_info.php');
+  }, 10);
+  localStorage.setItem('justAttemptedContact', '1');
+}
+
+async function fillMessageExamples(typ, pasteBox) {
+  let areaEmail = "<?php echo($__TEAM->email); ?>";
+  const person = idToReferral(getCookieJSON('linkPages'));
+  let requestType = person[TableColumns['type']];
+  const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[TableColumns['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
+  const link_beginning = (typ == 'sms') ? ('sms:' + encodeURI(String(person[TableColumns['phone']])) + '?body=') : emailLink;
+  const _destination = (typ == 'sms') ? '_parent' : '_blank';
+  _('startBlankBtn').href = link_beginning;
+  _('startBlankBtn').target = _destination;
+  const reqMssgUrl = 'php_functions/templates.php?refTyp=' + encodeURI(requestType) + '&type=' + encodeURI(typ);
+  //console.log(reqMssgUrl);
+  const rawFetch = await safeFetch(reqMssgUrl);
+  let rawJson = await rawFetch.json();
+  const Messages = rawJson.map( x => x[3]);
+  //console.log(Messages);
+  let output = "";
+  for (let i = 0; i < Messages.length; i++) {
+      output += '<div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16"><div class="googleMessage">' + Messages[i] + '</div><button onclick="sendToCompletionPage(\'' + typ + '\', this)" class="useThisTemplateBtn">Use This Template</button></div>';
+  }
+  pasteBox.innerHTML = output;
+}
+function sendToCompletionPage(smsOrEmail, el) {
+  setCookie('completeThisMessage', el.previousElementSibling.innerHTML);
+  safeRedirect(smsOrEmail + '_completer.php');
+}
 	</script>
 
   </body>
