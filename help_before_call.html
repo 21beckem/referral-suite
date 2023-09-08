@@ -108,12 +108,13 @@ if (link == undefined) {
   
   _('google_slides_import').src = link;
 }
-function callThenGoBack() {
+async function callThenGoBack() {
   const person = idToReferral(getCookieJSON('linkPages'));
-  logAttempt(0);
-  localStorage.setItem('justAttemptedContact', '1');
   window.open('tel:+' + person[TableColumns['phone']], '_blank');
-  safeRedirect('contact_info.html');
+  if (await logAttempt(0)) {
+    localStorage.setItem('justAttemptedContact', '0');
+    safeRedirect('contact_info.php');
+  }
 }
 
    </script>

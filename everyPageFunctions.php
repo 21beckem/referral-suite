@@ -128,12 +128,33 @@ function getTodaysInxdexOfAttempts(per) {
     sentDate.setHours(0,0,0,0);
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
+async function logAttempt(y) {
+    let person = idToReferral(getCookieJSON('linkPages'));
+    let x = getTodaysInxdexOfAttempts(person);
+    console.log(x);
+    let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
+    try {
+        al = JSON.parse(person[TableColumns['attempt log']]);
+    } catch(e) {}
+    if (x > al.length) {
+        return false; // person is older than the amount of days in attempt log
+    }
+    al[x][y] = 1;
+    person[TableColumns['attempt log']] = JSON.stringify(al);
+
+    try {
+        _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
+    } catch (e) {}
+    // save this change
+    return await savePerson(person);
+}
 function idToReferral(id) {
-    return CLAIMED.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0];
+    return [... CLAIMED.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
 }
 async function savePerson(perArr) {
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
-    return response.text();
+    return (response.status == 200);
+    //return response.text();
 }
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {

@@ -1076,7 +1076,7 @@ function getTodaysInxdexOfAttempts(per) {
     sentDate.setHours(0,0,0,0);
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
-function clearTodaysAttempts() {
+async function clearTodaysAttempts() {
     let person = idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     let al = JSON.parse(person[TableColumns['attempt log']]);
@@ -1090,8 +1090,7 @@ function clearTodaysAttempts() {
         _('attemptLogDot_2,'+x).classList.remove('contactDotBeenAttempted');
     } catch (e) {}
     // save this change
-    idToReferral(getCookieJSON('linkPages')) = person;
-    setCookieJSON('dataSync', data);
+    await savePerson(person);
 }
 function logAttemptBeforeSendingToLink(el, type) {
     logAttempt(type);
@@ -1100,7 +1099,7 @@ function logAttemptBeforeSendingToLink(el, type) {
     }, 10);
     localStorage.setItem('justAttemptedContact', '1');
 }
-function logAttempt(y) {
+async function logAttempt(y) {
     let person = idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     console.log(x);
@@ -1118,8 +1117,7 @@ function logAttempt(y) {
         _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
     } catch (e) {}
     // save this change
-    idToReferral(getCookieJSON('linkPages')) = person;
-    setCookieJSON('dataSync', data);
+    savePerson(person);
 }
 function fillInAttemptLog() {
     let person = idToReferral(getCookieJSON('linkPages'));

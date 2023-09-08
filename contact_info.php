@@ -262,8 +262,7 @@ function prettyPrintRefOrigin(x) {
     }
 }
 
-
-fillInContactInfo()  
+fillInContactInfo();
   </script>
 
   </body>
