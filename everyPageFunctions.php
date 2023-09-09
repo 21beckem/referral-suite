@@ -156,6 +156,9 @@ async function savePerson(perArr) {
     return (response.status == 200);
     //return response.text();
 }
+function PMGappReminder(action) {
+    return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
+}
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {
     //     document.body.innerHTML += `<div id="debug-table"></div>`;

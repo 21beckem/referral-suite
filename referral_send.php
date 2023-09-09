@@ -43,7 +43,7 @@ require_once('require_area.php');
   </div>
 
   <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
-    <button onclick="sendToAnotherArea()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Send</button>
+    <button onclick="confirmSendReferral()" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Send</button>
   </div>
 
     <!-- Bottom Nav Bar -->
@@ -56,11 +56,46 @@ require_once('require_area.php');
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
-const areas = getCookieJSON('missionAreasList') || null;
+const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` ORDER BY `mission_areas`.`name` ASC') )) ?>;
 if (areas != null) {
   _('areadropdown').innerHTML = '<option></option>';
   for (let i = 0; i < areas.length; i++) {
-    _('areadropdown').innerHTML += '<option>' + areas[i][0] + '</option>';
+    _('areadropdown').innerHTML += '<option>' + areas[i][1] + '</option>';
+  }
+}
+function confirmSendReferral() {
+  JSAlert.confirm('Are you sure you want to send this person to ' + _('areadropdown').value + '?'+PMGappReminder('send'), '', JSAlert.Icons.Warning).then(res => {
+    if (res) {
+      sendToAnotherArea();
+    }
+  });
+}
+function sendToAnotherArea() {
+  let person = idToReferral(getCookieJSON('linkPages'));
+  if (person == null) {
+    JSAlert.alert('something went wrong. Try again');
+    safeRedirect('index.html');
+  }
+  const newArea = _('areadropdown').value;
+
+  // set new area in data and save to cookie
+  person[TableColumns['sent status']] = 'Sent';
+  person[TableColumns['teaching area']] = newArea;
+
+  // follow up
+  let nextFU = new Date();
+  person[TableColumns['sent date']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+
+  nextFU.setDate(nextFU.getDate() + CONFIG['follow ups']['initial delay after sent']);
+  nextFU.setHours(3, 0, 0, 0);
+  person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+
+  if (savePerson(person)) {
+    alert('Sent!');
+    safeRedirect('index.php');
+
+    //givePoints
+    // setAddFoxPoints(10);               < - - come back to this later!
   }
 }
   </script>

@@ -51,7 +51,7 @@ require_once('require_area.php');
 _('claimAsArea').innerHTML = TEAM.name;
 
 function claimPerson() {
-  window.location.href = 'php_functions/claimReferral.php?perId=' + getCookie('linkPages');
+  safeRedirect('php_functions/claimReferral.php?perId=' + getCookie('linkPages'));
 }
     
     </script>

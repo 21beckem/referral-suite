@@ -262,7 +262,7 @@ function getOldestClaimedPerson() {
 function doubleCheckLogout() {
   JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {
     if (res) {
-      location.href = 'login.php';
+      safeRedirect('login.php');
     }
   });
 }
