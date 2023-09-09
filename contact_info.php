@@ -164,7 +164,7 @@ require_once('require_area.php');
       </div>
   </div>
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
-        <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="verifySentInSMOEsAB(this)" href="referral_edit.html">Send referral</button>
+        <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')">Send referral</button>
     </div>
     
 
