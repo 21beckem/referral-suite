@@ -76,11 +76,12 @@ require_once('require_area.php');
         <colgroup>
           <col>
           <col id="attemptLog_dayIndex0">
-          <col id="attemptLog_dayIndex1"> <!--  style="background-color: var(--light-grey);" -->
+          <col id="attemptLog_dayIndex1">
           <col id="attemptLog_dayIndex2">
           <col id="attemptLog_dayIndex3">
           <col id="attemptLog_dayIndex4">
           <col id="attemptLog_dayIndex5">
+          <col id="attemptLog_dayIndex6">
         </colgroup>
         <tr id="attemptLog_weekdays">
           <td></td>
