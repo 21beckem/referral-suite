@@ -93,7 +93,7 @@ require_once('require_area.php');
           <td>•</td>
         </tr>
         <tr>
-          <td><i class="fa fa-phone-square w3-text-call-color w3-xlarge" style="padding-left: 5px;"></i></td>
+          <td><i id="telnumber_attemptLog" class="fa fa-phone-square w3-text-call-color w3-xlarge" style="padding-left: 5px;"></i></td>
           <td><div class="attemptDot" id="attemptLogDot_0,0"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_0,1"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_0,2"></div></td>
@@ -103,7 +103,7 @@ require_once('require_area.php');
           <td><div class="attemptDot" id="attemptLogDot_0,6"></div></td>
         </tr>
         <tr>
-          <td><i class="fa fa-comment w3-text-sms-color w3-xlarge" style="padding-left: 3px;"></i></td>
+          <td><i id="smsnumber_attemptLog" class="fa fa-comment w3-text-sms-color w3-xlarge" style="padding-left: 3px;"></i></td>
           <td><div class="attemptDot" id="attemptLogDot_1,0"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_1,1"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_1,2"></div></td>
@@ -113,7 +113,7 @@ require_once('require_area.php');
           <td><div class="attemptDot" id="attemptLogDot_1,6"></div></td>
         </tr>
         <tr>
-          <td><i class="fa fa-envelope w3-text-email-color w3-xlarge" style="padding-left: 3px;"></i></td>
+          <td><i id="emailcontact_attemptLog" class="fa fa-envelope w3-text-email-color w3-xlarge" style="padding-left: 3px;"></i></td>
           <td><div class="attemptDot" id="attemptLogDot_2,0"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_2,1"></div></td>
           <td><div class="attemptDot" id="attemptLogDot_2,2"></div></td>
@@ -222,33 +222,51 @@ function fillInContactInfo() {
   //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
   const numb = person[TableColumns['phone']].trim();
 
-  _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
+  _('referraltype').innerHTML = (person[TableColumns['type']].trim()=='') ? 'Undeclared' : person[TableColumns['type']].replaceAll('_', ' ');
   _('referralorigin').innerHTML = prettyPrintRefOrigin(person[TableColumns['referral origin']]);
   if (numb == '') {
     // no number
-    _('phonenumber').innerHTML = 'Undefined';
+    _('phonenumber').innerHTML = 'Undeclared';
     _('telnumber').classList.add('disabled');
+    _('telnumber_attemptLog').classList.add('disabled');
     _('smsnumber').classList.add('disabled');
+    _('smsnumber_attemptLog').classList.add('disabled');
   // } else if (getCookieJSON('prankNumberList').hasOwnProperty(numb)) {
   //   let onclickFunc = "showPrankedNumberInfoBox('" + getCookieJSON('prankNumberList')[numb] + "')";
   //   _('phonenumber').innerHTML = '<span class="prankedNumberWarning">' + numb + '</span> <i class="fa-solid fa-circle-question" onclick="'+onclickFunc+'"></i>';
   } else {
     _('phonenumber').innerHTML = numb;
   }
-  _('email').innerHTML = person[TableColumns['email']];
-  let addStr = person[TableColumns['street address']] + ' ' + person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
-  _('address').innerHTML = addStr;
-  _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
-  _('adName').innerHTML = person[TableColumns['ad name']];
-  _('adDeck').href = CONFIG['home page links']['ad deck'];
+  let post = person[TableColumns['email']].trim();
+  if (post == '') {
+    _('email').innerHTML = 'Undeclared';
+    _('emailcontact').classList.add('disabled');
+    _('emailcontact_attemptLog').classList.add('disabled');
+  } else {
+    _('email').innerHTML = post;
+  }
+  let addStr = (person[TableColumns['street address']] + ' ' + person[TableColumns['city']] + ' ' + person[TableColumns['zip']]).trim();
+  if (addStr == '') {
+    _('address').innerHTML = 'Undeclared';
+    _('googlemaps').style.display = 'none';
+  } else {
+    _('address').innerHTML = addStr;
+    _('googlemaps').href = 'http://maps.google.com/?q=' + encodeURI(addStr);
+  }
   _('prefSprak').innerHTML = (person[TableColumns['lang']] == "") ? "Undeclared" : person[TableColumns['lang']];
+  _('adName').innerHTML = (person[TableColumns['ad name']] == "") ? "Undeclared" : person[TableColumns['ad name']];
+  if (CONFIG['home page links']['ad deck'].trim() == '') {
+    _('adDeck').style.display = 'none';
+  } else {
+    _('adDeck').href = CONFIG['home page links']['ad deck'];
+  }
   if (person[TableColumns['type']].toLowerCase().includes('family history')) {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
   }
   fillInAttemptLog();
 }
 function prettyPrintRefOrigin(x) {
-    switch (x.toLowerCase()) {
+    switch (x.trim().toLowerCase()) {
         case 'fb':
             return 'Facebook';
         case 'web':
@@ -257,8 +275,10 @@ function prettyPrintRefOrigin(x) {
             return 'Mission Website';
         case 'ig':
             return 'Instagram';
+        case '':
+            return 'Undeclared';
         default:
-            return x;
+            return x.trim();
     }
 }
 
