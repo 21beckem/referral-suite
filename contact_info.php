@@ -29,7 +29,7 @@ require_once('require_area.php');
       <div class="w3-container w3-padding-16">
         <div class="contact_info" id="contactname"></div>
       </div>
-      <div onclick="sendToDeceasePage(this)" href="decease.html" class="w3-container w3-cell w3-xlarge w3-right-align">
+      <div onclick="safeRedirect('decease.php')" class="w3-container w3-cell w3-xlarge w3-right-align">
         <i class="fa fa-trash-o w3-text-white" style="position: relative;"></i>
       </div>
     </div>
