@@ -100,6 +100,10 @@ require_once('require_area.php');
         <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
       </center>
     </div>
+    <br>
+    <center>
+      <a id="leaderboardBtn" href="/referral-suite-cert/Referral_Suite.pem.p12" class="w3-xlarge w3-round-large" download>Download RS Certificate</a>
+    </center>
 
     <div class="w3-center w3-xlarge" style="margin-top: 15px;">Welcome to Referral Suite!</div>
     <div class="" style="text-align: center;">Here is a list of things to check (in order) during your inbox shift!</div>
