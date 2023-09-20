@@ -34,6 +34,9 @@ Array.prototype.indexOfAll = function (searchItem) {
     }
     return indexes;
 }
+Array.prototype.transpose = function () {
+    return this[0].map((blank, colIndex) => this.map(row => row[colIndex]));
+}
 function safeRedirect(ref) {
     if (!inIframe()) {
         window.location.href = ref;

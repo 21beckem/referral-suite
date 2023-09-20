@@ -12,7 +12,7 @@ function make_bottom_nav($pageNum) { ?>
     </div>
 
     <div class="bottomNavBtnParent <?php if ($pageNum==2) { echo('w3-text-area-blue'); } ?>">
-        <a href="schedule.html">
+        <a href="schedule.php">
             <i class="fa fa-calendar-o"></i>
             <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
         </a>

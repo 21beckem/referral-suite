@@ -5,6 +5,7 @@
         header('location: login.php');
     }
     require_once('sql_tools.php');
+    require_once('overall_vars.php');
 
     $__MISSIONINFO = json_decode($_COOKIE['missionInfo']);
     $__TEAM = getTeam();

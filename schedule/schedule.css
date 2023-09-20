@@ -1,0 +1,86 @@
+*:focus {
+    outline: none;
+}
+.sheetTbl select {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    font-size: medium;
+    color: inherit;
+}
+.sheetTbl td:has(select):hover {
+    background-color: #ddd;
+}
+.sheetTbl td:has(select) {
+    padding: 0;
+    padding-right: 5px;
+}
+.sheetMap_EditedCell {
+    font-weight: bold;
+}
+#SheetMapColDivs {
+    display: flex;
+	overflow: auto;
+	flex: none;
+    width: 80%;
+    height: 100%;
+    scroll-snap-type: x mandatory;
+    flex-flow: row nowrap;
+    overflow-y: hidden;
+}
+#SheetMapColDivs > .tableCol {
+    width: 100%;
+	scroll-snap-align: center;
+	flex: none;
+    font-size: 22px;
+    align-content: stretch;
+}
+#SheetMapColDivs > .tableCol > div {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    height: 100%;
+    padding: 2px;
+}
+#SheetMapColDivs > .tableCol > div > div {
+    height: calc(99% / 7);
+    margin-bottom: 2px;
+    white-space: break-spaces;
+}
+#SheetMapColDivs select {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    color: inherit;
+}
+body, html {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+#scheduleParent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+#timesContainer {
+    width: 20%;
+    z-index: 5;
+    box-shadow: -4px 0px 8px black;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    padding: 2px;
+}
+#timesContainer > div {
+    height: 20px;
+}
