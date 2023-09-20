@@ -2,10 +2,12 @@ let timesContainer = _('timesContainer');
 let scheduleColDivs = _('scheduleColDivs');
 
 function scrollToToday(win) {
-    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-    const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
-    let iOfToday = schedArr[0].indexOf(niceDate) - 2;
+    const d = new Date();
+    let getYear = d.toLocaleString("default", { year: "numeric" });
+    var getMonth = d.toLocaleString("default", { month: "2-digit" });
+    var getDay = d.toLocaleString("default", { day: "2-digit" });
+    const niceDate = getYear + "-" + getMonth + "-" + getDay;
+    let iOfToday = schedArr.transpose()[0].indexOf(niceDate) - 2;
     scheduleColDivs.scrollTo(scheduleColDivs.offsetWidth*iOfToday, 0);
 }
 let teamColorLookup = {};
