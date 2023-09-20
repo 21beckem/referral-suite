@@ -1,12 +1,12 @@
 let timesContainer = _('timesContainer');
 let scheduleColDivs = _('scheduleColDivs');
 
-function scrollToToday(data, win, numberOfHiddenCols) {
+function scrollToToday(win) {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let niceDate = dayNames[new Date().getDay()] + '\n' + monthNames[new Date().getMonth()] + ' ' + String(new Date().getDate());
-    let iOfToday = data[0].indexOf(niceDate) - numberOfHiddenCols;
-    win.scrollTo(win.offsetWidth*iOfToday, 0);
+    let iOfToday = schedArr[0].indexOf(niceDate) - 2;
+    scheduleColDivs.scrollTo(scheduleColDivs.offsetWidth*iOfToday, 0);
 }
 let teamColorLookup = {};
 for (let i = 0; i < teamInfos.length; i++) {
@@ -18,7 +18,7 @@ function colorForTeam(teamId) {
     } else { return ''; }
 }
 
-function writeTable() {
+function writeSchedule() {
     const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let mainTbOut = '<tr>';
@@ -47,7 +47,7 @@ function writeTable() {
         }
         mainTbOut += '</tr>';
     }
-    scheduleColDivs.innerHTML = mainTbOut;
+    //scheduleColDivs.innerHTML = mainTbOut;
 
 
     let mainShOut = '';
@@ -56,9 +56,9 @@ function writeTable() {
         mainShOut += '<div class="tableCol"><div>';
 
         // make date cell
-        const thisDate = new Date(schedArr[0][i]);
+        const thisDate = new Date(col[0]);
         const niceDate = dayNames[thisDate.getDay()] + '<br>' + monthNames[thisDate.getMonth()] + ' ' + String(thisDate.getDate());
-        mainTbOut += '<div>' + niceDate + '<div>';
+        mainShOut += '<div>' + niceDate + '</div>';
 
         // make rest of cells
         for (let j = 1; j < col.length; j++) {
@@ -71,21 +71,21 @@ function writeTable() {
                 inboxersOptions += '<option value="'+team[0]+'"'+( (cell==team[0]) ? ' selected' : '' )+'>' + team[1] + '</option>';
             }
 
-            mainShOut += '<div><select onchange="dropdownOnChange(this, '+i+', '+j+')" style="background-color: '+colorForTeam(cell)+';">' + inboxersOptions + '</select></div>';
+            mainShOut += '<select onchange="dropdownOnChange(this, '+i+', '+j+')" style="background-color: '+colorForTeam(cell)+';">' + inboxersOptions + '</select>';
         }
 
         mainShOut += '</div></div>';
     }
+    scheduleColDivs.innerHTML = mainShOut;
+
+    // times Col
+    timesContainer.innerHTML += '<div></div>';
+    for (let i = 1; i < schedArr[0].length; i++) {
+        timesContainer.innerHTML += '<div>' + schedArr[0][i] + '-' + schedArr[0][i] + '</div>';
+    }
 }
 
 window.addEventListener("load", (e) => {
-    // SheetMap.load();
-    // const colsToHide = [0,1];
-    // _('scheduleParent').innerHTML += SheetMap.makeColDivsHTML(hideC=colsToHide);
-    // let timesContainer = _('timesContainer');
-    // timesContainer.innerHTML += '<div></div>';
-    // for (let i = 1; i < SheetMap.vars.tableDataNOW.length; i++) {
-    //     timesContainer.innerHTML += '<div>' + SheetMap.vars.tableDataNOW[i][0] + '-' + SheetMap.vars.tableDataNOW[i][1] + '</div>';
-    // }
-    // scrollToToday(SheetMap.vars.tableDataNOW, _('SheetMapColDivs'), colsToHide.length);
+    writeSchedule();
+    scrollToToday();
 });

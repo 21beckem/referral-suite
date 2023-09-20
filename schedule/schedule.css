@@ -20,7 +20,7 @@
 .sheetMap_EditedCell {
     font-weight: bold;
 }
-#SheetMapColDivs {
+#scheduleColDivs {
     display: flex;
 	overflow: auto;
 	flex: none;
@@ -30,14 +30,14 @@
     flex-flow: row nowrap;
     overflow-y: hidden;
 }
-#SheetMapColDivs > .tableCol {
+#scheduleColDivs > .tableCol {
     width: 100%;
 	scroll-snap-align: center;
 	flex: none;
     font-size: 22px;
     align-content: stretch;
 }
-#SheetMapColDivs > .tableCol > div {
+#scheduleColDivs > .tableCol > div {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -45,12 +45,12 @@
     height: 100%;
     padding: 2px;
 }
-#SheetMapColDivs > .tableCol > div > div {
+#scheduleColDivs > .tableCol > div > div {
     height: calc(99% / 7);
     margin-bottom: 2px;
     white-space: break-spaces;
 }
-#SheetMapColDivs select {
+#scheduleColDivs select {
     border-radius: 5px;
     width: 100%;
     height: 100%;
@@ -58,6 +58,9 @@
     border: none;
     font-size: inherit;
     color: inherit;
+}
+#scheduleColDivs select option {
+    background-color: var(--white);
 }
 body, html {
     padding: 0;
@@ -80,7 +83,4 @@ body, html {
     justify-content: space-around;
     height: 100%;
     padding: 2px;
-}
-#timesContainer > div {
-    height: 20px;
 }

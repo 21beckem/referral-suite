@@ -39,7 +39,7 @@ require_once('require_area.php');
     <!-- Bottom Nav Bar -->
     <?php
     require_once('make_bottom_nav.php');
-    make_bottom_nav(2);
+    make_bottom_nav(2, '0px');
     ?>
     <script>
       const schedArr = <?php echo( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `schedule` WHERE 1')[0][0] ); ?>.transpose();

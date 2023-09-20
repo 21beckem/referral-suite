@@ -14,6 +14,8 @@
     --sms-color: #2196F3;
     --call-color: #4CAF50;
     --light-grey: #f1f1f1;
+    --business-suite-defualt-icon: none;
+    --business-suite-active-icon: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
 }
 .business-suite {
     margin-top: 3px;
@@ -27,8 +29,11 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+.business-suite {
+    filter: var(--business-suite-defualt-icon);
+}
 .w3-text-area-blue a .business-suite {
-    filter: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
+    filter: var(--business-suite-active-icon);
 }
 .bottomNavBtnParent {
     text-align: center;
@@ -37,8 +42,8 @@
     font-size: 27px;
 }
 #BottomNavBar {
-    background-color: #f1f1f1;
-    color: #000;
+    background-color: var(--light-grey);
+    color: var(--black);
     bottom: -5px;
     position: fixed;
     width: 100%;
@@ -438,6 +443,8 @@ tr.spaceUnder>td {
         --light-grey: #5f5f5f;
         --white: rgb(24, 24, 24);
         --black: white;
+        --business-suite-defualt-icon: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(23deg) brightness(118%) contrast(118%);
+        --business-suite-active-icon: brightness(0) saturate(100%) invert(63%) sepia(68%) saturate(2997%) hue-rotate(219deg) brightness(103%) contrast(98%);
     }
     body {
         background-color: rgb(24, 24, 24);

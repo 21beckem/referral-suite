@@ -10,7 +10,7 @@ if (!empty($_POST)) {
         if (count($readRes)==0) {
             $alert = 'Mission name not found';
         } else {
-            if($_POST['pass'] != $readRes[0][4]) {
+            if($_POST['pass'] != $readRes[0][5]) {
                 $alert = 'Password incorrect';
             } else {
                 session_start();

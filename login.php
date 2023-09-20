@@ -77,7 +77,7 @@ function signInAs(x) {
 function signOutOfMission() {
   JSAlert.confirm('Are you sure you want to sign out of the <?php echo($missionInfo->name) ?> Mission?', '', JSAlert.Icons.Warning).then(res => {
     if (res) {
-      safeRedirect('sign_in.php');
+      window.location.href = 'sign_in.php';
     }
   });
 }

@@ -1,8 +1,8 @@
 <?php
 require_once('require_area.php');
-function make_bottom_nav($pageNum) { ?>
+function make_bottom_nav($pageNum, $bottomSpacingPX='80px') { ?>
 
-<div style="height: 80px;"></div>
+<div style="height: <?php echo($bottomSpacingPX); ?>;"></div>
 <div id="BottomNavBar">
     <div class="bottomNavBtnParent <?php if ($pageNum==1) { echo('w3-text-area-blue'); } ?>">
         <a href="index.php">
