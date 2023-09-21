@@ -20,6 +20,8 @@ require_once('require_area.php');
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>
@@ -36,13 +38,14 @@ require_once('require_area.php');
   <div class="w3-center" style="padding-top: 100px;">Which area is this person being sent to?</div>
   <div style="height:20px"></div>
   <div class="w3-center">  
-    <select onchange="areaOptionChanged(this)" id="areadropdown">
-      <option value=""></option>
-      <option value="">Error occured while getting area list</option>
-    </select>
+    <input type="text" id="areaInput">
+    <br>
+    <br>
+    <br>
+    <h3 id="selectedArea"></h3>
   </div>
 
-  <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
+  <div id="Sendbutton" class="w3-container w3-center" style="margin-top:90px; display: none;">
     <button onclick="confirmSendReferral()" class="w3-button w3-xlarge w3-round-large w3-blue" style="width: 40%;">Send</button>
   </div>
 
@@ -52,19 +55,31 @@ require_once('require_area.php');
   make_bottom_nav(3);
   ?>
   <script>
-
-function areaOptionChanged(el) {
-  document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
-}
 const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` ORDER BY `mission_areas`.`name` ASC') )) ?>;
-if (areas != null) {
-  _('areadropdown').innerHTML = '<option></option>';
-  for (let i = 0; i < areas.length; i++) {
-    _('areadropdown').innerHTML += '<option>' + areas[i][1] + '</option>';
+const autoCompleteJS = new autoComplete({
+  selector: "#areaInput",
+  placeHolder: "Search for area...",
+  data: {
+    src: areas.map(x => x[1]),
+    cache: true,
+  },
+  resultItem: {
+    highlight: true
+  },
+  events: {
+    input: {
+      selection: (event) => {
+        const selection = event.detail.selection.value;
+        // autoCompleteJS.input.value = selection;
+        _('selectedArea').innerHTML = selection;
+        _("Sendbutton").style.display = (selection == "") ? "none" : "";
+      }
+    }
   }
-}
+});
+
 function confirmSendReferral() {
-  JSAlert.confirm('Are you sure you want to send this person to ' + _('areadropdown').value + '?'+PMGappReminder('send'), '', JSAlert.Icons.Warning).then(res => {
+  JSAlert.confirm('Are you sure you want to send this person to ' + _('selectedArea').innerText + '?'+PMGappReminder('send'), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       sendToAnotherArea();
     }
@@ -76,7 +91,7 @@ function sendToAnotherArea() {
     JSAlert.alert('something went wrong. Try again');
     safeRedirect('index.html');
   }
-  const newArea = _('areadropdown').value;
+  const newArea = _('selectedArea').innerText;
 
   // set new area in data and save to cookie
   person[TableColumns['sent status']] = 'Sent';
