@@ -211,9 +211,9 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
-_('MB_deliverLink').href = CONFIG['home page links']['book of mormon delivery form'];
-_('adDeck').href = CONFIG['home page links']['ad deck'];
-_('gToBusSuite').href = CONFIG['home page links']['business suite help'];
+setBigToolButtonLink('MB_deliverLink', CONFIG['home page links']['book of mormon delivery form']);
+setBigToolButtonLink('adDeck', CONFIG['home page links']['ad deck']);
+setBigToolButtonLink('gToBusSuite', CONFIG['home page links']['business suite help']);
 setHomeBigBtnLink('1_sync');
 setHomeBigBtnLink('2_contact');
 setHomeBigBtnLink('3_log');
@@ -236,9 +236,19 @@ _('streakBox').style.filter = streakBoxFilter;*/
 _('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>;
 _('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
+function setBigToolButtonLink(elId, link) {
+  // if id doesnt exist or blank, hide button
+  console.log(link);
+  if (link==undefined || link.trim()=="") {
+    _(elId).parentElement.style.display = 'none';
+    return;
+  }
+  _(elId).href = link;
+}
 function setHomeBigBtnLink(elId) {
     let link = CONFIG['home page links'][elId];
     const el = _(elId);
+
     if (link.includes('www.canva.com') || link.includes('docs.google.com/presentation')) {
         el.setAttribute('onclick', "openGoogleSlides('" + link + "')");
     } else if (!link.startsWith('http')) {
