@@ -46,7 +46,6 @@
     padding: 2px;
 }
 #scheduleColDivs > .tableCol > div > div {
-    height: calc(99% / 7);
     margin-bottom: 2px;
     white-space: break-spaces;
 }
@@ -57,7 +56,7 @@
     background-color: transparent;
     border: none;
     font-size: inherit;
-    color: inherit;
+    color: black;
 }
 #scheduleColDivs select option {
     background-color: var(--white);
@@ -77,10 +76,16 @@ body, html {
     width: 20%;
     z-index: 5;
     box-shadow: -4px 0px 8px black;
+    height: 100%;
+    padding: 2px;
+    position: relative;
+}
+#timesMarginBox {
+    width: 100%;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 100%;
-    padding: 2px;
+    position: absolute;
+    bottom: 0;
 }

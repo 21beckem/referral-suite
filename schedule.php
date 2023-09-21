@@ -32,8 +32,14 @@ require_once('require_area.php');
     <div style="height: 68px;"></div>
     
     <div id="scheduleParent" style="height: calc(100% - 126px);">
-      <div id="timesContainer"></div>
-      <div id="scheduleColDivs"></div>
+      <div id="timesContainer">
+        <div id="timesMarginBox"></div>
+      </div>
+      <div id="scheduleColDivs">
+        <div id="loadingAnim" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+          <div class="lds-dual-ring"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Bottom Nav Bar -->
