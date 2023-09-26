@@ -2,6 +2,7 @@
   session_start();
   setcookie('teamId', '', -1, '/');
   setcookie('__TEAM', '', -1, '/');
+  setcookie('__CONFIG', '', -1, '/');
   if (!isset($_COOKIE['missionInfo'])) {
     header('location: sign_in.php');
   }

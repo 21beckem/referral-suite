@@ -8,9 +8,11 @@ if (!empty($_POST)) {
 
         $readRes = readSQL('Referral_Suite_General', 'SELECT * FROM `mission_users` WHERE `name`="'.$_POST['mission'].'"');
         if (count($readRes)==0) {
-            $alert = 'Mission name not found';
+            $alert = 'Mission not found';
         } else {
-            if($_POST['pass'] != $readRes[0][5]) {
+            // get that mission's passcode from settings
+            $thisMissionPass = readSQL($readRes[0][3], 'SELECT `value` FROM `settings` WHERE `name`="login password"')[0][0];
+            if($_POST['pass'] != $thisMissionPass) {
                 $alert = 'Password incorrect';
             } else {
                 session_start();

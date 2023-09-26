@@ -105,47 +105,6 @@ require_once('require_area.php');
       <a id="leaderboardBtn" href="/referral-suite-cert/Referral_Suite.pem.p12" class="w3-xlarge w3-round-large" download>Download RS Certificate</a>
     </center>
 
-    <div class="w3-center w3-xlarge" style="margin-top: 15px;">Welcome to Referral Suite!</div>
-    <div class="" style="text-align: center;">Here is a list of things to check (in order) during your inbox shift!</div>
-    <div class="w3-border-bottom" style="padding-bottom: 10px;">
-      <table id="bigBtnsTable">
-        <tr>
-            <td>
-              <a id="1_sync" href="#">
-                <div class="bigTipBtn" style="background-image: url('img/1_home_btn.jpg');"></div>
-              </a>
-            </td>
-            <td>
-              <a id="2_contact" href="#">
-                <div class="bigTipBtn" style="background-image: url('img/2_home_btn.jpg');"></div>
-              </a>
-            </td>
-            <td>
-              <a id="3_log" href="#">
-                <div class="bigTipBtn" style="background-image: url('img/3_home_btn.jpg');"></div>
-              </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <a id="4_message" href="#">
-                <div class="bigTipBtn" style="background-image: url('img/4_home_btn.jpg');"></div>
-              </a>
-            </td>
-            <td>
-              <a id="5_comments" href="#">
-                <div class="bigTipBtn" style="background-image: url('img/5_home_btn.jpg');"></div>
-              </a>
-            </td>
-            <td>
-              <a id="6_report" onclick="sendToReportingForm()">
-                <div class="bigTipBtn" style="background-image: url('img/6_home_btn.jpg');"></div>
-              </a>
-            </td>
-        </tr>
-      </table>
-  </div>
-
     <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
     <div class="full_width_home_btn">
       <a id="MB_deliverLink" target="_blank" href="">
@@ -211,14 +170,9 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
-setBigToolButtonLink('MB_deliverLink', CONFIG['home page links']['book of mormon delivery form']);
-setBigToolButtonLink('adDeck', CONFIG['home page links']['ad deck']);
-setBigToolButtonLink('gToBusSuite', CONFIG['home page links']['business suite help']);
-setHomeBigBtnLink('1_sync');
-setHomeBigBtnLink('2_contact');
-setHomeBigBtnLink('3_log');
-setHomeBigBtnLink('4_message');
-setHomeBigBtnLink('5_comments');
+setBigToolButtonLink('MB_deliverLink', CONFIG['book of mormon delivery form link']);
+setBigToolButtonLink('adDeck', CONFIG['ad deck link']);
+setBigToolButtonLink('gToBusSuite', CONFIG['business suite guidance link']);
 
 /*let streakBoxFilter = '';
 switch (foxStreakExtendingStatus()) {
@@ -238,30 +192,12 @@ _('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
 function setBigToolButtonLink(elId, link) {
   // if id doesnt exist or blank, hide button
-  console.log(link);
+  //console.log(link);
   if (link==undefined || link.trim()=="") {
     _(elId).parentElement.style.display = 'none';
     return;
   }
   _(elId).href = link;
-}
-function setHomeBigBtnLink(elId) {
-    let link = CONFIG['home page links'][elId];
-    const el = _(elId);
-
-    if (link.includes('www.canva.com') || link.includes('docs.google.com/presentation')) {
-        el.setAttribute('onclick', "openGoogleSlides('" + link + "')");
-    } else if (!link.startsWith('http')) {
-        el.href = link;
-    } else {
-        console.log('Unrecognized presentation link. Will open in new tab:' + link);
-        el.href = link.replace("{Area}", area);
-        el.setAttribute('target', '_blank');
-    }
-}
-function openGoogleSlides(link) {
-    setCookie('openThisSlides', link);
-    safeRedirect('view_google_slides.html');
 }
 function getOldestClaimedPerson() {
     let currentOldest = my_referrals[0];

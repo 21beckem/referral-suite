@@ -61,10 +61,6 @@ require_once('require_area.php');
       <div class="w3-container w3-padding-16">
         <div class="contact_info">Create SMS</div>
       </div>
-      <div onclick="openGoogleSlides(CONFIG['tips on prewritten messages page']['SMS'])" class="w3-container w3-cell w3-xlarge w3-right-align">
-        
-        <i class="fa-solid fa-circle-question w3-text-white" style="position: relative;"></i>
-      </div>
     </div>
     <div style="height: 80px;"></div>
     <div class="w3-container w3-white w3-padding w3-card-subtle">

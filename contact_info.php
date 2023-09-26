@@ -256,10 +256,10 @@ function fillInContactInfo() {
   }
   _('prefSprak').innerHTML = (person[TableColumns['lang']] == "") ? "Undeclared" : person[TableColumns['lang']];
   _('adName').innerHTML = (person[TableColumns['ad name']] == "") ? "Undeclared" : person[TableColumns['ad name']];
-  if (CONFIG['home page links']['ad deck'].trim() == '') {
+  if (CONFIG['ad deck link'].trim() == '') {
     _('adDeck').style.display = 'none';
   } else {
-    _('adDeck').href = CONFIG['home page links']['ad deck'];
+    _('adDeck').href = CONFIG['ad deck link'];
   }
   if (person[TableColumns['type']].toLowerCase().includes('family history')) {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
