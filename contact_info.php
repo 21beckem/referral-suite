@@ -43,7 +43,7 @@ require_once('require_area.php');
 
         <div class="w3-cell-row w3-padding-16">
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="telnumber" href="help_before_call.php" target="_parent">
+                <a id="telnumber" href="">
                     <i class="fa fa-phone-square w3-text-call-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Call</div>
                     </i>
@@ -218,7 +218,7 @@ function fillInAttemptLog() {
 function fillInContactInfo() {
   const person = idToReferral(getCookie('linkPages'));
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-  //_('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
+  _('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
   //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
   const numb = person[TableColumns['phone']].trim();
@@ -256,10 +256,10 @@ function fillInContactInfo() {
   }
   _('prefSprak').innerHTML = (person[TableColumns['lang']] == "") ? "Undeclared" : person[TableColumns['lang']];
   _('adName').innerHTML = (person[TableColumns['ad name']] == "") ? "Undeclared" : person[TableColumns['ad name']];
-  if (CONFIG['ad deck link'].trim() == '') {
+  if (CONFIG['Home Page']['ad deck link'].trim() == '') {
     _('adDeck').style.display = 'none';
   } else {
-    _('adDeck').href = CONFIG['ad deck link'];
+    _('adDeck').href = CONFIG['Home Page']['ad deck link'];
   }
   if (person[TableColumns['type']].toLowerCase().includes('family history')) {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");

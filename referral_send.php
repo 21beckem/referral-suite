@@ -101,7 +101,7 @@ function sendToAnotherArea() {
   let nextFU = new Date();
   person[TableColumns['sent date']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-  nextFU.setDate(nextFU.getDate() + parseInt(CONFIG['initial delay after sent']));
+  nextFU.setDate(nextFU.getDate() + parseInt(CONFIG['Follow Ups']['initial delay after sent']));
   nextFU.setHours(3, 0, 0, 0);
   person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 

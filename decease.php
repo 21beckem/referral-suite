@@ -51,8 +51,8 @@ require_once('require_area.php');
   <script>
 function fillInDeceeaseReasons() {
   let out = "<option></option>";
-  for (let i = 0; i < Object.keys(CONFIG['stop contacting reasons']).length; i++) {
-    out += '<option value="' + Object.keys(CONFIG['stop contacting reasons'])[i] + '">' + CONFIG['stop contacting reasons'][Object.keys(CONFIG['stop contacting reasons'])[i]] + '</option>';
+  for (let i = 0; i < Object.keys(CONFIG['Stop Contacting']['reasons']).length; i++) {
+    out += '<option value="' + Object.keys(CONFIG['Stop Contacting']['reasons'])[i] + '">' + CONFIG['Stop Contacting']['reasons'][Object.keys(CONFIG['Stop Contacting']['reasons'])[i]] + '</option>';
   }
   _('deceaseDropdown').innerHTML = out;
 }

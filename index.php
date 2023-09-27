@@ -170,9 +170,9 @@ if (my_referrals.length > 0) {
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
-setBigToolButtonLink('MB_deliverLink', CONFIG['book of mormon delivery form link']);
-setBigToolButtonLink('adDeck', CONFIG['ad deck link']);
-setBigToolButtonLink('gToBusSuite', CONFIG['business suite guidance link']);
+setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
+setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
+setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
 
 /*let streakBoxFilter = '';
 switch (foxStreakExtendingStatus()) {

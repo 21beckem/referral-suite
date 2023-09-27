@@ -30,10 +30,12 @@
         for ($i=0; $i < count($rows); $i++) {
             $row = $rows[$i];
             if ($row[3] == 'json') {
-                $out[ $row[5] ] = json_decode($row[6]);
+                $val = json_decode($row[6]);
             } else {
-                $out[ $row[5] ] = $row[6];
+                $val = $row[6];
             }
+
+            $out[ $row[2] ][ $row[5] ] = $val;
         }
         return $out;
     }
@@ -42,7 +44,7 @@
             return json_decode($_COOKIE['__CONFIG']);
         }
         global $__MISSIONINFO;
-        $rows = readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `settings` WHERE 1');
+        $rows = readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `settings` ORDER BY `settings`.`sort_order` ASC');
         $jsonStr = json_encode( makeConfigFromRows($rows) );
         setcookie('__CONFIG', $jsonStr, time() + (86400 * 1), "/"); // 86400 = 1 day
         return json_decode($jsonStr);
