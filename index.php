@@ -41,6 +41,25 @@ require_once('require_area.php');
   content: "$";
   color: transparent;
 }
+#foxWindow {
+  position: fixed;
+  background-color: blue;
+  width: 100%;
+  height: 170px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
+}
+#foxWindow img {
+  position: relative;
+  width: 170px;
+  bottom: -20px;
+}
+#wholePageCard {
+  background-color: white;
+  width: 100%;
+  position: relative;
+  margin-top: 170px;
+  box-shadow: 0px 11px 20px 3px black;
+}
     </style>
   </head>
   <body>
@@ -50,93 +69,97 @@ require_once('require_area.php');
         <a>Referral Suite</a>
       </div>
     </div>
-    <div style="height: 80px;"></div>
+    <div style="height: 60px;"></div>
 
-    <!-- Progress bars -->
-    <div class="w3-border-bottom">
-      <table style="width: 100%;">
-        <tr>
-          <td style="width: 80%; padding-left: 10px;">
-            <div class="w3-light-gray w3-round-medium">
-              <div id="totReferralsBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-            </div>
-          </td>
-          <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-        </tr>
-      </table>
-      <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Claimed referrals</div>
+    <div id="foxWindow">
+      <center><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""></center>
     </div>
 
-    <div class="w3-border-bottom" style="padding-top: 10px">
-      <table style="width: 100%;">
-        <tr>
-          <td style="width: 80%; padding-left: 10px;">
-            <div class="w3-light-gray w3-round-medium">
-              <div id="oldReferralBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-            </div>
-          </td>
-          <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-        </tr>
-      </table>
-      <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
-    </div>
-    <div class="w3-border-bottom w3-container" style="padding-bottom: 5px;">
-      <table style="width: 100%;">
-        <tr>
-          <td style="width: 60%; position: relative;">
-            <div id="streakBox">
-              <img src="img/streak1.png" alt="streak_ico" style="width: 100%;">
-              <a id="streakBoxNum" style="position:absolute; top: 0; left: 27px; font-size: 30px; color: #F203FF;">0</a>
-            </div>
-          </td>
-          <td style="width: 5%;"></td>
-          <td style="width: 30%; font-size: 25px;">
-            <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
-            <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
-          </td>
-        </tr>
-      </table>
-      <center>
-        <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
-      </center>
-    </div>
-    <br>
-    <center>
-      <a id="leaderboardBtn" href="/referral-suite-cert/Referral_Suite.pem.p12" class="w3-xlarge w3-round-large" download>Download RS Certificate</a>
-    </center>
+    <div id="wholePageCard">
+      <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
 
-    <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
-    <div class="full_width_home_btn">
-      <a id="MB_deliverLink" target="_blank" href="">
-        <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
-      </a>
-    </div>
-    <div class="full_width_home_btn">
-      <a id="adDeck" target="_blank" href="">
-        <div class="bigTipBtn" style="background-image: url('img/CurrentAdsInvert.jpg'); border: 1px solid #f2bfff;"></div>
-      </a>
-    </div>
-    <div class="full_width_home_btn">
-      <a id="gToBusSuite" target="_blank" href="">
-        <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
-      </a>
-    </div>
-    <div class="full_width_home_btn">
-      <a href="search_database.html">
-        <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
-      </a>
-    </div>
+      <div class="w3-container" style="padding-bottom: 5px;">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 60%; position: relative;">
+              <div id="streakBox">
+                <img src="img/streak1.png" alt="streak_ico" style="width: 100%;">
+                <a id="streakBoxNum" style="position:absolute; top: 0; left: 27px; font-size: 30px; color: #F203FF;">0</a>
+              </div>
+            </td>
+            <td style="width: 5%;"></td>
+            <td style="width: 30%; font-size: 25px;">
+              <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
+              <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
+            </td>
+          </tr>
+        </table>
+        <center>
+          <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
+        </center>
+      </div>
 
-    <!-- Logout Button -->
-    <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
+      <!-- Progress bars -->
+      <div class="w3-border-bottom">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 80%; padding-left: 10px;">
+              <div class="w3-light-gray w3-round-medium">
+                <div id="totReferralsBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
+              </div>
+            </td>
+            <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
+          </tr>
+        </table>
+        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Claimed referrals</div>
+      </div>
+
+      <div class="w3-border-bottom" style="padding-top: 10px">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 80%; padding-left: 10px;">
+              <div class="w3-light-gray w3-round-medium">
+                <div id="oldReferralBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
+              </div>
+            </td>
+            <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
+          </tr>
+        </table>
+        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
+      </div>
+
+      <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
+      <div class="full_width_home_btn">
+        <a id="MB_deliverLink" target="_blank" href="">
+          <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
+        </a>
+      </div>
+      <div class="full_width_home_btn">
+        <a id="adDeck" target="_blank" href="">
+          <div class="bigTipBtn" style="background-image: url('img/CurrentAdsInvert.jpg'); border: 1px solid #f2bfff;"></div>
+        </a>
+      </div>
+      <div class="full_width_home_btn">
+        <a id="gToBusSuite" target="_blank" href="">
+          <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
+        </a>
+      </div>
+      <div class="full_width_home_btn">
+        <a href="search_database.html">
+          <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
+        </a>
+      </div>
+
+      <!-- Logout Button -->
+      <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
 
 
-    <!-- Bottom Nav Bar -->
-    <?php
-    require_once('make_bottom_nav.php');
-    make_bottom_nav(1);
-    ?>
-
+      <!-- Bottom Nav Bar -->
+      <?php
+      require_once('make_bottom_nav.php');
+      make_bottom_nav(1);
+      ?>
+    </div>
     <script>
 const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;
