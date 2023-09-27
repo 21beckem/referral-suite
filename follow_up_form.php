@@ -1,3 +1,6 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,55 +45,52 @@
   </div>
 
     <!-- Bottom Nav Bar -->
-    <div style="height: 80px;"></div>
-    <div id="BottomNavBar">
-
-      <div class="bottomNavBtnParent">
-        <a href="index.php">
-          <i class="fa fa-home"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="schedule.html">
-          <i class="fa fa-calendar-o"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent w3-text-area-blue">
-        <a href="contact_book.php">
-          <i class="fa fa-address-book"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="unclaimed_referrals.php">
-          <i class="fa fa-bell"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="sync.html">
-          <i class="business-suite"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-        </a>
-      </div>
-
-    </div>
-
-
+    <?php
+    require_once('make_bottom_nav.php');
+    make_bottom_nav(3);
+    ?>
 
   <script>
+async function saveFollowUpForm() {
+  let person = idToReferral(getCookie('linkPages'));
+  if (person == null) {
+    JSAlert.alert('something went wrong. Try again');
+    safeRedirect('index.php');
+  }
+  const status = document.getElementById('statusdropdown').value;
+
+  let clickedOption = Object.keys(CONFIG['Follow Ups']['status delays'])[parseInt(status)];
+  let delay = CONFIG['Follow Ups']['status delays'][clickedOption];
+
+  if (isNaN(parseInt(delay))) {
+    person[TableColumns['AB status']] = delay;
+    person[TableColumns['next follow up']] = 'MAKE_VALUE_NULL';
+  } else {
+    delay = parseInt(delay);
+    let nextFU = new Date();
+    nextFU.setHours(3, 0, 0, 0);
+    nextFU.setDate(nextFU.getDate() + delay);
+    person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+  person[TableColumns['follow up status']] = status;
+  person[TableColumns['amount of times followed up']] = parseInt(person[TableColumns['amount of times followed up']]) + 1;
+
+  if (await savePerson(person)) {
+    alert('Saved!');
+    safeRedirect('index.php');
+
+    //givePoints
+    // setAddFoxPoints(10);               < - - come back to this later!
+  }
+}
+function fillInFollowUpOptions(el) {
+  let out = "<option></option>";
+  for (let i = 0; i < Object.keys(CONFIG['Follow Ups']['status delays']).length; i++) {
+    out += '<option value="' + i + '">' + Object.keys(CONFIG['Follow Ups']['status delays'])[i] + '</option>';
+  }
+  el.innerHTML = out;
+}
 fillInFollowUpOptions(_('statusdropdown'));
 
 function areaOptionChanged(el) {

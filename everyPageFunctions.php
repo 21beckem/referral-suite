@@ -152,7 +152,7 @@ async function logAttempt(y) {
     return await savePerson(person);
 }
 function idToReferral(id) {
-    return [... CLAIMED.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
+    return [... CLAIMED.concat(FOLLOW_UPS).filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
 }
 async function savePerson(perArr) {
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));

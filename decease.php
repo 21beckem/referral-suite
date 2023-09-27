@@ -66,7 +66,7 @@ function confirmDeceasePerson() {
     }
   });
 }
-function deceasePerson() {
+async function deceasePerson() {
   let person = idToReferral(getCookieJSON('linkPages'));
   if (person == null) {
     JSAlert.alert('Something went wrong. Try again');
@@ -84,7 +84,7 @@ function deceasePerson() {
   //   }
   //   data.new_pranked_numbers.push( [ person[TableColumns['phone']] , new Date().toISOString().split('T')[0] ] );
   // }
-  if (savePerson(person)) {
+  if (await savePerson(person)) {
     alert('Deleted!');
     safeRedirect('index.php');
   }

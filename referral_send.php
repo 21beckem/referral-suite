@@ -85,7 +85,7 @@ function confirmSendReferral() {
     }
   });
 }
-function sendToAnotherArea() {
+async function sendToAnotherArea() {
   let person = idToReferral(getCookieJSON('linkPages'));
   if (person == null) {
     JSAlert.alert('something went wrong. Try again');
@@ -105,7 +105,7 @@ function sendToAnotherArea() {
   nextFU.setHours(3, 0, 0, 0);
   person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-  if (savePerson(person)) {
+  if (await savePerson(person)) {
     alert('Sent!');
     safeRedirect('index.php');
 

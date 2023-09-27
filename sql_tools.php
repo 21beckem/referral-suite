@@ -128,7 +128,10 @@ function updateTableRowFromObject($YOUR_DATABASE_NAME, $tableName, $rowSelector,
 	return writeSQL($YOUR_DATABASE_NAME, $updateStr);
 }
 function addQuotes($str) {
-	if (gettype($str) == 'string') {
+	if ($str == 'MAKE_VALUE_NULL') {
+        return 'NULL';
+    }
+    if (gettype($str) == 'string') {
     	return '"'.addslashes($str).'"';
     }
 	if ($str == NULL) {

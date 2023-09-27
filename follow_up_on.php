@@ -1,3 +1,6 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -85,61 +88,43 @@
     <!-- Options to follow up -->
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
       <div class="w3-container w3-cell w3-center">
-        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.html">I've Sucessfully <br> Contacted <span id="refLoc2"></span></a>
+        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.php">I've Sucessfully <br> Contacted <span id="refLoc2"></span></a>
       </div>
     </div>
-    
-
-
-
 
    <!-- Bottom Nav Bar -->
-   <div style="height: 100px;"></div>
-   <div id="BottomNavBar">
+    <?php
+    require_once('make_bottom_nav.php');
+    make_bottom_nav(3);
+    ?>
+   <script>
+const teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
+const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` WHERE 1') )) ?>;
+function fillInFollowUpInfo() {
+  const person = idToReferral(getCookie('linkPages'));
+  _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
+  _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
+  _('lastAtt').innerHTML = new Date(person[TableColumns['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  let fuTimes = person[TableColumns['amount of times followed up']];
+  _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes) == 1) ? ' time' : ' times');
+  _('refLoc').innerHTML = person[TableColumns['teaching area']];
+  _('refLoc2').innerHTML = person[TableColumns['teaching area']];
+  _('refSender').innerHTML = teamInfos.filter(x=> parseInt(x[0])==parseInt(person[TableColumns['claimed area']]))[0][1];
 
-     <div class="bottomNavBtnParent">
-       <a href="index.php">
-         <i class="fa fa-home"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-       </a>
-     </div>
+  // find area number
+  for (let i = 0; i < areas.length; i++) {
+    if (areas[i][1] == person[TableColumns['teaching area']] && areas[i][2] != '') {
+      _('contactAreaCard').style.display = '';
+      _('telnumber').href = 'tel:+' + areas[i][2];
+      _('smsnumber').href = 'sms:+' + areas[i][2];
+      break;
+    }
+  }
+}
 
-     <div class="bottomNavBtnParent">
-       <a href="schedule.html">
-         <i class="fa fa-calendar-o"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-       </a>
-     </div>
+fillInFollowUpInfo();
 
-     <div class="bottomNavBtnParent w3-text-area-blue">
-       <a href="contact_book.php">
-         <i class="fa fa-address-book"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-       </a>
-       <div style="height: 0; width: 100%;">
-         <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-       </div>
-     </div>
-
-     <div class="bottomNavBtnParent">
-       <a href="unclaimed_referrals.php">
-         <i class="fa fa-bell"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-       </a>
-       <div style="height: 0; width: 100%;">
-         <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-       </div>
-     </div>
-
-     <div class="bottomNavBtnParent">
-       <a href="sync.html">
-         <i class="business-suite"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-       </a>
-     </div>
-
-   </div>
-   <script>fillInFollowUpInfo()</script>
+</script>
 
   </body>
 </html>
