@@ -54,11 +54,17 @@ require_once('require_area.php');
   bottom: -20px;
 }
 #wholePageCard {
-  background-color: white;
+  background-color: var(--white);
   width: 100%;
   position: relative;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
+}
+@media (prefers-color-scheme: dark) {
+  #foxWindow {
+    color-scheme: dark;
+    background: radial-gradient(circle, rgb(68 68 68) 0%, rgb(38 38 38) 100%);
+  }
 }
     </style>
   </head>
