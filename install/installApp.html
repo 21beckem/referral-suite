@@ -64,7 +64,13 @@ footer, header, hgroup, main, menu, nav, section {
                 <br><br>
 
                 <h3>Now click here to<br>install Referral Suite:</h3>
-                <center><h3><button id="add-button" class="purpleBtn">Install</button></h3></center>
+                <center>
+                    <div id="alreadyInstalled" style="display: none;">
+                        <br>
+                        <h4>Looks Like Referral Suite is already installed :)</h4>
+                    </div>
+                    <h3><button id="add-button" class="purpleBtn" style="display: none;">Install</button></h3>
+                </center>
                 
             </section>
 
@@ -79,7 +85,16 @@ Reveal.initialize({
 });
 const addBtn = document.getElementById('add-button');
 
+setTimeout(function() {
+    try {
+        document.getElementById('alreadyInstalled').style.display = 'block';
+    } catch (error) {}
+}, 1000);
 window.addEventListener('beforeinstallprompt', (e) => {
+    // set buttons
+    document.getElementById('alreadyInstalled').remove();
+    addBtn.parentElement.style.display = 'block';
+
     // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
     // Stash the event so it can be triggered later.
@@ -89,17 +104,18 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
     addBtn.addEventListener('click', () => {
         // hide our user interface that shows our A2HS button
-        addBtn.style.display = 'none';
+        addBtn.parentElement.style.display = 'none';
         // Show the prompt
         deferredPrompt.prompt();
         // Wait for the user to respond to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-        } else {
-            console.log('User dismissed the A2HS prompt');
-        }
-        deferredPrompt = null;
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+                addBtn.parentElement.style.display = 'none';
+            } else {
+                console.log('User dismissed the A2HS prompt');
+                addBtn.parentElement.style.display = 'block';
+            }
         });
     });
 });
