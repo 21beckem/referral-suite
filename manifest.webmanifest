@@ -1,5 +1,5 @@
 {
-    "description": "Manage Social-Media Referrals so simply!",
+    "description": "Manage Mission Social-Media Referrals",
     "name": "Referral Suite",
     "short_name": "Referral Suite",
     "start_url": "index.php",
@@ -9,7 +9,7 @@
     "icons": [
         {
             "src": "logo.png",
-            "sizes": "500x500",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ]

@@ -16,10 +16,10 @@ require_once('require_area.php');
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
+    <link rel="icon" type="image/png" href="/referral-suite-manager/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
     <style>
 #totReferralsBar, #oldReferralBar {

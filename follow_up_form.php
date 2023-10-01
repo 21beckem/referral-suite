@@ -19,7 +19,7 @@ require_once('require_area.php');
     <script src="fox.js"></script>
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>

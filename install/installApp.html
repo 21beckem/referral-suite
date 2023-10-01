@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Suite Installer</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
+    <meta name="theme-color" content="#462c6a">
+    <style>
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+    display: block;
+}
+#add-button {
+    font-size: inherit;
+    color: inherit;
+    font-weight: 400;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-family: "League Gothic",Impact,sans-serif;
+}
+.purpleBtn {
+    background: linear-gradient(140deg, rgb(217 101 189) -20%, rgb(185 110 239) 100%);
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 3px;
+    color: #fff;
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/moon.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Wonderful!</h2>
+                
+                <br><br>
+
+                <h3>Now click here to<br>install Referral Suite:</h3>
+                <center><h3><button id="add-button" class="purpleBtn">Install</button></h3></center>
+                
+            </section>
+
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js"></script>
+    <script>
+Reveal.initialize({
+    controlsLayout: 'edges',
+    width: 740,
+    height: 1480,
+});
+const addBtn = document.getElementById('add-button');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to notify the user they can add to home screen
+    addBtn.style.display = 'block';
+
+    addBtn.addEventListener('click', () => {
+        // hide our user interface that shows our A2HS button
+        addBtn.style.display = 'none';
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+        } else {
+            console.log('User dismissed the A2HS prompt');
+        }
+        deferredPrompt = null;
+        });
+    });
+});
+    </script>
+</body>
+</html>
