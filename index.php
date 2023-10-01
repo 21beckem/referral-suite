@@ -16,7 +16,7 @@ require_once('require_area.php');
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <link rel="icon" type="image/png" href="/referral-suite-manager/logo.png" />
+    <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
@@ -55,8 +55,10 @@ require_once('require_area.php');
 }
 #wholePageCard {
   background-color: var(--white);
-  width: 100%;
+  width: calc(100% + 2px);
   position: relative;
+  margin-right: -1px;
+  margin-left: -1px;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
 }

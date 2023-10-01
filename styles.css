@@ -17,24 +17,6 @@
     --business-suite-defualt-icon: none;
     --business-suite-active-icon: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
 }
-.business-suite {
-    margin-top: 3px;
-    padding-bottom: 0px;
-    font-style: normal;
-    display: block;
-    width: 100%;
-    height: 35px;
-    background-image: url(img/business-suite.svg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-.business-suite {
-    filter: var(--business-suite-defualt-icon);
-}
-.w3-text-area-blue a .business-suite {
-    filter: var(--business-suite-active-icon);
-}
 .bottomNavBtnParent {
     text-align: center;
     float: left;
@@ -42,11 +24,15 @@
     font-size: 27px;
 }
 #BottomNavBar {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    z-index: 9999999;
     background-color: var(--light-grey);
     color: var(--black);
     bottom: -5px;
     position: fixed;
     width: 100%;
+    min-height: 63px;
 }
 .bottomNavBtnParent a div {
     display: none;
@@ -99,23 +85,6 @@
 }
 .contact_info {
     margin: -4px;
-}
-#BottomNavBar {
-    padding-top: 7px;
-    padding-bottom: 16px;
-    z-index: 9999999;
-}
-#syncBtn {
-    width: 90%;
-    color: white;
-    height: 100px;
-    border: none;
-    background-image: url('img/SYNC_btn.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 10px;
-    box-shadow: 1px 2px 10px -7px black;
 }
 .w3-email-color {
     color: var(--white);
@@ -177,6 +146,7 @@ html, body {
     overscroll-behavior: none;
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 .person-to-click * {

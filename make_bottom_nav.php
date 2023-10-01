@@ -39,9 +39,9 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') { ?>
     </div>
 
     <div class="bottomNavBtnParent <?php if ($pageNum==5) { echo('w3-text-area-blue'); } ?>">
-        <a href="sync.html">
-            <i class="business-suite"></i>
-            <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
+        <a href="shop.php">
+            <i class="fa-solid fa-tag"></i>
+            <div class="w3-tiny w3-opacity" style="height: 0;">Shop</div>
         </a>
     </div>
 
