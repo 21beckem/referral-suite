@@ -86,7 +86,7 @@ require_once('require_area.php');
     <div id="wholePageCard">
       <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
 
-      <div class="w3-container" style="padding-bottom: 5px;">
+      <div class="w3-container" style="padding-bottom: 20px;">
         <table style="width: 100%;">
           <tr>
             <td style="width: 60%; position: relative;">
