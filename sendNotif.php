@@ -1,29 +1,35 @@
 <?php
 
-require_once('vendor/autoload.php');
+function sendFCMNotification($deviceToken) {
+    $url = 'https://fcm.googleapis.com/fcm/send';
+    $data = [
+        'to' => $deviceToken,
+        'notification' => [
+            'body' => 'Yo! New Referral!',
+            'title' => 'Referral Received',
+            'image' => 'img/fox_profile_pics/red.svg'
+        ]
+    ];
+    $options = array(
+        CURLOPT_URL => $url,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => array(
+            "Authorization: key=AAAAjdtjTaQ:APA91bGYIyTdoqKCX0RwqwJBky84CsdJXf-pE_zUcoHHuR0Di6WAQs_1yoZqIHWJncYkyrsQh1tcd3SmXcdNtit9vHb4_40qX3p-PKQfSgaJMQ4k5hSYdtBb7c-xy-K5INsWE8tE9v0U",
+            "Content-Type: application/json",
+        ),
+        CURLOPT_POSTFIELDS => json_encode($data),
+    );
+    $curl = curl_init();
+    curl_setopt_array($curl, $options);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    return json_decode($response);
+}
 
-use Minishlink\WebPush\Subscription;
-use Minishlink\WebPush\WebPush;
+$deviceToken = 'era-39GGI-qim6L9Todmdy:APA91bFUzh6IP0HZ3soGbxkCjDqujw3ZH5s91OQVz711xosL9b-JFuZtnJeOgLFhNHLWrLBgYU0_tzw0J8Y3zV_e4nWsW-jy6jDY44O0vcdBEKU-ewcb2kY3g56Vj9ZJCDkBzrHtD6wE';
+$result = sendFCMNotification($deviceToken);
 
-
-$auth = [
-    'VAPID' => [
-        'subject' => 'mailto:m1.g2.becker3@gmail.com',
-        'publicKey' => 'BN2yWUCkOtoNVl5V9dwHj6rLYQn7-1YsnZw1Fpmc84hUtxKxd40JDC3XKw-uiByi95XXnZHhvTLAwd-lbtcpYvQ',
-        'privateKey' => 'QLW1rdrBEKafhH7wfUznv_eh7j4JCIs2E4gh3uGrOvA',
-    ],
-];
-
-$webPush = new WebPush($auth);
-
-$subStr = '{"endpoint":"https://fcm.googleapis.com/fcm/send/cPPgJbV3zeE:APA91bGfMPj2uWd-lz6qI_OJGnDzzd2nV-MZjbtPncGpv_zgtZjis16a0I5zYoJzyhcAb4fwhxq1VHiN3_whav0645j_ExfyCUG9kAi311j7m9d-o7loH_TpXHHbZAzBh8K0gFSKSILc","expirationTime":null,"keys":{"p256dh":"BCYS2GZ_IH9mqsk2hz7ZyFuKDx5IjtkNWWIkJbwix5cXxm81xEwz-dLuZBujMIq9pP-XnxGiaM-DLLJ6AgLPNpc","auth":"ebnvEzEpLjl0VLxOJqaPFA"}}';
-
-$report = $webPush->sendOneNotification(
-    Subscription::create(json_decode($subStr,true))
-    , '{"title":"Hi from php" , "body":"php is amazing!" , "url":"./?message=123"}', ['TTL' => 5000]);
-
-print_r($report);
-
-
+var_dump($result);
 
 ?>

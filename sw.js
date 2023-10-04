@@ -1,15 +1,12 @@
 self.addEventListener("push", (event) => {
-    const notification = event.data.json();
-    // {"title":"Hi" , "body":"something amazing!", "url":"./?message=123"}
+    const notification = event.data.json().notification;
     event.waitUntil(self.registration.showNotification(notification.title, {
         body: notification.body,
-        icon: "logo.png",
-        data: {
-            notifURL: notification.url
-        }
+        icon: notification.image,
+        
     }));
 });
 
 self.addEventListener("notificationclick", (event) => {
-    event.waitUntil(clients.openWindow(event.notification.data.notifURL));
+    event.waitUntil(clients.openWindow('/referral-suite-manager/unclaimed_referrals.php'));
 });
