@@ -8,5 +8,5 @@ self.addEventListener("push", (event) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
-    event.waitUntil(clients.openWindow('/referral-suite-manager/unclaimed_referrals.php'));
+    event.waitUntil(clients.openWindow('/referral-suite/unclaimed_referrals.php'));
 });

@@ -19,7 +19,7 @@ require_once('require_area.php');
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
+    <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
     <style>
 #totReferralsBar, #oldReferralBar {
