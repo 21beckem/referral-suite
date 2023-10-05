@@ -55,7 +55,7 @@ function writeSchedule() {
     // times Col
     //timesMarginBox.innerHTML += '<div style="opacity:0">00:00-00:00</div>';
     for (let i = 1; i < schedArr[0].length; i++) {
-        timesMarginBox.innerHTML += '<div>' + schedArr[0][i] + '-' + schedArr[0][i] + '</div>';
+        timesMarginBox.innerHTML += '<div>' + schedArr[0][i] + '-' + schedArr[1][i] + '</div>';
     }
     timesMarginBox.style.height = 'calc(100% - '+document.querySelector('#scheduleColDivs .tableCol > div > div').clientHeight+'px)';
 }
