@@ -1,0 +1,91 @@
+*:focus {
+    outline: none;
+}
+.sheetTbl select {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    font-size: medium;
+    color: inherit;
+}
+.sheetTbl td:has(select):hover {
+    background-color: #ddd;
+}
+.sheetTbl td:has(select) {
+    padding: 0;
+    padding-right: 5px;
+}
+.sheetMap_EditedCell {
+    font-weight: bold;
+}
+#scheduleColDivs {
+    display: flex;
+	overflow: auto;
+	flex: none;
+    width: 80%;
+    height: 100%;
+    scroll-snap-type: x mandatory;
+    flex-flow: row nowrap;
+    overflow-y: hidden;
+}
+#scheduleColDivs > .tableCol {
+    width: 100%;
+	scroll-snap-align: center;
+	flex: none;
+    font-size: 22px;
+    align-content: stretch;
+}
+#scheduleColDivs > .tableCol > div {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    height: 100%;
+    padding: 2px;
+}
+#scheduleColDivs > .tableCol > div > div {
+    margin-bottom: 2px;
+    white-space: break-spaces;
+}
+#scheduleColDivs select {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    color: black;
+}
+#scheduleColDivs select option {
+    background-color: var(--white);
+}
+body, html {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+#scheduleParent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+#timesContainer {
+    width: 20%;
+    z-index: 5;
+    box-shadow: -4px 0px 8px black;
+    height: 100%;
+    padding: 2px;
+    position: relative;
+}
+#timesMarginBox {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 0;
+}

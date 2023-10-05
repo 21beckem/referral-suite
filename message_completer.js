@@ -1,5 +1,5 @@
 const current_page = document.currentScript.getAttribute('current-page');
-const person = data.area_specific_data.my_referrals[getCookieJSON('linkPages')] || null;
+const person = idToReferral(getCookieJSON('linkPages')) || null;
 
 const templateMssg = (getCookie('completeThisMessage'));
 
@@ -37,7 +37,7 @@ function updateField(el) {
 }
 
 function sendTheMessage() {
-	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[ CONFIG['tableColumns']['phone'] ])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ CONFIG['tableColumns']['email'] ] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
+	const link_beginning = (current_page == 'sms') ? 'sms:' + encodeURI(String(person[ TableColumns['phone'] ])) + '?body=' : 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[ TableColumns['email'] ] + '&entry.873933093=' + getCookie('areaUserEmail') + '&entry.1947536680=';
 	const sendLink = link_beginning + encodeURI(_('MessageOutput').innerText);
 	_('fakeLinkToClickToSend').href = sendLink;
 	let listOfIns = _('completerItemsParent').querySelectorAll('INPUT');
@@ -51,7 +51,7 @@ function sendTheMessage() {
 		logAttempt((current_page == 'sms') ? 1 : 2);
 		localStorage.setItem('justAttemptedContact', '1');
 		_('fakeLinkToClickToSend').click();
-		safeRedirect('contact_info.html');
+		safeRedirect('contact_info.php');
 	} else {
 		alert('Please fill out the required info 🙃');
 	}
@@ -65,9 +65,9 @@ function trySetValue(el, val) {
 	} catch (e) {}
 }
 window.onload = () => {
-	Object.keys(CONFIG['tableColumns']).forEach((colName) => {
-		trySetValue(_('completerInputFor_{'+colName+'}'), person[ CONFIG['tableColumns'][colName] ]);
+	Object.keys(TableColumns).forEach((colName) => {
+		trySetValue(_('completerInputFor_{'+colName+'}'), person[ TableColumns[colName] ]);
 	});
-	let addStr = person[CONFIG['tableColumns']['street address']] + ' ' + person[CONFIG['tableColumns']['city']] + ' ' + person[CONFIG['tableColumns']['zip']];
+	let addStr = person[TableColumns['street address']] + ' ' + person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
 	trySetValue(_('completerInputFor_{address}'), addStr);
 }

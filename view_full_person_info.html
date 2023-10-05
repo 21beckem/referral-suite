@@ -13,11 +13,11 @@
     <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
-    <script src="script.js"></script>
+    <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
     <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/referral-suite/manifest.webmanifest">
+    <link rel="manifest" href="/referral-suite-manager/manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>
@@ -52,24 +52,24 @@
 
    <!-- Bottom Nav Bar -->
    <div style="height: 80px;"></div>
-   <div id="BottomNavBar" class="w3-bottom w3-cell-row w3-light-gray">
+   <div id="BottomNavBar">
 
-     <div class="w3-container w3-cell w3-center w3-xlarge w3-text-area-blue">
-       <a href="index.html">
+     <div class="bottomNavBtnParent w3-text-area-blue">
+       <a href="index.php">
          <i class="fa fa-home"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
        </a>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
+     <div class="bottomNavBtnParent">
        <a href="schedule.html">
          <i class="fa fa-calendar-o"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
        </a>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
-       <a href="contact_book.html">
+     <div class="bottomNavBtnParent">
+       <a href="contact_book.php">
          <i class="fa fa-address-book"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
        </a>
@@ -78,8 +78,8 @@
        </div>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
-       <a href="unclaimed_referrals.html">
+     <div class="bottomNavBtnParent">
+       <a href="unclaimed_referrals.php">
          <i class="fa fa-bell"></i>
          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
        </a>
@@ -88,10 +88,10 @@
        </div>
      </div>
 
-     <div class="w3-container w3-cell w3-center w3-xlarge">
+     <div class="bottomNavBtnParent">
        <a href="sync.html">
-         <i class="fa fa-refresh"></i>
-         <div class="w3-tiny w3-opacity" style="height: 0;">Sync</div>
+         <i class="business-suite"></i>
+         <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
        </a>
      </div>
 

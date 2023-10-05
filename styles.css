@@ -3,6 +3,7 @@
     --black: black;
     --white: white;
     --red: rgb(158,0,0);
+    --pure-red: rgb(225, 0, 0);
     --warning-red: #d42121;
     --warning-orange: #d87300;
     --all-good-green: #058d00;
@@ -13,13 +14,38 @@
     --sms-color: #2196F3;
     --call-color: #4CAF50;
     --light-grey: #f1f1f1;
+    --business-suite-defualt-icon: none;
+    --business-suite-active-icon: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
 }
-.w3-spin-centered{
-    animation: w3-spin-centered 2s infinite cubic-bezier(0.52, -0.41, 0.45, 1.42);
+.bottomNavBtnParent {
+    text-align: center;
+    float: left;
+    width: calc(100% / 5);
+    font-size: 27px;
 }
-@keyframes w3-spin-centered {
-    0%{transform:translate(-50%, -50%) rotate(0deg)}
-    100%{transform:translate(-50%, -50%) rotate(359deg)}
+#BottomNavBar {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    z-index: 9999999;
+    background-color: var(--light-grey);
+    color: var(--black);
+    bottom: -5px;
+    position: fixed;
+    width: 100%;
+    min-height: 63px;
+}
+.bottomNavBtnParent a div {
+    display: none;
+}
+.purpleBtn {
+    background: linear-gradient(140deg, rgba(232,133,208,1) -20%, rgb(196 167 217) 100%);
+    background-color: #BBA7DA;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 3px;
+    color: #fff;
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
 }
 #loadingcover > div {
     height: 100%;
@@ -60,23 +86,6 @@
 .contact_info {
     margin: -4px;
 }
-#BottomNavBar {
-    padding-top: 7px;
-    padding-bottom: 16px;
-    z-index: 9999999;
-}
-#syncBtn {
-    width: 90%;
-    color: white;
-    height: 100px;
-    border: none;
-    background-image: url('img/SYNC_btn.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 10px;
-    box-shadow: 1px 2px 10px -7px black;
-}
 .w3-email-color {
     color: var(--white);
     background-color: var(--email-color) !important;
@@ -102,10 +111,10 @@
     background-color: var(--light-blue) !important;
 }
 .w3-red {
-    background-color: var(--red) !important;
+    background-color: var(--pure-red) !important;
 }
 .w3-text-red {
-    color: var(--red) !important;
+    color: var(--pure-red) !important;
 }
 
 .w3-dot {
@@ -125,7 +134,8 @@
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    transform: translate(7px, -31px);    
+    transform: translate(12px, -36px);
+    box-shadow: 0px 0px 10px -2px black;
 }
 
 .w3-sync-claim {
@@ -136,6 +146,7 @@ html, body {
     overscroll-behavior: none;
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 .person-to-click * {
@@ -402,6 +413,8 @@ tr.spaceUnder>td {
         --light-grey: #5f5f5f;
         --white: rgb(24, 24, 24);
         --black: white;
+        --business-suite-defualt-icon: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(23deg) brightness(118%) contrast(118%);
+        --business-suite-active-icon: brightness(0) saturate(100%) invert(63%) sepia(68%) saturate(2997%) hue-rotate(219deg) brightness(103%) contrast(98%);
     }
     body {
         background-color: rgb(24, 24, 24);
