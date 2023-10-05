@@ -1,13 +1,13 @@
 {
     "inboxers" : {
-        "Visby" : { "email": "214811603@missionary.org", "color": "teal" },
-        "Växjö" : { "email": "8868619@missionary.org", "color": "green" },
+        "Hägersten" : { "email": "500367156@missionary.org", "color": "teal" },
+        "Borås" : { "email": "8868634@missionary.org", "color": "green" },
         "Uppsala" : { "email": "115495100@missionary.org", "color": "red" },
         "Skellefteå" : { "email": "8868621@missionary.org", "color": "orange" },
         "Karlstad" : { "email": "8868625@missionary.org", "color": "lavender" },
-        "Luleå" : { "email": "500382804@missionary.org", "color": "purple" },
+        "Kristianstad" : { "email": "49896900@missionary.org", "color": "purple" },
         "Alingsås" : { "email": "66744624@missionary.org", "color": "yellow" },
-        "Karlskrona" : { "email": "8868617@missionary.org", "color": "pink" },
+        "Gävle" : { "email": "115495285@missionary.org", "color": "pink" },
         "SMOEs" : { "email": "141877743@missionary.org", "color": "light-green" }
     },
     "decease reasons" : {
