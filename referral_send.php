@@ -21,7 +21,7 @@ require_once('require_area.php');
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+    <link rel="stylesheet" href="autoComplete-purple.css">
     <meta name="theme-color" content="#462c6a">
   </head>
   <body>
