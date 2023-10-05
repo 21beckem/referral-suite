@@ -68,6 +68,26 @@ require_once('require_area.php');
     background: radial-gradient(circle, rgb(68 68 68) 0%, rgb(38 38 38) 100%);
   }
 }
+.comingSoonBox {
+  position: relative;
+}
+.comingSoonBox *:not(.comingSoonWords) {
+  filter: grayscale(1) blur(1px);
+  opacity: 0.8;
+}
+.comingSoonBox .comingSoonWords {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  line-height: 6;
+  height: 100%;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0px 1px 8px black;
+}
     </style>
   </head>
   <body>
@@ -86,7 +106,7 @@ require_once('require_area.php');
     <div id="wholePageCard">
       <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
 
-      <div class="w3-container" style="padding-bottom: 20px;">
+      <div class="w3-container comingSoonBox" style="padding-bottom: 20px;">
         <table style="width: 100%;">
           <tr>
             <td style="width: 60%; position: relative;">
@@ -105,6 +125,7 @@ require_once('require_area.php');
         <center>
           <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
         </center>
+        <div class="comingSoonWords">Coming Soon</div>
       </div>
 
       <!-- Progress bars -->
