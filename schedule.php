@@ -49,7 +49,8 @@ require_once('require_area.php');
     ?>
     <script>
       const schedArr = <?php echo( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `schedule` WHERE 1')[0][0] ); ?>.transpose();
-      const teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
+      let teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
+      teamInfos.unshift(['-2', '~ Other ~', '', 'white', '', '', '0']);
       const InboxColors = <?php echo(json_encode($InboxColors)); ?>;
     </script>
     <script src="schedule/schedule.js"></script>
