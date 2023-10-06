@@ -77,8 +77,9 @@ async function saveFollowUpForm() {
   person[TableColumns['amount of times followed up']] = parseInt(person[TableColumns['amount of times followed up']]) + 1;
 
   if (await savePerson(person)) {
-    alert('Saved!');
-    safeRedirect('index.php');
+    JSAlert.alert('Saved!', '', JSAlert.Icons.Success).then(()=> {
+      safeRedirect('index.php');
+    });
 
     //givePoints
     // setAddFoxPoints(10);               < - - come back to this later!

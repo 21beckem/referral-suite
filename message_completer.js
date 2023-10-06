@@ -53,7 +53,7 @@ function sendTheMessage() {
 		_('fakeLinkToClickToSend').click();
 		safeRedirect('contact_info.php');
 	} else {
-		alert('Please fill out the required info 🙃');
+		JSAlert.alert('Please fill out the required info 🙃');
 	}
 }
 

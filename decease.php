@@ -85,8 +85,9 @@ async function deceasePerson() {
   //   data.new_pranked_numbers.push( [ person[TableColumns['phone']] , new Date().toISOString().split('T')[0] ] );
   // }
   if (await savePerson(person)) {
-    alert('Deleted!');
-    safeRedirect('index.php');
+    JSAlert.alert('Marked as not interested!', '', JSAlert.Icons.Success).then(()=> {
+      safeRedirect('index.php');
+    });
   }
 }
 
