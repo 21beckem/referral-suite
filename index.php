@@ -174,7 +174,7 @@ require_once('require_area.php');
         </a>
       </div>
       <div class="full_width_home_btn">
-        <a href="search_database.html">
+        <a href="referral_archive.php">
           <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
       </div>

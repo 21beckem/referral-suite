@@ -1,10 +1,13 @@
+<?php
+require_once('require_area.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral Search</title>
+    <title>Referral Archive</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
@@ -72,51 +75,53 @@
     </div>
 
     <!-- Bottom Nav Bar -->
-    <div style="height: 80px;"></div>
-    <div id="BottomNavBar">
+    <?php
+      require_once('make_bottom_nav.php');
+      make_bottom_nav(1);
+    ?>
+    <script>
+async function searchAndDisplayDatabaseReferrals() {
+  _('loadingAnim').style.display = '';
+  const searchQ = _('referralSearchbar').value;
 
-      <div class="bottomNavBtnParent w3-text-area-blue">
-        <a href="index.php">
-          <i class="fa fa-home"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Home</div>
-        </a>
-      </div>
+  let fetchURL = 'php_functions/searchArchive.php?q=' + encodeURIComponent(searchQ);
+  const response = await safeFetch(fetchURL);
+  const returnedRefs = await response.json();
 
-      <div class="bottomNavBtnParent">
-        <a href="schedule.html">
-          <i class="fa fa-calendar-o"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Schedule</div>
-        </a>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="contact_book.php">
-          <i class="fa fa-address-book"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="followup_reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="unclaimed_referrals.php">
-          <i class="fa fa-bell"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">Unclaimed</div>
-        </a>
-        <div style="height: 0; width: 100%;">
-          <div id="reddot" class="w3-circle w3-red w3-notification-dot" style="display: none;"></div>
-        </div>
-      </div>
-
-      <div class="bottomNavBtnParent">
-        <a href="sync.html">
-          <i class="business-suite"></i>
-          <div class="w3-tiny w3-opacity" style="height: 0;">B S</div>
-        </a>
-      </div>
-
-    </div>
+  let output = '';
+  for (let i = 0; i < returnedRefs.length; i++) {
+    const per = returnedRefs[i];
+    output += `<div class="searchResult" onclick="viewPersonInfo(` + JSON.stringify(per).replaceAll("'", "\\'").replaceAll('"', "'") + `)">
+          <a class="name">` + per[TableColumns['first name']] + per[TableColumns['last name']] + `</a>
+          <table style="width: 100%;">
+            <tr>
+              <td>
+                <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-clock" style="color: var(--light-blue);"></i> ` + per[TableColumns['date']] + `</div>
+              </td>
+              <td>
+                <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-signal" style="color: var(--call-color);"></i> ` + per[TableColumns['sent status']] + `</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-reply-all" style="color: var(--sms-color);"></i> ` + per[TableColumns['type']] + `</div>
+              </td>
+              <td>
+                <div class="w3-left-align w3-small w3-opacity"><i class="fa-solid fa-chalkboard-user" style="color: var(--red);"></i> ` + per[TableColumns['teaching area']] + `</div>
+              </td>
+            </tr>
+          </table>
+      </div>`;
+  }
+  if (returnedRefs.length == 0) {
+    output = 'No results';
+  } else if (output == '') {
+    output = "There's been an error...";
+  }
+  _('loadingAnim').style.display = 'none';
+  _('searchResultsBox').innerHTML = output;
+}
+    </script>
     
   </body>
 </html>
