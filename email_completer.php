@@ -17,7 +17,7 @@ require_once('require_area.php');
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
-        <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
+    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">

@@ -43,7 +43,7 @@ require_once('require_area.php');
 
         <div class="w3-cell-row w3-padding-16">
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="telnumber" href="">
+                <a id="telnumber" onclick="logAttempt(0)" href="">
                     <i class="fa fa-phone-square w3-text-call-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Call</div>
                     </i>
