@@ -98,6 +98,6 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
         } else {
             console.error('subscription token saving error: ', msg);
         }
-    }
+    }//*/
 </script>
 <?php } ?>

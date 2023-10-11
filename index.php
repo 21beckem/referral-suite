@@ -125,7 +125,7 @@ require_once('require_area.php');
         <center>
           <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
         </center>
-        <div class="comingSoonWords">Coming Soon</div>
+        <div class="comingSoonWords">Coming Soon Beta</div>
       </div>
 
       <!-- Progress bars -->
@@ -190,6 +190,20 @@ require_once('require_area.php');
       ?>
     </div>
     <script>
+/*if (!("Notification" in window)) {
+  // Check if the browser supports notifications
+  alert("This browser does not support desktop notification");
+} else {
+  Notification.requestPermission().then((permission) => {
+    alert(permission);
+    // If the user accepts, let's create a notification
+    if (permission === "granted") {
+      const notification = new Notification("Hi there!");
+      // …
+    }
+  });
+}*/
+
 const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;
 const currentRefCount = my_referrals.length;

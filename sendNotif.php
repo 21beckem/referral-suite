@@ -27,7 +27,7 @@ function sendFCMNotification($deviceToken) {
     return json_decode($response);
 }
 
-$deviceToken = 'era-39GGI-qim6L9Todmdy:APA91bFUzh6IP0HZ3soGbxkCjDqujw3ZH5s91OQVz711xosL9b-JFuZtnJeOgLFhNHLWrLBgYU0_tzw0J8Y3zV_e4nWsW-jy6jDY44O0vcdBEKU-ewcb2kY3g56Vj9ZJCDkBzrHtD6wE';
+$deviceToken = 'fkKMYlClrS1ZXtrs5-BRoC:APA91bHQuM63iyRIMBb9eaAGt7h1erH48cNQzS0z2HU5W2Sdjkh84E-JZT2jmW6DtfQePfqF5HQdpQ5LNsz--CLTv8g9rqFy92piKb5tNY8t27jF8m-s-aoM9Ysawy-28yiL4Oa50-fb';
 $result = sendFCMNotification($deviceToken);
 
 var_dump($result);
