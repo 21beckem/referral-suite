@@ -1,20 +1,22 @@
 <?php
-  session_start();
-  setcookie('teamId', '', -1, '/');
-  setcookie('__TEAM', '', -1, '/');
-  setcookie('__CONFIG', '', -1, '/');
-  if (!isset($_COOKIE['missionInfo'])) {
-    header('location: sign_in.php');
-  }
-  $missionInfo = json_decode($_COOKIE['missionInfo']);
-  require_once('sql_tools.php');
+session_start();
+setcookie('teamId', '', -1, '/');
+setcookie('__TEAM', '', -1, '/');
+setcookie('__CONFIG', '', -1, '/');
+if (!isset($_COOKIE['missionInfo'])) {
+  header('location: sign_in.php');
+}
+$missionInfo = json_decode($_COOKIE['missionInfo']);
+require_once('sql_tools.php');
 
-  if (!empty($_POST)) {
-    if (isset($_POST['teamId'])) {
-      setcookie('teamId', $_POST['teamId'], time() + (10 * 365 * 24 * 60 * 60), '/');
-      header('location: index.php');
-    }
+if (!empty($_POST)) {
+  if (isset($_POST['teamId'])) {
+    setcookie('teamId', $_POST['teamId'], time() + (10 * 365 * 24 * 60 * 60), '/');
+    header('location: index.php');
   }
+}
+// delete notification token if it exists
+writeSQL($missionInfo->mykey, 'DELETE FROM `tokens` WHERE `token`="'.$_SESSION['currentNotificationToken'].'"');
 ?>
 <!DOCTYPE html>
 <html lang="en">

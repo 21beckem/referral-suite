@@ -1,5 +1,7 @@
 <?php
 
+require_once('sql_tools.php');
+
 function sendFCMNotification($deviceToken) {
     $url = 'https://fcm.googleapis.com/fcm/send';
     $data = [
@@ -27,9 +29,22 @@ function sendFCMNotification($deviceToken) {
     return json_decode($response);
 }
 
-$deviceToken = 'fkKMYlClrS1ZXtrs5-BRoC:APA91bHQuM63iyRIMBb9eaAGt7h1erH48cNQzS0z2HU5W2Sdjkh84E-JZT2jmW6DtfQePfqF5HQdpQ5LNsz--CLTv8g9rqFy92piKb5tNY8t27jF8m-s-aoM9Ysawy-28yiL4Oa50-fb';
-$result = sendFCMNotification($deviceToken);
+function notifyTeam($mykey, $tmId) {
+    $tmId = strval($tmId);
+    $rowsWithId = readSQL($mykey, 'SELECT * FROM `tokens` WHERE `teamId`="'.$tmId.'"');
 
-var_dump($result);
+    for ($i=0; $i < count($rowsWithId); $i++) { 
+        $row = $rowsWithId[$i];
+
+        // send notification
+        $result = sendFCMNotification($row[2]);
+        if (!$result->success) {
+            // delete token if fail
+            writeSQL($mykey, 'DELETE FROM `tokens` WHERE `id`='.$row[0]);
+        }
+    }
+}
+notifyTeam('SSM64f4c72792c37', 4);
+
 
 ?>

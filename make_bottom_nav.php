@@ -91,13 +91,12 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
         const res = await fetch('php_functions/addSubToken.php?teamId=<?php echo($__TEAM->id); ?>' + '&token=' + encodeURI(tok));
         const msg = await res.text();
         if (res.status == 200) {
-            alert('subscription token saved: ', tok);
+            console.log('subscription token saved:\n' + tok);
         } else if (res.status == 202) {
-            console.log(msg);
-            console.log(tok);
+            console.log(msg, '\n'+tok);
         } else {
             console.error('subscription token saving error: ', msg);
         }
-    }//*/
+    }
 </script>
 <?php } ?>

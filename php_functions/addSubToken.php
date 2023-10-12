@@ -12,6 +12,9 @@ if (!isset($_GET['teamId']) || !isset($_GET['token'])) {
     http_response_code(500);
     die('Uh... something went wrong. You didn\'t provide the data I need');
 }
+
+$_SESSION['currentNotificationToken'] = $_GET['token'];
+
 // if token already exists
 $existsAlready = count( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `tokens` WHERE `token`="'.$_GET['token'].'"') )  > 0;
 if ($existsAlready) {
