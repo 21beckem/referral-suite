@@ -115,8 +115,8 @@ function fillInFollowUpInfo() {
   for (let i = 0; i < areas.length; i++) {
     if (areas[i][1] == person[TableColumns['teaching area']] && areas[i][2] != '') {
       _('contactAreaCard').style.display = '';
-      _('telnumber').href = 'tel:+' + areas[i][2];
-      _('smsnumber').href = 'sms:+' + areas[i][2];
+      _('telnumber').href = 'tel:' + areas[i][2];
+      _('smsnumber').href = 'sms:' + areas[i][2];
       break;
     }
   }
