@@ -17,6 +17,7 @@ if (!empty($_POST)) {
 }
 // delete notification token if it exists
 writeSQL($missionInfo->mykey, 'DELETE FROM `tokens` WHERE `token`="'.$_SESSION['currentNotificationToken'].'"');
+unset($_SESSION['currentNotificationToken']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,6 @@ writeSQL($missionInfo->mykey, 'DELETE FROM `tokens` WHERE `token`="'.$_SESSION['
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
