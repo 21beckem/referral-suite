@@ -60,6 +60,7 @@ require_once('require_area.php');
   margin-left: -1px;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
+  clip-path: inset(-15px 0px 0px 0px);
 }
 @media (prefers-color-scheme: dark) {
   #foxWindow {
@@ -104,28 +105,6 @@ require_once('require_area.php');
 
     <div id="wholePageCard">
       <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
-
-      <div class="w3-container comingSoonBox" style="padding-bottom: 20px;">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 60%; position: relative;">
-              <div id="streakBox">
-                <img src="img/streak1.png" alt="streak_ico" style="width: 100%;">
-                <a id="streakBoxNum" style="position:absolute; top: 0; left: 27px; font-size: 30px; color: #F203FF;">0</a>
-              </div>
-            </td>
-            <td style="width: 5%;"></td>
-            <td style="width: 30%; font-size: 25px;">
-              <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
-              <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
-            </td>
-          </tr>
-        </table>
-        <center>
-          <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
-        </center>
-        <div class="comingSoonWords">Coming Soon Beta</div>
-      </div>
 
       <!-- Progress bars -->
       <div class="w3-border-bottom">
@@ -189,20 +168,6 @@ require_once('require_area.php');
       ?>
     </div>
     <script>
-/*if (!("Notification" in window)) {
-  // Check if the browser supports notifications
-  alert("This browser does not support desktop notification");
-} else {
-  Notification.requestPermission().then((permission) => {
-    alert(permission);
-    // If the user accepts, let's create a notification
-    if (permission === "granted") {
-      const notification = new Notification("Hi there!");
-      // …
-    }
-  });
-}*/
-
 const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;
 const currentRefCount = my_referrals.length;
