@@ -261,7 +261,7 @@ function fillInContactInfo() {
     _('adDeck').href = CONFIG['Home Page']['ad deck link'];
   }
   if (person[TableColumns['type']].toLowerCase().includes('family history')) {
-    _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
+    _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.php')");
   }
   fillInAttemptLog();
 }

@@ -42,10 +42,11 @@ require_once('require_area.php');
 }
 #foxWindow {
   position: fixed;
-  background-color: blue;
   width: 100%;
   height: 170px;
-  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
+  background-image: url('img/jesusAndLamb1.jpg');
+  background-size: cover;
+  background-position-y: center;
 }
 #foxWindow img {
   position: relative;
@@ -94,13 +95,13 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Referral Suite</a>
+        <a>Referral Suite Beta</a>
       </div>
     </div>
     <div style="height: 60px;"></div>
 
     <div id="foxWindow">
-      <center><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""></center>
+      <!-- <center><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""></center> -->
     </div>
 
     <div id="wholePageCard">
