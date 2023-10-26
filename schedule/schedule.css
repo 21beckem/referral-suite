@@ -85,4 +85,5 @@ body, html {
     justify-content: space-around;
     position: absolute;
     bottom: 0;
+    font-size: 14px;
 }
