@@ -60,17 +60,9 @@ footer, header, hgroup, main, menu, nav, section {
 
             <section>
                 <h2>Wonderful!</h2>
-                
                 <br><br>
-
-                <h3>Now click here to<br>install Referral Suite:</h3>
-                <center>
-                    <div id="alreadyInstalled" style="display: none;">
-                        <br>
-                        <h4>Looks Like Referral Suite is already installed :)</h4>
-                    </div>
-                    <h3><button id="add-button" class="purpleBtn" style="display: none;">Install</button></h3>
-                </center>
+                <h3>Last Step:</h3>
+                <h4>Click the 3 dots at the top right corner,<br>then click Install App!</h4>
                 
             </section>
 
@@ -82,42 +74,6 @@ Reveal.initialize({
     controlsLayout: 'edges',
     width: 740,
     height: 1480,
-});
-const addBtn = document.getElementById('add-button');
-
-setTimeout(function() {
-    try {
-        document.getElementById('alreadyInstalled').style.display = 'block';
-    } catch (error) {}
-}, 1000);
-window.addEventListener('beforeinstallprompt', (e) => {
-    // set buttons
-    document.getElementById('alreadyInstalled').remove();
-    addBtn.parentElement.style.display = 'block';
-
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    addBtn.style.display = 'block';
-
-    addBtn.addEventListener('click', () => {
-        // hide our user interface that shows our A2HS button
-        addBtn.parentElement.style.display = 'none';
-        // Show the prompt
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-                addBtn.parentElement.style.display = 'none';
-            } else {
-                console.log('User dismissed the A2HS prompt');
-                addBtn.parentElement.style.display = 'block';
-            }
-        });
-    });
 });
     </script>
 </body>
