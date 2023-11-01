@@ -8,6 +8,7 @@ if (!isset($_COOKIE['missionInfo'])) {
 }
 $missionInfo = json_decode($_COOKIE['missionInfo']);
 require_once('sql_tools.php');
+require_once('overall_vars.php');
 
 if (!empty($_POST)) {
   if (isset($_POST['teamId'])) {
@@ -62,7 +63,7 @@ unset($_SESSION['currentNotificationToken']);
     <?php
       $areas = readSQL($missionInfo->mykey, 'SELECT * FROM `teams` WHERE 1');
       foreach ($areas as $i => $row) {
-        echo('<button onclick="signInAs('.$row[0].')">'.$row[1].'</button>');
+        echo('<button style="background-color:'.$InboxColors[ $row[3] ].'" onclick="signInAs('.$row[0].')">'.$row[1].'</button>');
       }
     ?>
     </div>

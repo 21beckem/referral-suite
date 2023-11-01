@@ -48,10 +48,13 @@ require_once('require_area.php');
   background-size: cover;
   background-position-y: center;
 }
-#foxWindow img {
-  position: relative;
-  width: 170px;
-  bottom: -20px;
+#AreaName img {
+  margin: 5px;
+  display: inline-block;
+  height: 1.5em;
+  width: auto;
+  transform: translate(0, -0.15em);
+  border-radius: 50%;
 }
 #wholePageCard {
   background-color: var(--white);
@@ -62,12 +65,6 @@ require_once('require_area.php');
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
   clip-path: inset(-15px 0px 0px 0px);
-}
-@media (prefers-color-scheme: dark) {
-  #foxWindow {
-    color-scheme: dark;
-    background: radial-gradient(circle, rgb(68 68 68) 0%, rgb(38 38 38) 100%);
-  }
 }
 .comingSoonBox {
   position: relative;
@@ -105,7 +102,7 @@ require_once('require_area.php');
     </div>
 
     <div id="wholePageCard">
-      <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
+      <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
 
       <!-- Progress bars -->
       <div class="w3-border-bottom">
