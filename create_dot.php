@@ -35,7 +35,7 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <div id="contactname">FH Referral</div>
+        <div id="contactname">Create Dot</div>
       </div>
     </div>
     <div style="height: 80px;"></div>
@@ -54,7 +54,7 @@ require_once('require_area.php');
     </div>
     <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Finding Source</div>
-        <div class="w3-left-align w3-large">Missionary → Family History</div>
+        <div id="findingSource" class="w3-left-align w3-large">Missionary → Family History</div>
     </div>
     <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Preferred Language</div>
@@ -88,15 +88,13 @@ require_once('require_area.php');
         <div class="w3-left-align w3-large">Choose teaching area then click SELECT</div>
     </div>
     <br>
-    <center><h4>Click ✓, then click SEND</h4></center>
-
-    <div class="w3-container" style="margin-top: 30px">
+    <center>
+      <h4>Click ✓, then click SEND</h4>
+      <br>
       <div class="w3-container w3-cell w3-center">
-        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="referral_send.php">Done?</a>            
-      </div>
-    </div>
-    
-
+        <a class="w3-button w3-xlarge w3-round-large w3-blue" href="referral_send.php">Done. Continue to send</a>            
+      </div>    
+    </center>
 
 
 
@@ -111,28 +109,10 @@ const person = idToReferral(getCookieJSON('linkPages'));
 _('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
 //_('contactname').innerHTML = _('personName').innerHTML;
 _('email').innerHTML = person[TableColumns['email']];
+_('findingSource').innerHTML = CONFIG['Dot Creation']['finding source'];
 _('address').innerHTML = person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
-_('FH_lang').innerHTML = CONFIG['General']['most common language in mission'];
-_('FH_message').innerHTML = makeFHMessage(person);
-function makeFHMessage(per) {
-  if (per[TableColumns['referral origin']].toLowerCase().includes('fb') || per[TableColumns['referral origin']].toLowerCase().includes('ig')) {
-    return `This is a FAMILY HISTORY REFERRAL from Facebook!! This person clicked on a FB ad and wants help with Family History! Contact them as as soon as possible. USE EMAIL!
-
-GOOD LUCK!
-
-What they want help with: ` + per[TableColumns['help request']] + `
-
-How experienced they are: ` + per[TableColumns['experience']];
-  } else {
-    return `This is a FAMILY HISTORY REFERRAL from the MISSION WEBSITE!! This person went to the website and wants help with Family History! Contact them as as soon as possible. USE EMAIL!
-
-GOOD Luck!
-
-What they want help with: ` + per[TableColumns['help request']] + `
-
-How experienced they are: ` + per[TableColumns['experience']];
-  }
-}
+_('FH_lang').innerHTML = CONFIG['Dot Creation']['most common language in mission'];
+_('FH_message').innerHTML = CONFIG['Dot Creation']['message'];
 
    </script>
 
