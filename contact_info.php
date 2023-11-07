@@ -18,7 +18,6 @@ require_once('require_area.php');
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -130,41 +129,41 @@ require_once('require_area.php');
       <div id="referraltype" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Referral origin</div>
-        <div id="referralorigin" class="w3-left-align w3-large"></div>
+      <div class="w3-left-align w3-small w3-opacity">Referral origin</div>
+      <div id="referralorigin" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Phone Number</div>
-        <div id="phonenumber" class="w3-left-align w3-large"></div>
+      <div class="w3-left-align w3-small w3-opacity">Phone Number</div>
+      <div id="phonenumber" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Email</div>
-        <div id="email" class="w3-left-align w3-large"></div>
+      <div class="w3-left-align w3-small w3-opacity">Email</div>
+      <div id="email" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
         <div class="w3-left-align w3-small w3-opacity">Address</div>
         <div id="address" class="w3-left-align w3-large"></div>
         <div class="w3-container w3-cell w3-right-align">
-            <a id="googlemaps" href="http://maps.google.com/?q=your+query" target="_blank">
-                <i class="fa fa-map-marker w3-text-dark-gray w3-xlarge" style="margin-top: 5px;"></i>
-            </a>
+          <a id="googlemaps" href="http://maps.google.com/?q=your+query" target="_blank">
+            <i class="fa fa-map-marker w3-text-dark-gray w3-xlarge" style="margin-top: 5px;"></i>
+          </a>
         </div>
     </div>
     <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
-        <div class="w3-left-align w3-small w3-opacity">Preferred Language</div>
-        <div id="prefSprak" class="w3-left-align w3-large"></div>
+      <div class="w3-left-align w3-small w3-opacity">Preferred Language</div>
+      <div id="prefSprak" class="w3-left-align w3-large"></div>
     </div>
     <div class="w3-container w3-cell-row w3-margin-top w3-border-bottom">
       <div class="w3-left-align w3-small w3-opacity">Ad Name</div>
       <div id="adName" class="w3-left-align w3-large"></div>
       <div class="w3-container w3-cell w3-right-align">
-          <a id="adDeck" href="" target="_blank">
-              <i class="fa fa-external-link w3-text-dark-gray w3-xlarge" style="margin-top: 18px;"></i>
-          </a>
+        <a id="adDeck" href="" target="_blank">
+          <i class="fa fa-external-link w3-text-dark-gray w3-xlarge" style="margin-top: 18px;"></i>
+        </a>
       </div>
   </div>
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
-        <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')">Send referral</button>
+      <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')">Send referral</button>
     </div>
     
 
@@ -217,8 +216,9 @@ function fillInAttemptLog() {
 }
 function fillInContactInfo() {
   const person = idToReferral(getCookie('linkPages'));
+  let ref_types = <?php echo(json_encode( getReferralTypes() )); ?>;
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-  _('telnumber').href = 'tel:+' + person[ TableColumns['phone'] ];
+  _('telnumber').href = 'tel:' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
   //_('emailcontact').href = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[9] + '&entry.873933093=';
   const numb = person[TableColumns['phone']].trim();
@@ -261,8 +261,9 @@ function fillInContactInfo() {
   } else {
     _('adDeck').href = CONFIG['Home Page']['ad deck link'];
   }
-  if (person[TableColumns['type']].toLowerCase().includes('family history')) {
-    _('sendReferralBtn').setAttribute('onclick', "safeRedirect('fh_referral_info.html')");
+  if (ref_types[ person[TableColumns['type']] ] != 'automatic') {
+    _('sendReferralBtn').setAttribute('onclick', "safeRedirect('create_dot.php')");
+    _('sendReferralBtn').innerHTML = 'Create Dot and Send';
   }
   fillInAttemptLog();
 }

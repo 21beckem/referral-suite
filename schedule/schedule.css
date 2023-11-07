@@ -17,9 +17,6 @@
     padding: 0;
     padding-right: 5px;
 }
-.sheetMap_EditedCell {
-    font-weight: bold;
-}
 #scheduleColDivs {
     display: flex;
 	overflow: auto;
@@ -88,4 +85,5 @@ body, html {
     justify-content: space-around;
     position: absolute;
     bottom: 0;
+    font-size: 14px;
 }

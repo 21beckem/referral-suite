@@ -63,5 +63,18 @@
         global $__MISSIONINFO, $__TEAM;
         return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Referral Sent`="Sent" AND `Next Follow Up` <= CURRENT_TIME AND `Claimed`="'.$__TEAM->id.'"');
     }
+    function getReferralTypes() {
+        if (isset($_COOKIE['__REFERRALTYPES'])) {
+            return json_decode($_COOKIE['__REFERRALTYPES']);
+        }
+        global $__MISSIONINFO;
+        $list = readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `referral_types` WHERE 1');
+        $types = array();
+        for ($i=0; $i < count($list); $i++) { 
+            $types[ $list[$i][1] ] = $list[$i][2];
+        }
+        setcookie('__REFERRALTYPES', json_encode((object) $types), time() + (86400 * 1), "/"); // 86400 = 1 day
+        return (object) $types;
+    }
 
 ?>

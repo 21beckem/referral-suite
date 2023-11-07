@@ -1,6 +1,8 @@
 <?php
 require_once('require_area.php');
-function make_bottom_nav($pageNum, $bottomSpacingPX='80px') { ?>
+function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
+    global $__TEAM;
+?>
 
 <div style="height: <?php echo($bottomSpacingPX); ?>;"></div>
 <div id="BottomNavBar">
@@ -38,16 +40,8 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') { ?>
         </div>
     </div>
 
-    <div class="bottomNavBtnParent <?php if ($pageNum==5) { echo('w3-text-area-blue'); } ?>">
-        <a href="shop.php">
-            <i class="fa-solid fa-tag"></i>
-            <div class="w3-tiny w3-opacity" style="height: 0;">Shop</div>
-        </a>
-    </div>
-
 </div>
 <script type="module">
-    /* Works!  But don't have enough time to implement now
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-messaging.js";
@@ -75,17 +69,27 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') { ?>
     })
     .then((currentToken) => {
         if (currentToken) {
-            alert(currentToken);
+            sendNewTokenToServer(currentToken);
         } else {
             // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
+            JSAlert.alert('No notification token available. Request permission to generate one.');
         }
     })
     .catch((err) => {
-    console.log('An error occurred while retrieving token. ', err);
-    // ...
+        console.log('An error occurred while retrieving token.');
+        console.log(err);
+        // ...
     });
-    */
+    async function sendNewTokenToServer(tok) {
+        const res = await fetch('php_functions/addSubToken.php?teamId=<?php echo($__TEAM->id); ?>' + '&token=' + encodeURI(tok));
+        const msg = await res.text();
+        if (res.status == 200) {
+            console.log('subscription token saved:\n' + tok);
+        } else if (res.status == 202) {
+            console.log(msg, '\n'+tok);
+        } else {
+            console.error('subscription token saving error: ', msg);
+        }
+    }
 </script>
-
 <?php } ?>

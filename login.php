@@ -1,20 +1,24 @@
 <?php
-  session_start();
-  setcookie('teamId', '', -1, '/');
-  setcookie('__TEAM', '', -1, '/');
-  setcookie('__CONFIG', '', -1, '/');
-  if (!isset($_COOKIE['missionInfo'])) {
-    header('location: sign_in.php');
-  }
-  $missionInfo = json_decode($_COOKIE['missionInfo']);
-  require_once('sql_tools.php');
+session_start();
+setcookie('teamId', '', -1, '/');
+setcookie('__TEAM', '', -1, '/');
+setcookie('__CONFIG', '', -1, '/');
+if (!isset($_COOKIE['missionInfo'])) {
+  header('location: sign_in.php');
+}
+$missionInfo = json_decode($_COOKIE['missionInfo']);
+require_once('sql_tools.php');
+require_once('overall_vars.php');
 
-  if (!empty($_POST)) {
-    if (isset($_POST['teamId'])) {
-      setcookie('teamId', $_POST['teamId'], time() + (10 * 365 * 24 * 60 * 60), '/');
-      header('location: index.php');
-    }
+if (!empty($_POST)) {
+  if (isset($_POST['teamId'])) {
+    setcookie('teamId', $_POST['teamId'], time() + (10 * 365 * 24 * 60 * 60), '/');
+    header('location: index.php');
   }
+}
+// delete notification token if it exists
+writeSQL($missionInfo->mykey, 'DELETE FROM `tokens` WHERE `token`="'.$_SESSION['currentNotificationToken'].'"');
+unset($_SESSION['currentNotificationToken']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +35,6 @@
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -60,7 +63,7 @@
     <?php
       $areas = readSQL($missionInfo->mykey, 'SELECT * FROM `teams` WHERE 1');
       foreach ($areas as $i => $row) {
-        echo('<button onclick="signInAs('.$row[0].')">'.$row[1].'</button>');
+        echo('<button style="background-color:'.$InboxColors[ $row[3] ].'" onclick="signInAs('.$row[0].')">'.$row[1].'</button>');
       }
     ?>
     </div>

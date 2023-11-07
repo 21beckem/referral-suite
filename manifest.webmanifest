@@ -2,7 +2,7 @@
     "description": "Manage Mission Social-Media Referrals",
     "name": "Referral Suite Manager",
     "short_name": "Referral Suite",
-    "start_url": "/referral-suite/index.php",
+    "start_url": "index.php",
     "display": "standalone",
     "background_color": "#7347B2",
     "orientation": "portrait-primary",

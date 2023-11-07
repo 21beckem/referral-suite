@@ -18,7 +18,6 @@ require_once('require_area.php');
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <script src="fox.js"></script>
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -115,8 +114,8 @@ function fillInFollowUpInfo() {
   for (let i = 0; i < areas.length; i++) {
     if (areas[i][1] == person[TableColumns['teaching area']] && areas[i][2] != '') {
       _('contactAreaCard').style.display = '';
-      _('telnumber').href = 'tel:+' + areas[i][2];
-      _('smsnumber').href = 'sms:+' + areas[i][2];
+      _('telnumber').href = 'tel:' + areas[i][2];
+      _('smsnumber').href = 'sms:' + areas[i][2];
       break;
     }
   }

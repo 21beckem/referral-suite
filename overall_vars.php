@@ -5,6 +5,7 @@ $TeamRoles = array(
     'Follow Up Saver'
 );
 $InboxColors = array(
+    'white' => '#fff',
     'teal' => '#00FFFF',
     'orange' => '#F6B26B',
     'lavender' => '#CAB7FC',

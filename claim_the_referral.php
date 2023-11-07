@@ -16,7 +16,6 @@ require_once('require_area.php');
     <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <script src="fox.js"></script>
   </head>
   <body>

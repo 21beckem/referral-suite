@@ -17,7 +17,6 @@ require_once('require_area.php');
   <script src="jsalert.js"></script>
   <script src="everyPageFunctions.php"></script>
   <script src="fox.js"></script>
-  <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#462c6a">
@@ -63,7 +62,7 @@ for (let i = 0; i < UNCLAIMED.length; i++) {
       <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
   </div>`;
   const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-  output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="claim_the_referral.php" class="person-to-click">
+  output += `<aa onclick="claimThisReferral(` + per[TableColumns['id']] + `, '`+per[TableColumns['first name']]+`', '`+per[TableColumns['last name']]+`')" class="person-to-click">
     <div class="w3-bar" style="display: flex;">` + dotStyle + `
       <div class="w3-bar-item">
         <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
@@ -74,6 +73,14 @@ for (let i = 0; i < UNCLAIMED.length; i++) {
   </aa>`;
 }
 _('unclaimedlist').innerHTML = output;
+
+function claimThisReferral(perId, fname, lname) {
+  JSAlert.confirm('Are you sure you want to claim <br>'+fname+' '+lname+'<br> as <?php echo($__TEAM->name) ?>?', '', JSAlert.Icons.Info).then(res => {
+    if (res) {
+      safeRedirect('php_functions/claimReferral.php?perId=' + perId);
+    }
+  });
+}
 
 function timeSince_formatted(date) {
   var seconds = Math.floor((new Date() - date) / 1000);

@@ -17,7 +17,6 @@ require_once('require_area.php');
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
-    <script src="https://21beckem.github.io/SheetMap/sheetmap.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -41,17 +40,30 @@ require_once('require_area.php');
   content: "$";
   color: transparent;
 }
-#foxWindow {
+#paintingWindow {
   position: fixed;
-  background-color: blue;
   width: 100%;
   height: 170px;
+  /* background-image: url('img/jesusAndLamb1.jpg'); */
   background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
+  background-size: cover;
+  background-position-y: center;
 }
-#foxWindow img {
+#paintingWindow img {
   position: relative;
-  width: 170px;
-  bottom: -20px;
+  width: 140px;
+  bottom: -12px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(1px 4px 4px rgba(0,0,0,0.5));
+}
+#AreaName img {
+  margin: 5px;
+  display: inline-block;
+  height: 1.5em;
+  width: auto;
+  transform: translate(0, -0.15em);
+  border-radius: 50%;
 }
 #wholePageCard {
   background-color: var(--white);
@@ -61,12 +73,7 @@ require_once('require_area.php');
   margin-left: -1px;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
-}
-@media (prefers-color-scheme: dark) {
-  #foxWindow {
-    color-scheme: dark;
-    background: radial-gradient(circle, rgb(68 68 68) 0%, rgb(38 38 38) 100%);
-  }
+  clip-path: inset(-15px 0px 0px 0px);
 }
 .comingSoonBox {
   position: relative;
@@ -99,34 +106,12 @@ require_once('require_area.php');
     </div>
     <div style="height: 60px;"></div>
 
-    <div id="foxWindow">
-      <center><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""></center>
+    <div id="paintingWindow">
+      <img src="img/templeClipart.png" alt="">
     </div>
 
     <div id="wholePageCard">
-      <h3 style="margin: 20px 0px -5px 10px"><?php echo($__TEAM->name); ?></h3>
-
-      <div class="w3-container comingSoonBox" style="padding-bottom: 20px;">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 60%; position: relative;">
-              <div id="streakBox">
-                <img src="img/streak1.png" alt="streak_ico" style="width: 100%;">
-                <a id="streakBoxNum" style="position:absolute; top: 0; left: 27px; font-size: 30px; color: #F203FF;">0</a>
-              </div>
-            </td>
-            <td style="width: 5%;"></td>
-            <td style="width: 30%; font-size: 25px;">
-              <img src="img/inbucks1.png" alt="inbucks_ico" style="width: 50%; margin-left: 50%; transform: translateX(-50%);">
-              <a id="inbucksValue" style="display: block; width: 100%; text-align: center;">0</a>
-            </td>
-          </tr>
-        </table>
-        <center>
-          <div id="leaderboardBtn" onclick="safeRedirect('fox_leaderboard.html')" class="w3-xlarge w3-round-large">Leaderboard</div>
-        </center>
-        <div class="comingSoonWords">Coming Soon</div>
-      </div>
+      <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
 
       <!-- Progress bars -->
       <div class="w3-border-bottom">
@@ -225,22 +210,6 @@ if (my_referrals.length > 0) {
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
 setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
-
-/*let streakBoxFilter = '';
-switch (foxStreakExtendingStatus()) {
-    case 'done for today':
-        streakBoxFilter = '';
-        break;
-    case 'can extend':
-        streakBoxFilter = 'grayscale(0.8) opacity(0.8)';
-        break;
-
-    default:
-        streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
-}
-_('streakBox').style.filter = streakBoxFilter;*/
-_('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>;
-_('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
 function setBigToolButtonLink(elId, link) {
   // if id doesnt exist or blank, hide button
