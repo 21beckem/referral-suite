@@ -40,13 +40,22 @@ require_once('require_area.php');
   content: "$";
   color: transparent;
 }
-#foxWindow {
+#paintingWindow {
   position: fixed;
   width: 100%;
   height: 170px;
-  background-image: url('img/jesusAndLamb1.jpg');
+  /* background-image: url('img/jesusAndLamb1.jpg'); */
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
   background-size: cover;
   background-position-y: center;
+}
+#paintingWindow img {
+  position: relative;
+  width: 140px;
+  bottom: -12px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(1px 4px 4px rgba(0,0,0,0.5));
 }
 #AreaName img {
   margin: 5px;
@@ -92,13 +101,13 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Referral Suite Beta</a>
+        <a>Referral Suite</a>
       </div>
     </div>
     <div style="height: 60px;"></div>
 
-    <div id="foxWindow">
-      <!-- <center><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""></center> -->
+    <div id="paintingWindow">
+      <img src="img/templeClipart.png" alt="">
     </div>
 
     <div id="wholePageCard">
@@ -201,22 +210,6 @@ if (my_referrals.length > 0) {
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
 setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
-
-/*let streakBoxFilter = '';
-switch (foxStreakExtendingStatus()) {
-    case 'done for today':
-        streakBoxFilter = '';
-        break;
-    case 'can extend':
-        streakBoxFilter = 'grayscale(0.8) opacity(0.8)';
-        break;
-
-    default:
-        streakBoxFilter = 'brightness(0.5) grayscale(1) opacity(0.2)';
-}
-_('streakBox').style.filter = streakBoxFilter;*/
-_('streakBoxNum').innerHTML = <?php echo(count(json_decode($__TEAM->fox_streak))); ?>;
-_('inbucksValue').innerHTML = <?php echo($__TEAM->fox_inbucks); ?>;
 
 function setBigToolButtonLink(elId, link) {
   // if id doesnt exist or blank, hide button

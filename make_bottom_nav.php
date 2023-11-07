@@ -72,12 +72,12 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
             sendNewTokenToServer(currentToken);
         } else {
             // Show permission request UI
-            alert('No registration token available. Request permission to generate one.');
+            JSAlert.alert('No notification token available. Request permission to generate one.');
         }
     })
     .catch((err) => {
-        alert('An error occurred while retrieving token.');
-        alert(err);
+        console.log('An error occurred while retrieving token.');
+        console.log(err);
         // ...
     });
     async function sendNewTokenToServer(tok) {
