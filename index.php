@@ -101,7 +101,7 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Referral Suite</a>
+        <a>Referral Suite Beta</a>
       </div>
     </div>
     <div style="height: 60px;"></div>
