@@ -1,6 +1,6 @@
 {
-    "description": "Manage Mission Social-Media Referrals",
-    "name": "Referral Suite Manager",
+    "description": "Manage Social-Media Referrals",
+    "name": "Referral Suite",
     "short_name": "Referral Suite",
     "start_url": "index.php",
     "display": "standalone",

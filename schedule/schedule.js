@@ -1,14 +1,12 @@
 let timesMarginBox = _('timesMarginBox');
 let scheduleColDivs = _('scheduleColDivs');
 
-function scrollToToday(win) {
-    const d = new Date();
-    let getYear = d.toLocaleString("default", { year: "numeric" });
-    var getMonth = d.toLocaleString("default", { month: "2-digit" });
-    var getDay = d.toLocaleString("default", { day: "2-digit" });
-    const niceDate = getYear + "-" + getMonth + "-" + getDay;
-    let iOfToday = schedArr.transpose()[0].indexOf(niceDate) - 2;
-    scheduleColDivs.scrollTo(scheduleColDivs.offsetWidth*iOfToday, 0);
+let d = new Date();
+let niceDate = d.toLocaleString("default", { year: "numeric" }) + "-" + d.toLocaleString("default", { month: "2-digit" }) + "-" + d.toLocaleString("default", { day: "2-digit" });
+const iOfToday = schedArr.transpose()[0].indexOf(niceDate);
+
+function scrollToToday() {
+    scheduleColDivs.scrollTo(scheduleColDivs.offsetWidth*(iOfToday - 2), 0);
 }
 let teamColorLookup = {};
 for (let i = 0; i < teamInfos.length; i++) {
@@ -27,12 +25,17 @@ function writeSchedule() {
     let mainShOut = '';
     for (let i = 2; i < schedArr.length; i++) {
         const col = schedArr[i];
-        mainShOut += '<div class="tableCol"><div>';
+        let prevDay = (iOfToday>i) ? ' class="prevDayOrShift"' : '';
+        mainShOut += '<div class="tableCol"><div'+prevDay+'>';
 
         // make date cell
         const thisDate = new Date(col[0]);
         const niceDate = dayNames[thisDate.getDay()] + '<br>' + monthNames[thisDate.getMonth()] + ' ' + String(thisDate.getDate());
         mainShOut += '<div>' + niceDate + '</div>';
+        
+        // create comparative date
+        const d = new Date();
+        const sDate = d.toLocaleString("default", { year: "numeric" }) + "-" + d.toLocaleString("default", { month: "2-digit" }) + "-" + d.toLocaleString("default", { day: "2-digit" });
 
         // make rest of cells
         for (let j = 1; j < col.length; j++) {
@@ -44,8 +47,15 @@ function writeSchedule() {
                 const team = teamInfos[k];
                 inboxersOptions += '<option value="'+team[0]+'"'+( (cell==team[0]) ? ' selected' : '' )+'>' + team[1] + '</option>';
             }
+            let prevShift = '';
+            if (iOfToday==i) {
+                //console.log(new Date(sDate+' '+schedArr[1][j]), d);
+                if (new Date(sDate+' '+schedArr[1][j]).getTime() < d.getTime()) {
+                    prevShift = ' class="prevDayOrShift"';
+                }
+            }
 
-            mainShOut += '<div style="height:calc(99% / '+(col.length-1)+')"><select onchange="saveScheduleChange(this, '+i+', '+j+')" style="background-color: '+colorForTeam(cell)+';">' + inboxersOptions + '</select></div>';
+            mainShOut += '<div'+prevShift+' style="height:calc(99% / '+(col.length-1)+')"><select onchange="saveScheduleChange(this, '+i+', '+j+')" style="background-color: '+colorForTeam(cell)+';">' + inboxersOptions + '</select></div>';
         }
 
         mainShOut += '</div></div>';

@@ -87,3 +87,7 @@ body, html {
     bottom: 0;
     font-size: 14px;
 }
+.prevDayOrShift {
+    filter: opacity(0.5);
+    pointer-events: none;
+}

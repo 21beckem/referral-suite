@@ -75,33 +75,13 @@ require_once('require_area.php');
   box-shadow: 0px 11px 20px 3px black;
   clip-path: inset(-15px 0px 0px 0px);
 }
-.comingSoonBox {
-  position: relative;
-}
-.comingSoonBox *:not(.comingSoonWords) {
-  filter: grayscale(1) blur(1px);
-  opacity: 0.8;
-}
-.comingSoonBox .comingSoonWords {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  line-height: 6;
-  height: 100%;
-  text-align: center;
-  font-size: 25px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0px 1px 8px black;
-}
     </style>
   </head>
   <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Referral Suite</a>
+        <a>Referral Suite<?php if(strpos($_SERVER['REQUEST_URI'],'beta') !== false) { echo(' Beta'); } ?></a>
       </div>
     </div>
     <div style="height: 60px;"></div>
@@ -144,6 +124,11 @@ require_once('require_area.php');
 
       <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
       <div class="full_width_home_btn">
+        <a href="tutorial_links.php">
+          <div class="bigTipBtn" style="background-image: url('img/TutorialsBtnInvert.png'); border: 1px solid #f2bfff;"></div>
+        </a>
+      </div>
+      <div class="full_width_home_btn">
         <a id="MB_deliverLink" target="_blank" href="">
           <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
@@ -158,11 +143,11 @@ require_once('require_area.php');
           <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
       </div>
-      <div class="full_width_home_btn">
+      <!-- <div class="full_width_home_btn">
         <a href="referral_archive.php">
           <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
-      </div>
+      </div> -->
 
       <!-- Logout Button -->
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
