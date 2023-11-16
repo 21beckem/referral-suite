@@ -8,6 +8,7 @@ const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
 const CLAIMED = <?php echo(json_encode( getClaimed() )) ?>;
 const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
+const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
 // ignore all errors above this line
 
@@ -159,8 +160,15 @@ async function savePerson(perArr) {
     return (response.status == 200);
     //return response.text();
 }
-function PMGappReminder(action) {
-    return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
+function PMGappReminder(action, person=null) {
+    if (person == null) {
+        person = idToReferral(getCookieJSON('linkPages'));
+    }
+    if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
+        return '';
+    } else {
+        return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
+    }
 }
 window.addEventListener("load", (e) => {
     // if (DEBUG_MODE) {

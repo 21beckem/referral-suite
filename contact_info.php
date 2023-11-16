@@ -216,7 +216,6 @@ function fillInAttemptLog() {
 }
 function fillInContactInfo() {
   const person = idToReferral(getCookie('linkPages'));
-  let ref_types = <?php echo(json_encode( getReferralTypes() )); ?>;
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   _('telnumber').href = 'tel:' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
@@ -261,7 +260,7 @@ function fillInContactInfo() {
   } else {
     _('adDeck').href = CONFIG['Home Page']['ad deck link'];
   }
-  if (ref_types[ person[TableColumns['type']] ] != 'automatic') {
+  if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('create_dot.php')");
     _('sendReferralBtn').innerHTML = 'Create Dot and Send';
   }

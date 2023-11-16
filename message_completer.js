@@ -66,7 +66,8 @@ function trySetValue(el, val) {
 }
 window.onload = () => {
 	Object.keys(TableColumns).forEach((colName) => {
-		trySetValue(_('completerInputFor_{'+colName+'}'), person[ TableColumns[colName] ]);
+		console.log(person[ TableColumns[colName] ]);
+		trySetValue(_('completerInputFor_{'+colName+'}'), String(person[ TableColumns[colName] ]).trim());
 	});
 	let addStr = person[TableColumns['street address']] + ' ' + person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
 	trySetValue(_('completerInputFor_{address}'), addStr);
