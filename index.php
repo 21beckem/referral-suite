@@ -153,12 +153,12 @@ require_once('require_area.php');
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
 
 
+    </div>
       <!-- Bottom Nav Bar -->
       <?php
       require_once('make_bottom_nav.php');
       make_bottom_nav(1);
       ?>
-    </div>
     <script>
 const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;

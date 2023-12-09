@@ -58,7 +58,7 @@ require_once('require_area.php');
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="emailcontact" href="email_templates.php">
+                <a id="emailcontact" href="emailer.php">
                     <i class="fa fa-envelope w3-text-email-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Email</div>
                     </i>
@@ -207,11 +207,6 @@ function fillInAttemptLog() {
   try {
     let todaysI = getTodaysInxdexOfAttempts(person);
     _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
-    for (let i = 0; i < 7; i++) {
-      _('attemptLogDot_0,' + i).disabled = (i!=todaysI);
-      _('attemptLogDot_1,' + i).disabled = (i!=todaysI);
-      _('attemptLogDot_2,' + i).disabled = (i!=todaysI);
-    }
   } catch (e) {}
 }
 function fillInContactInfo() {

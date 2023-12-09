@@ -33,20 +33,7 @@ require_once('require_area.php');
 
   <!-- List of items -->
   <div class="w3-container">
-    <div id="unclaimedlist">
-      <!--<a onclick="redirectAfterFunction(this)" href="claim_the_referral.html">
-            <div class="w3-bar" style="display: flex;">
-              <div class="w3-bar-item w3-circle">
-                <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-              </div>
-              <div class="w3-bar-item">
-                <span class="w3-large"></span><br>
-                <span></span><br>
-                <span></span>
-              </div>
-            </div>
-          </a>-->
-    </div>
+    <div id="unclaimedlist"></div>
   </div>
 
   <!-- Bottom Nav Bar -->

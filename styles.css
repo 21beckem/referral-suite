@@ -75,7 +75,7 @@
     padding: 0.01em 16px;
     font-size: 30px;
 }
-#topHeaderBar div:has(.contact_info):first-child {
+#topHeaderBar div:has(.contact_info) {
     letter-spacing: 0.1em;
     background-color: var(--mainColor);
     color: #fff;
