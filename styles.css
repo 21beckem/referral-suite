@@ -79,6 +79,7 @@
     letter-spacing: 0.1em;
     background-color: var(--mainColor);
     color: #fff;
+    width: 100%;
     text-align: left;
     display: table-cell;
     font-size: 30px;
@@ -145,7 +146,7 @@
 html, body {
     overscroll-behavior: none;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow-x: hidden;
 }
 
