@@ -12,14 +12,14 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>for chart -->
     <style>
 #totReferralsBar, #oldReferralBar {
   background: linear-gradient(90deg, rgb(94 215 74) 50%, rgba(158,0,0,1) 100%);
@@ -44,10 +44,10 @@ require_once('require_area.php');
   position: fixed;
   width: 100%;
   height: 170px;
-  /* background-image: url('img/jesusAndLamb1.jpg'); */
-  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
+  background-image: url('img/jesusAndLamb1.jpg');
+  /* background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%); */
   background-size: cover;
-  background-position-y: center;
+  background-position: center;
 }
 #paintingWindow img {
   position: relative;
@@ -87,13 +87,14 @@ require_once('require_area.php');
     <div style="height: 60px;"></div>
 
     <div id="paintingWindow">
-      <img src="img/templeClipart.png" alt="">
+      <!-- <img src="img/templeClipart.png" alt=""> -->
     </div>
 
     <div id="wholePageCard">
       <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
 
       <!-- Progress bars -->
+      <!-- <canvas id="myChart1" style="width:100%;max-width:600px"></canvas> -->
       <div class="w3-border-bottom">
         <table style="width: 100%;">
           <tr>
@@ -143,11 +144,11 @@ require_once('require_area.php');
           <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
       </div>
-      <!-- <div class="full_width_home_btn">
+      <div class="full_width_home_btn">
         <a href="referral_archive.php">
           <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
-      </div> -->
+      </div>
 
       <!-- Logout Button -->
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
@@ -222,6 +223,24 @@ function doubleCheckLogout() {
     }
   });
 }
+
+// // for chart
+// new Chart("myChart1", {
+//   type: "pie",
+//   data: {
+//     labels: ['Sent', 'In Contact', 'Dropped'],
+//     datasets: [{
+//       backgroundColor: barColors = ['#04A96D', '#E8C3B9','red'],
+//       data: <?php //echo(json_encode(getThisMonthsStats())) ?>
+//     }]
+//   },
+//   options: {
+//     title: {
+//       display: true,
+//       text: "Referrals This Month"
+//     }
+//   }
+// });
     </script>
     
   </body>

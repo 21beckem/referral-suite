@@ -13,11 +13,8 @@ require_once('require_area.php');
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">

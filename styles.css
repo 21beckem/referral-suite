@@ -5,7 +5,8 @@
     --red: rgb(158,0,0);
     --pure-red: rgb(225, 0, 0);
     --warning-red: #d42121;
-    --warning-orange: #d87300;
+    --warning-orange: #ff9317;
+    --warning-orange-light: #ff931729;
     --all-good-green: #058d00;
     --light-blue: #462c6a;
     --dul-accent: #bca7da;
@@ -16,6 +17,22 @@
     --light-grey: #f1f1f1;
     --business-suite-defualt-icon: none;
     --business-suite-active-icon: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
+}
+.notice {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--warning-orange-light);
+    border-left: 7px solid var(--warning-orange);
+    box-shadow: 1px 2px 10px -7px rgba(0, 0, 0, 0.5);
+}
+.notice .closebtn {
+    margin-left: 15px;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 .bottomNavBtnParent {
     text-align: center;

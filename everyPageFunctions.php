@@ -1,4 +1,5 @@
 <?php
+$doNotRedirectForRequireArea_JustReturnBlank = true;
 require_once('require_area.php');
 header('Content-Type: application/javascript');
 ?>;

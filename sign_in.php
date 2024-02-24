@@ -39,8 +39,6 @@ if (!empty($_POST)) {
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <meta name="mobile-web-app-capable" content="yes">

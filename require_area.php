@@ -2,7 +2,11 @@
 
     session_start();
     if (!isset($_COOKIE['teamId'])) {
-        header('location: login.php');
+        if(isset($doNotRedirectForRequireArea_JustReturnBlank)) {
+            die('');
+        } else {
+            header('location: login.php');
+        }
     }
     require_once('sql_tools.php');
     require_once('overall_vars.php');
@@ -62,6 +66,13 @@
     function getFollowUps() {
         global $__MISSIONINFO, $__TEAM;
         return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Referral Sent`="Sent" AND `Next Follow Up` <= CURRENT_TIME AND `Claimed`="'.$__TEAM->id.'"');
+    }
+    function getThisMonthsStats() {
+        global $__MISSIONINFO, $__TEAM;
+        $sent = count(readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE MONTH(`Date and Time`) = MONTH(now()) AND YEAR(`Date and Time`) = YEAR(now()) AND `Referral Sent` = "Sent"'));
+        $notSent = count(readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE MONTH(`Date and Time`) = MONTH(now()) AND YEAR(`Date and Time`) = YEAR(now()) AND `Referral Sent` = "Not sent"'));
+        $dropped = count(readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE MONTH(`Date and Time`) = MONTH(now()) AND YEAR(`Date and Time`) = YEAR(now()) AND `Referral Sent` = "Not interested"'));
+        return [ $sent, $notSent, $dropped ];
     }
     function getReferralTypes() {
         if (isset($_COOKIE['__REFERRALTYPES'])) {

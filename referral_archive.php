@@ -12,11 +12,8 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -91,7 +88,7 @@ async function searchAndDisplayDatabaseReferrals() {
   for (let i = 0; i < returnedRefs.length; i++) {
     const per = returnedRefs[i];
     output += `<div class="searchResult" onclick="viewPersonInfo(` + JSON.stringify(per).replaceAll("'", "\\'").replaceAll('"', "'") + `)">
-          <a class="name">` + per[TableColumns['first name']] + per[TableColumns['last name']] + `</a>
+          <a class="name">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</a>
           <table style="width: 100%;">
             <tr>
               <td>
@@ -119,6 +116,10 @@ async function searchAndDisplayDatabaseReferrals() {
   }
   _('loadingAnim').style.display = 'none';
   _('searchResultsBox').innerHTML = output;
+}
+function viewPersonInfo(per) {
+  setCookieJSON('personJSON', per);
+  safeRedirect('contact_info.php?viewOnlyPerson=true');
 }
     </script>
     
