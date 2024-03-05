@@ -32,7 +32,7 @@ function pivo($toPaste, $ifNot='') {
       <div class="w3-container w3-padding-16">
         <div class="contact_info" id="contactname"></div>
       </div>
-      <div <?php pivo('', 'onclick="safeRedirect(\'decease.php\')"'); ?> class="w3-container w3-cell w3-xlarge w3-right-align">
+      <div onclick="safeRedirect('decease.php')" class="w3-container w3-cell w3-xlarge w3-right-align" <?php pivo('style="display:none"'); ?>>
         <i class="fa fa-trash-o w3-text-white" style="position: relative;"></i>
       </div>
     </div>

@@ -28,7 +28,7 @@ require_once('require_area.php');
     </div>
     <div style="height: 68px;"></div>
     
-    <div id="scheduleParent" style="height: calc(100% - 126px);">
+    <div id="scheduleParent" style="height: calc(100% - 143px); clip-path:inset(0 0 0 0);">
       <div id="timesContainer">
         <div id="timesMarginBox"></div>
       </div>

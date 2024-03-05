@@ -16,8 +16,8 @@ $InboxColors = array(
     'pink' => '#D5A6BD',
     'yellow' => '#FFE599',
     'orange-yellow' => '#d0a600',
-    'light-blue' => '#3a77ff',
-    'forest' => '#137832'
+    'light-blue' => '#749fff',
+    'forest' => '#56c678'
 );
 
 ?>

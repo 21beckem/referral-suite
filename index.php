@@ -73,7 +73,8 @@ require_once('require_area.php');
   margin-left: -1px;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
-  clip-path: inset(-15px 0px 0px 0px);
+  padding-bottom: 5px;
+  clip-path: inset(-15px 0px 2px 0px);
 }
     </style>
   </head>
