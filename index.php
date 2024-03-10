@@ -162,9 +162,8 @@ require_once('require_area.php');
       make_bottom_nav(1);
       ?>
     <script>
-const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
 let maxRefsAllowed = 15;
-const currentRefCount = my_referrals.length;
+const currentRefCount = CLAIMED.length;
 
 
 let totReferralsBar = _("totReferralsBar");
@@ -178,7 +177,7 @@ if (currentRefCount >= maxRefsAllowed) {
     totReferrals.classList.add('w3-text-red');
 }
 let maxRefAge = 7;
-if (my_referrals.length > 0) {
+if (CLAIMED.length > 0) {
     let oldReferralBar = _("oldReferralBar");
     let oldReferral = getOldestClaimedPerson()[2];
     let today = new Date();
@@ -208,9 +207,9 @@ function setBigToolButtonLink(elId, link) {
   _(elId).href = link;
 }
 function getOldestClaimedPerson() {
-    let currentOldest = my_referrals[0];
-    for (let i = 0; i < my_referrals.length; i++) {
-        const per = my_referrals[i];
+    let currentOldest = CLAIMED[0];
+    for (let i = 0; i < CLAIMED.length; i++) {
+        const per = CLAIMED[i];
         if (new Date(per[2]).getTime() < new Date(currentOldest[2]).getTime()) {
             currentOldest = per;
         }

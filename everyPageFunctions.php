@@ -7,7 +7,7 @@ const MISSIONINFO = <?php echo(json_encode( $__MISSIONINFO )) ?>;
 const TEAM = <?php echo(json_encode( $__TEAM )) ?>;
 const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
-const CLAIMED = <?php echo(json_encode( getClaimed() )) ?>;
+const CLAIMED = <?php echo(json_encode( getClaimed_stillContacting() )) ?>;
 const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
 const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
@@ -26,6 +26,16 @@ String.prototype.toTitleCase = function() {
     }
     // Directly return the joined string
     return splitStr.join(' '); 
+}
+String.prototype.addSlashes = function() {
+    return this.replace(/\\/g, '\\\\').
+        replace(/\u0008/g, '\\b').
+        replace(/\t/g, '\\t').
+        replace(/\n/g, '\\n').
+        replace(/\f/g, '\\f').
+        replace(/\r/g, '\\r').
+        replace(/'/g, '\\\'').
+        replace(/"/g, '\\"');
 }
 Array.prototype.indexOfAll = function (searchItem) {
     let i = this.indexOf(searchItem);

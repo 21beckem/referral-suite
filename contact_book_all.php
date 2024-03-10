@@ -43,6 +43,29 @@ require_once('require_area.php');
   background-color: #462c6a;
   border-bottom: 5px solid white;
 }
+
+#yourreferrals div.header {
+  width: 100%;
+  margin-bottom: 15px;
+}
+#yourreferrals div.header div.bar {
+  width: 100%;
+  padding: 5px 20px;
+  box-shadow: 0px 3px 10px -8px black;
+  clip-path: inset(0px 0px -10px 0px);
+  position: sticky;
+  background-color: white;
+  top: 95px;
+}
+#yourreferrals div.header div.contents {
+  padding: 0px 10px;
+}
+#yourreferrals div.header div.bar div.bar-line {
+  width: 100%;
+  border-bottom: 2px solid #462c6a;
+  font-size: 20px;
+  color: #462c6a;
+}
   </style>
 </head>
 <body>
@@ -58,13 +81,37 @@ require_once('require_area.php');
         </tr>
       </table>
     </div>
-    <div style="height: 100px;"></div>
+    <div style="height: 95px;"></div>
      
-   <!-- List of items -->
-  <div class="w3-container">
-    <div id="yourreferrals"></div>
-    <div id="yourfollowups"></div>
-  </div>
+    <!-- List of items -->
+    <div id="yourreferrals">
+      <div class="header">
+        <div class="bar"><div class="bar-line">Still Contacting</div></div>
+        <div class="contents">
+          
+          <aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
+            <div class="w3-bar" style="display: flex;">
+              <div class="w3-bar-item w3-circle">
+                <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
+                  <i class="fa fa-calendar-check-o" style="color:#1d53b7; font-size:22px"></i>
+                </div>
+              </div>
+              <div class="w3-bar-item">
+                <span class="w3-large">Michael Becker</span><br>
+                <span>5 Min</span><br>
+                <span>I'm in nerd</span>
+              </div>
+            </div>
+          </aa>
+
+        </div>
+      </div>
+      <div class="header">
+        <div class="bar"><div class="bar-line">Still Contacting</div></div>
+        <div class="contents" id="stillContacting_box"></div>
+      </div>
+
+    </div>
 
 
    <!-- Bottom Nav Bar -->
@@ -75,22 +122,51 @@ require_once('require_area.php');
 
    </div>
    <script>
-makeListClaimedPeople(CLAIMED);
-makeListFollowUpPeople(FOLLOW_UPS);
+const ALL_CLAIMED = <?php echo(json_encode( getClaimed_all() )) ?>;
+sortAllPeopleToBoxes(ALL_CLAIMED);
 
-function makeListClaimedPeople(arr) {
+function sortAllPeopleToBoxes(ALL_people) {
+  let srtd = {
+    'yellow' : [],
+    'green' : [],
+    'gray' : [],
+    'grey' : []
+  }
+  for (let i = 0; i < ALL_people.length; i++) {
+    const per = ALL_people[i];
+    srtd[per[TableColumns['AB status']].toLowerCase()].push(per);
+  }
+  srtd['grey'].push(...srtd['gray']);
+  delete srtd['gray'];
+  console.log(srtd);
+
+  // sorted into AB colors. Now sort a little further and start pasting on the page
+
+  let lst = peopleListToHTML(ALL_people);
+  _('stillContacting_box').innerHTML = lst;
+}
+
+function ABstatus_toColor(col) {
+  let tab = {
+    'yellow' : '#ffa514',
+    'green' : 'green',
+    'gray' : 'gray',
+    'grey' : 'gray'
+  }
+  if (!(col.toLowerCase() in tab)) {
+    return col.toLowerCase();
+  }
+  return tab[col.toLowerCase()];
+}
+function peopleListToHTML(arr) {
   let output = '';
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
     let dotStyle = `<div class="w3-bar-item w3-circle">
-        <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
-    let nextPage = 'contact_info.php';
-    if (!hasPersonBeenContactedToday(per)) {
-        dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
-    }
+        <div class="w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px; background-color: ` + ABstatus_toColor(per[TableColumns['AB status']]) + `;"></div>`;
     dotStyle += `</div>`;
     const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="` + nextPage + `" class="person-to-click">
+    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="contact_info.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">` + dotStyle + `
         <div class="w3-bar-item">
           <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
@@ -100,73 +176,38 @@ function makeListClaimedPeople(arr) {
       </div>
     </aa>`;
   }
-  _('yourreferrals').innerHTML = output;
+  return output;
 }
-function makeListFollowUpPeople(arr) {
-  let output = '';
-  for (let i = 0; i < arr.length; i++) {
-    const per = arr[i];
-    const elapsedTime = timeSince_formatted(new Date(per[TableColumns['next follow up']]));
-    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
-      <div class="w3-bar" style="display: flex;">
-        <div class="w3-bar-item w3-circle">
-          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
-            <i class="fa fa-calendar-check-o" style="color:#1d53b7; font-size:22px"></i>
-          </div>
-        </div>
-        <div class="w3-bar-item">
-          <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
-          <span>` + elapsedTime + `</span><br>
-          <span>` + per[TableColumns['teaching area']] + `</span>
-        </div>
-      </div>
-    </aa>`;
-  }
-  _('yourfollowups').innerHTML = output;
-}
-
 function timeSince_formatted(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
   var interval = seconds / 31536000;
-  let color = 'var(--all-good-green)';
   let timeStr = Math.floor(seconds) + " seconds";
   let found = false;
   if (interval > 1 && !found) {
     found = true;
     timeStr = Math.round(interval) + " years";
-    color = 'var(--warning-red)';
   }
   interval = seconds / 2592000;
   if (interval > 1 && !found) {
     found = true;
     timeStr = Math.round(interval) + " months";
-    color = 'var(--warning-red)';
   }
   interval = seconds / 86400;
   if (interval > 1 && !found) {
     found = true;
     timeStr = Math.round(interval) + " days";
-    if (interval > 10.0) {
-      color = 'var(--warning-red)';
-    } else if (interval < 4.0) {
-      color = 'var(--all-good-green)';
-    } else {
-      color = 'var(--warning-orange)';
-    }
   }
   interval = seconds / 3600;
   if (interval > 1 && !found) {
     found = true;
     timeStr = Math.round(interval) + " hours";
-    color = 'var(--all-good-green)';
   }
   interval = seconds / 60;
   if (interval > 1 && !found) {
     found = true;
     timeStr = Math.round(interval) + " minutes";
-    color = 'var(--all-good-green)';
   }
-  return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
+  return '<a style="color:gray"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
 }
     </script>
 </body>

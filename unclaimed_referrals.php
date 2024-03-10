@@ -46,7 +46,7 @@ for (let i = 0; i < UNCLAIMED.length; i++) {
       <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
   </div>`;
   const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-  output += `<aa onclick="claimThisReferral(` + per[TableColumns['id']] + `, '`+per[TableColumns['first name']]+`', '`+per[TableColumns['last name']]+`')" class="person-to-click">
+  output += `<aa onclick="claimThisReferral(` + per[TableColumns['id']] + `, '`+per[TableColumns['first name']].addSlashes()+`', '`+per[TableColumns['last name']].addSlashes()+`')" class="person-to-click">
     <div class="w3-bar" style="display: flex;">` + dotStyle + `
       <div class="w3-bar-item">
         <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>

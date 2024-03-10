@@ -59,7 +59,11 @@
         global $__MISSIONINFO, $__TEAM;
         return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Referral Sent`="Not sent" AND `Claimed`="Unclaimed"');
     }
-    function getClaimed() {
+    function getClaimed_all() {
+        global $__MISSIONINFO, $__TEAM;
+        return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Claimed`="'.$__TEAM->id.'"');
+    }
+    function getClaimed_stillContacting() {
         global $__MISSIONINFO, $__TEAM;
         return readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `all_referrals` WHERE `Referral Sent`="Not sent" AND `Claimed`="'.$__TEAM->id.'"');
     }
