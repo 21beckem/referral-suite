@@ -87,30 +87,29 @@ require_once('require_area.php');
     <div id="yourreferrals">
       <div class="header">
         <div class="bar"><div class="bar-line">Still Contacting</div></div>
-        <div class="contents">
-          
-          <aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
-            <div class="w3-bar" style="display: flex;">
-              <div class="w3-bar-item w3-circle">
-                <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
-                  <i class="fa fa-calendar-check-o" style="color:#1d53b7; font-size:22px"></i>
-                </div>
-              </div>
-              <div class="w3-bar-item">
-                <span class="w3-large">Michael Becker</span><br>
-                <span>5 Min</span><br>
-                <span>I'm in nerd</span>
-              </div>
-            </div>
-          </aa>
-
-        </div>
-      </div>
-      <div class="header">
-        <div class="bar"><div class="bar-line">Still Contacting</div></div>
         <div class="contents" id="stillContacting_box"></div>
       </div>
-
+      <div class="header">
+        <div class="bar"><div class="bar-line">Ready To Follow Up</div></div>
+        <div class="contents" id="readyToFollowUp_box"></div>
+      </div>
+      <div class="header">
+        <div class="bar"><div class="bar-line">Follow Up Waiting</div></div>
+        <div class="contents" id="followUpWaiting_box"></div>
+      </div>
+      <div class="header">
+        <div class="bar"><div class="bar-line">Being Taught</div></div>
+        <div class="contents" id="beingTaught_box"></div>
+      </div>
+      <div class="header">
+        <div class="bar"><div class="bar-line">Never Sent</div></div>
+        <div class="contents" id="neverSent_box"></div>
+      </div>
+      <div class="header">
+        <div class="bar"><div class="bar-line">Sent. Never Met</div></div>
+        <div class="contents" id="neverMet_box"></div>
+      </div>
+      
     </div>
 
 
@@ -122,9 +121,6 @@ require_once('require_area.php');
 
    </div>
    <script>
-const ALL_CLAIMED = <?php echo(json_encode( getClaimed_all() )) ?>;
-sortAllPeopleToBoxes(ALL_CLAIMED);
-
 function sortAllPeopleToBoxes(ALL_people) {
   let srtd = {
     'yellow' : [],
@@ -140,37 +136,45 @@ function sortAllPeopleToBoxes(ALL_people) {
   delete srtd['gray'];
   console.log(srtd);
 
-  // sorted into AB colors. Now sort a little further and start pasting on the page
-
-  let lst = peopleListToHTML(ALL_people);
+  let lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Not sent'), 'yellow');
   _('stillContacting_box').innerHTML = lst;
-}
 
-function ABstatus_toColor(col) {
-  let tab = {
-    'yellow' : '#ffa514',
-    'green' : 'green',
-    'gray' : 'gray',
-    'grey' : 'gray'
-  }
-  if (!(col.toLowerCase() in tab)) {
-    return col.toLowerCase();
-  }
-  return tab[col.toLowerCase()];
+  lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']])), 'FU_ready');
+  _('readyToFollowUp_box').innerHTML = lst;
+
+  lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Sent' && !dateInPast(x[TableColumns['next follow up']])), 'FU_waity');
+  _('followUpWaiting_box').innerHTML = lst;
+
+  lst = peopleListToHTML(srtd['green'], 'green');
+  _('beingTaught_box').innerHTML = lst;
+
+  lst = peopleListToHTML(ALL_people.filter(x => x[TableColumns['sent status']]=='Not interested'), 'grey');
+  _('neverSent_box').innerHTML = lst;
+  
+  lst = peopleListToHTML(srtd['grey'].filter(x => x[TableColumns['sent status']]=='Sent'), 'grey');
+  _('neverMet_box').innerHTML = lst;
 }
-function peopleListToHTML(arr) {
+const dotStyle = {
+  'green' : `<i class="fa-solid fa-circle" style="color:green"></i>`,
+  'yellow' : `<i class="fa-regular fa-circle" style="color:#ffa514"></i>`,
+  'grey' : `<i class="fa-solid fa-circle" style="color:grey"></i>`,
+  'FU_ready' : `<i class="fa-solid fa-clock" style="color:#ffa514"></i>`,
+  'FU_waity' : `<i class="fa-solid fa-circle" style="color:#ffa514"></i>`,
+}
+function peopleListToHTML(arr, thisDotStyle="yellow") {
   let output = '';
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
-    let dotStyle = `<div class="w3-bar-item w3-circle">
-        <div class="w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px; background-color: ` + ABstatus_toColor(per[TableColumns['AB status']]) + `;"></div>`;
-    dotStyle += `</div>`;
-    const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
+    let dotCode = dotStyle[thisDotStyle];
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="contact_info.php" class="person-to-click">
-      <div class="w3-bar" style="display: flex;">` + dotStyle + `
+      <div class="w3-bar" style="display: flex;">
+        <div class="w3-bar-item w3-circle">
+          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 10px; font-size:22px">
+          ` + dotCode + `
+          </div>
+        </div>
         <div class="w3-bar-item">
           <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
-          <span>` + elapsedTime + `</span><br>
           <span>` + per[TableColumns['type']].replaceAll('_', ' ') + `</span>
         </div>
       </div>
@@ -178,37 +182,7 @@ function peopleListToHTML(arr) {
   }
   return output;
 }
-function timeSince_formatted(date) {
-  var seconds = Math.floor((new Date() - date) / 1000);
-  var interval = seconds / 31536000;
-  let timeStr = Math.floor(seconds) + " seconds";
-  let found = false;
-  if (interval > 1 && !found) {
-    found = true;
-    timeStr = Math.round(interval) + " years";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1 && !found) {
-    found = true;
-    timeStr = Math.round(interval) + " months";
-  }
-  interval = seconds / 86400;
-  if (interval > 1 && !found) {
-    found = true;
-    timeStr = Math.round(interval) + " days";
-  }
-  interval = seconds / 3600;
-  if (interval > 1 && !found) {
-    found = true;
-    timeStr = Math.round(interval) + " hours";
-  }
-  interval = seconds / 60;
-  if (interval > 1 && !found) {
-    found = true;
-    timeStr = Math.round(interval) + " minutes";
-  }
-  return '<a style="color:gray"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
-}
+sortAllPeopleToBoxes(ALL_CLAIMED);
     </script>
 </body>
 </html>

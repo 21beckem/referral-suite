@@ -2,13 +2,44 @@
 $doNotRedirectForRequireArea_JustReturnBlank = true;
 require_once('require_area.php');
 header('Content-Type: application/javascript');
-?>;
+?>
+const TableColumns = {
+    "type" : 0,
+    "id" : 1,
+    "date" : 2,
+    "sent status" : 3,
+    "claimed area" : 4,
+    "teaching area" : 5,
+    "AB status" : 6,
+    "first name" : 7,
+    "last name" : 8,
+    "phone" : 9,
+    "email" : 10,
+    "street address" : 11,
+    "city" : 12,
+    "zip" : 13,
+    "lang" : 14,
+    "referral origin" : 15,
+    "ad name" : 16,
+    "next follow up" : 17,
+    "follow up status" : 18,
+    "amount of times followed up" : 19,
+    "sent date" : 20,
+    "not interested reason" : 21,
+    "attempt log" : 22,
+    "help request" : 23,
+    "experience" : 24
+}
+function dateInPast(dateStr) {
+    return new Date().getTime() > new Date(dateStr).getTime();
+}
 const MISSIONINFO = <?php echo(json_encode( $__MISSIONINFO )) ?>;
 const TEAM = <?php echo(json_encode( $__TEAM )) ?>;
 const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
-const CLAIMED = <?php echo(json_encode( getClaimed_stillContacting() )) ?>;
-const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
+const ALL_CLAIMED = <?php echo(json_encode( getClaimed_all() )) ?>;
+const CLAIMED = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Not sent');
+const FOLLOW_UPS = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']]));
 const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
 // ignore all errors above this line
@@ -100,33 +131,6 @@ function saveToLinkPagesThenRedirect(person, el) {
     setCookieJSON('linkPages', person);
     safeRedirect(el.getAttribute('href'));
 }
-const TableColumns = {
-    "type" : 0,
-    "id" : 1,
-    "date" : 2,
-    "sent status" : 3,
-    "claimed area" : 4,
-    "teaching area" : 5,
-    "AB status" : 6,
-    "first name" : 7,
-    "last name" : 8,
-    "phone" : 9,
-    "email" : 10,
-    "street address" : 11,
-    "city" : 12,
-    "zip" : 13,
-    "lang" : 14,
-    "referral origin" : 15,
-    "ad name" : 16,
-    "next follow up" : 17,
-    "follow up status" : 18,
-    "amount of times followed up" : 19,
-    "sent date" : 20,
-    "not interested reason" : 21,
-    "attempt log" : 22,
-    "help request" : 23,
-    "experience" : 24
-}
 
 // not so EVERYpage functions but nice to have on every page
 function hasPersonBeenContactedToday(per) {
@@ -164,7 +168,7 @@ async function logAttempt(y) {
     return await savePerson(person);
 }
 function idToReferral(id) {
-    return [... CLAIMED.concat(FOLLOW_UPS).filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
+    return [... ALL_CLAIMED.concat(FOLLOW_UPS).filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
 }
 async function savePerson(perArr) {
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
@@ -181,12 +185,3 @@ function PMGappReminder(action, person=null) {
         return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
     }
 }
-window.addEventListener("load", (e) => {
-    // if (DEBUG_MODE) {
-    //     document.body.innerHTML += `<div id="debug-table"></div>`;
-    // }
-    // if (FoxEnabled) {
-    //     setupInboxFox();
-    //     handleDailyAndShiftlyNotifications();
-    // }
-});

@@ -71,6 +71,7 @@ async function deceasePerson() {
 
   // set new area in data and save to cookie
   person[TableColumns['sent status']] = 'Not interested';
+  person[TableColumns['AB status']] = 'Grey';
   person[TableColumns['not interested reason']] = _('deceaseDropdown').value;
 
   // add this person's number to list of pranked numbers

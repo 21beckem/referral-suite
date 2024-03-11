@@ -82,16 +82,19 @@ function makeListClaimedPeople(arr) {
   let output = '';
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
-    let dotStyle = `<div class="w3-bar-item w3-circle">
-        <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>`;
-    let nextPage = 'contact_info.php';
+    let notifPoint = '';
     if (!hasPersonBeenContactedToday(per)) {
-        dotStyle += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-36px; font-size:25px; font-weight:bold; height:0;">!</div>`;
+      notifPoint += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-30px; font-size:25px; font-weight:bold; height:0;">!</div>`;
     }
-    dotStyle += `</div>`;
     const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="` + nextPage + `" class="person-to-click">
-      <div class="w3-bar" style="display: flex;">` + dotStyle + `
+    output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="contact_info.php" class="person-to-click">
+      <div class="w3-bar" style="display: flex;">
+        <div class="w3-bar-item w3-circle">
+          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px; font-size:22px">
+            <i class="fa-solid fa-circle" style="color:#ffa514"></i>
+          </div>
+          ` + notifPoint + `
+        </div>
         <div class="w3-bar-item">
           <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
           <span>` + elapsedTime + `</span><br>
@@ -110,8 +113,8 @@ function makeListFollowUpPeople(arr) {
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
-          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px;">
-            <i class="fa fa-calendar-check-o" style="color:#1d53b7; font-size:22px"></i>
+          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px; font-size:22px">
+            <i class="fa-solid fa-clock" style="color:#ffa514"></i>
           </div>
         </div>
         <div class="w3-bar-item">
