@@ -91,15 +91,15 @@ require_once('require_area.php');
     </div>
   </div>
   <script>
-
-const person = idToReferral(getCookie('linkPages'));
-_('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-const emailBodyInput = _('emailBodyInput');
-
-emailBodyInput.addEventListener("input", (e) => {
-  //console.log(e);
-  _('bottomNavSpacer').style.height = (_('BottomNavBar').scrollHeight + 5) + 'px';
-}, false);
+(async () => {
+  const person = await idToReferral(getCookie('linkPages'));
+  _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
+  
+  _('emailBodyInput').addEventListener("input", (e) => {
+    //console.log(e);
+    _('bottomNavSpacer').style.height = (_('BottomNavBar').scrollHeight + 5) + 'px';
+  }, false);
+})();
   </script>
 </body>
 </html>

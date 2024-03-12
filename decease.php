@@ -55,15 +55,15 @@ function fillInDeceeaseReasons() {
 function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
-function confirmDeceasePerson() {
-  JSAlert.confirm('Are you sure you want to mark this person as Not Interested?'+PMGappReminder('delete/decease'), '', JSAlert.Icons.Warning).then(res => {
+async function confirmDeceasePerson() {
+  JSAlert.confirm('Are you sure you want to mark this person as Not Interested?'+(await PMGappReminder('delete/decease')), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       deceasePerson();
     }
   });
 }
 async function deceasePerson() {
-  let person = idToReferral(getCookieJSON('linkPages'));
+  let person = await idToReferral(getCookieJSON('linkPages'));
   if (person == null) {
     JSAlert.alert('Something went wrong. Try again');
     safeRedirect('index.php');

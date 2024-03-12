@@ -74,15 +74,15 @@ const autoCompleteJS = new autoComplete({
   }
 });
 
-function confirmSendReferral() {
-  JSAlert.confirm('Are you sure you want to send this person to ' + _('selectedArea').innerText + '?'+PMGappReminder('send'), '', JSAlert.Icons.Warning).then(res => {
+async function confirmSendReferral() {
+  JSAlert.confirm('Are you sure you want to send this person to ' + _('selectedArea').innerText + '?'+(await PMGappReminder('send')), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       sendToAnotherArea();
     }
   });
 }
 async function sendToAnotherArea() {
-  let person = idToReferral(getCookieJSON('linkPages'));
+  let person = await idToReferral(getCookieJSON('linkPages'));
   if (person == null) {
     JSAlert.alert('something went wrong. Try again');
     safeRedirect('index.html');

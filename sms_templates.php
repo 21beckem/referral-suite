@@ -90,7 +90,7 @@ async function logAttemptBeforeSendingToLink(el, type) {
 
 async function fillMessageExamples(typ, pasteBox) {
   let areaEmail = "<?php echo($__TEAM->email); ?>";
-  const person = idToReferral(getCookieJSON('linkPages'));
+  const person = await idToReferral(getCookieJSON('linkPages'));
   let requestType = person[TableColumns['type']];
   const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[TableColumns['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
   const link_beginning = (typ == 'sms') ? ('sms:' + encodeURI(String(person[TableColumns['phone']])) + '?body=') : emailLink;

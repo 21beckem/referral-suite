@@ -182,6 +182,7 @@ function peopleListToHTML(arr, thisDotStyle="yellow") {
   }
   return output;
 }
+const ALL_CLAIMED = <?php echo(json_encode( getClaimed_all() )) ?>;
 sortAllPeopleToBoxes(ALL_CLAIMED);
     </script>
 </body>

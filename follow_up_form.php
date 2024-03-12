@@ -48,7 +48,7 @@ require_once('require_area.php');
 
   <script>
 async function saveFollowUpForm() {
-  let person = idToReferral(getCookie('linkPages'));
+  let person = await idToReferral(getCookie('linkPages'));
   if (person == null) {
     JSAlert.alert('something went wrong. Try again');
     safeRedirect('index.php');

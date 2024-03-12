@@ -3,43 +3,14 @@ $doNotRedirectForRequireArea_JustReturnBlank = true;
 require_once('require_area.php');
 header('Content-Type: application/javascript');
 ?>
-const TableColumns = {
-    "type" : 0,
-    "id" : 1,
-    "date" : 2,
-    "sent status" : 3,
-    "claimed area" : 4,
-    "teaching area" : 5,
-    "AB status" : 6,
-    "first name" : 7,
-    "last name" : 8,
-    "phone" : 9,
-    "email" : 10,
-    "street address" : 11,
-    "city" : 12,
-    "zip" : 13,
-    "lang" : 14,
-    "referral origin" : 15,
-    "ad name" : 16,
-    "next follow up" : 17,
-    "follow up status" : 18,
-    "amount of times followed up" : 19,
-    "sent date" : 20,
-    "not interested reason" : 21,
-    "attempt log" : 22,
-    "help request" : 23,
-    "experience" : 24
-}
-function dateInPast(dateStr) {
-    return new Date().getTime() > new Date(dateStr).getTime();
-}
 const MISSIONINFO = <?php echo(json_encode( $__MISSIONINFO )) ?>;
 const TEAM = <?php echo(json_encode( $__TEAM )) ?>;
 const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
-const ALL_CLAIMED = <?php echo(json_encode( getClaimed_all() )) ?>;
-const CLAIMED = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Not sent');
-const FOLLOW_UPS = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']]));
+const CLAIMED = <?php echo(json_encode( getClaimed_stillContacting() )) ?>;
+const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
+//const CLAIMED = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Not sent');
+//const FOLLOW_UPS = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']]));
 const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
 // ignore all errors above this line
@@ -110,6 +81,36 @@ document.addEventListener('click', e => {
         safeRedirect(origin.href);
     }
 });
+const TableColumns = {
+    "type" : 0,
+    "id" : 1,
+    "date" : 2,
+    "sent status" : 3,
+    "claimed area" : 4,
+    "teaching area" : 5,
+    "AB status" : 6,
+    "first name" : 7,
+    "last name" : 8,
+    "phone" : 9,
+    "email" : 10,
+    "street address" : 11,
+    "city" : 12,
+    "zip" : 13,
+    "lang" : 14,
+    "referral origin" : 15,
+    "ad name" : 16,
+    "next follow up" : 17,
+    "follow up status" : 18,
+    "amount of times followed up" : 19,
+    "sent date" : 20,
+    "not interested reason" : 21,
+    "attempt log" : 22,
+    "help request" : 23,
+    "experience" : 24
+}
+function dateInPast(dateStr) {
+    return new Date().getTime() > new Date(dateStr).getTime();
+}
 function setCookie(cname, cvalue) {
     localStorage.setItem(cname, cvalue);
 }
@@ -148,7 +149,7 @@ function getTodaysInxdexOfAttempts(per) {
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
 async function logAttempt(y) {
-    let person = idToReferral(getCookieJSON('linkPages'));
+    let person = await idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     console.log(x);
     let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
@@ -167,17 +168,24 @@ async function logAttempt(y) {
     // save this change
     return await savePerson(person);
 }
-function idToReferral(id) {
-    return [... ALL_CLAIMED.concat(FOLLOW_UPS).filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
+async function idToReferral(id) {
+    let allDownloaded = [... CLAIMED.concat(FOLLOW_UPS) ];
+    let output = allDownloaded.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0];
+    if (output==undefined) {
+        // get from server. 
+        let res = await fetch('php_functions/idToReferral.php?q='+id);
+        output = await res.json();
+    }
+    return output;
 }
 async function savePerson(perArr) {
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
     return (response.status == 200);
     //return response.text();
 }
-function PMGappReminder(action, person=null) {
+async function PMGappReminder(action, person=null) {
     if (person == null) {
-        person = idToReferral(getCookieJSON('linkPages'));
+        person = await idToReferral(getCookieJSON('linkPages'));
     }
     if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
         return '';

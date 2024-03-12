@@ -186,12 +186,17 @@ function pivo($toPaste, $ifNot='') {
   make_bottom_nav(3);
   ?>
   <script>
-<?php
-pivo(
-  "let person = getCookieJSON('personJSON'); ",
-  "let person = idToReferral(getCookie('linkPages')); "
-);
-?>
+let person;
+(async () => {
+  <?php
+  pivo(
+    "person = getCookieJSON('personJSON'); ",
+    "person = await idToReferral(getCookie('linkPages')); "
+  );
+
+  ?>
+  fillInContactInfo();
+})();
 function fillInAttemptLog() {
   let al = Array(7).fill([0, 0, 0]);
   try {
@@ -291,8 +296,6 @@ function prettyPrintRefOrigin(x) {
             return x.trim();
     }
 }
-
-fillInContactInfo();
   </script>
 
   </body>

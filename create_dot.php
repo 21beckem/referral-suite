@@ -101,15 +101,16 @@ require_once('require_area.php');
     make_bottom_nav(3);
     ?>
    <script>
-
-const person = idToReferral(getCookieJSON('linkPages'));
-_('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-//_('contactname').innerHTML = _('personName').innerHTML;
-_('email').innerHTML = person[TableColumns['email']];
-_('findingSource').innerHTML = CONFIG['Dot Creation']['finding source'];
-_('address').innerHTML = person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
-_('FH_lang').innerHTML = CONFIG['Dot Creation']['most common language in mission'];
-_('FH_message').innerHTML = CONFIG['Dot Creation']['message'];
+(async () => {
+  const person = await idToReferral(getCookieJSON('linkPages'));
+  _('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
+  //_('contactname').innerHTML = _('personName').innerHTML;
+  _('email').innerHTML = person[TableColumns['email']];
+  _('findingSource').innerHTML = CONFIG['Dot Creation']['finding source'];
+  _('address').innerHTML = person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
+  _('FH_lang').innerHTML = CONFIG['Dot Creation']['most common language in mission'];
+  _('FH_message').innerHTML = CONFIG['Dot Creation']['message'];
+})();
 
    </script>
 

@@ -90,7 +90,7 @@ function makeListClaimedPeople(arr) {
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="contact_info.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
-          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px; font-size:22px">
+          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 22px; font-size:22px">
             <i class="fa-solid fa-circle" style="color:#ffa514"></i>
           </div>
           ` + notifPoint + `
@@ -113,7 +113,7 @@ function makeListFollowUpPeople(arr) {
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
-          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 27px; font-size:22px">
+          <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 22px; font-size:22px">
             <i class="fa-solid fa-clock" style="color:#ffa514"></i>
           </div>
         </div>

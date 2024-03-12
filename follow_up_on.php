@@ -96,8 +96,8 @@ require_once('require_area.php');
    <script>
 const teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
 const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` WHERE 1') )) ?>;
-function fillInFollowUpInfo() {
-  const person = idToReferral(getCookie('linkPages'));
+async function fillInFollowUpInfo() {
+  const person = await idToReferral(getCookie('linkPages'));
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
   _('lastAtt').innerHTML = new Date(person[TableColumns['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });

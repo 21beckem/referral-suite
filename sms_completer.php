@@ -75,7 +75,7 @@ input[type="text"] {
 	</div>
     <div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16">
 		<div id="MessageOutput" class="googleMessage"></div>
-		<button onclick="sendTheMessage()" class="useThisTemplateBtn">Send</button>
+		<button id="sendTheMessageBtn" class="useThisTemplateBtn">Send</button>
     </div>
 	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_parent"></a>
 
