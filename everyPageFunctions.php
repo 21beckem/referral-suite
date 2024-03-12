@@ -9,8 +9,6 @@ const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
 const CLAIMED = <?php echo(json_encode( getClaimed_stillContacting() )) ?>;
 const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
-//const CLAIMED = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Not sent');
-//const FOLLOW_UPS = ALL_CLAIMED.filter(x => x[TableColumns['AB status']].toLowerCase()=='yellow' && x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']]));
 const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
 // ignore all errors above this line
@@ -108,7 +106,12 @@ const TableColumns = {
     "help request" : 23,
     "experience" : 24
 }
+function dateInFuture(dateStr) {
+    if (!dateStr) { return null; }
+    return new Date().getTime() < new Date(dateStr).getTime();
+}
 function dateInPast(dateStr) {
+    if (!dateStr) { return null; }
     return new Date().getTime() > new Date(dateStr).getTime();
 }
 function setCookie(cname, cvalue) {

@@ -142,7 +142,7 @@ function sortAllPeopleToBoxes(ALL_people) {
   lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Sent' && dateInPast(x[TableColumns['next follow up']])), 'FU_ready');
   _('readyToFollowUp_box').innerHTML = lst;
 
-  lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Sent' && !dateInPast(x[TableColumns['next follow up']])), 'FU_waity');
+  lst = peopleListToHTML(srtd['yellow'].filter(x => x[TableColumns['sent status']]=='Sent' && dateInFuture(x[TableColumns['next follow up']])), 'FU_waity');
   _('followUpWaiting_box').innerHTML = lst;
 
   lst = peopleListToHTML(srtd['green'], 'green');
