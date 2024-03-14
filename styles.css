@@ -18,6 +18,40 @@
     --business-suite-defualt-icon: none;
     --business-suite-active-icon: invert(23%) sepia(17%) saturate(3408%) hue-rotate(232deg) brightness(92%) contrast(91%);
 }
+tabsheader {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    display: flex;
+}
+tabsheader tab button {
+    width: 100%;
+    text-align: center;
+    background-color: inherit;
+    color: inherit;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+tabsheader tab {
+    flex: 1;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+}
+tabsheader tab.active {
+    background-color: #462c6a;
+    border-bottom: 5px solid white;
+}
+.dangerBtn {
+    border: none;
+    color: red;
+    border-radius: 4px;
+    padding: 4px 20px;
+    margin: 10px;
+    background-color: #f9f9f9;
+}
 .notice {
     width: 100%;
     padding: 10px;
@@ -93,7 +127,7 @@
     font-family: 'Advent Pro';
     box-shadow: 0px 0px 17px -10px black;
 }
-#topHeaderBar div:has(:not(.contact_info)):first-child {
+#topHeaderBar div:first-child {
     letter-spacing: 0.15em;
     background-color: var(--mainColor);
     color: #fff;
@@ -102,18 +136,6 @@
     text-align: center;
     padding: 0.01em 16px;
     font-size: 30px;
-}
-#topHeaderBar div:has(.contact_info) {
-    letter-spacing: 0.1em;
-    background-color: var(--mainColor);
-    color: #fff;
-    width: 100%;
-    text-align: left;
-    display: table-cell;
-    font-size: 30px;
-}
-.contact_info {
-    margin: -4px;
 }
 .w3-email-color {
     color: var(--white);

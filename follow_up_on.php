@@ -22,37 +22,50 @@ require_once('require_area.php');
   <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div>
-        <div id="contactname"></div>
+      <div style="padding-bottom: 6px!important;text-align:left!important">
+        <a class="contact_info" id="contactname"></a>
       </div>
+      <tabsheader>
+        <tab><button onclick="location.href='contact_info.php'">Contact</button></tab>
+        <tab class="active">Follow Up</tab>
+        <tab><button onclick="location.href='#.php'">Timeline</button></tab>
+      </tabsheader>
     </div>
-    <div style="height: 80px;"></div>
+    <div style="height: 100px;"></div>
 
     <!-- Contact Card -->
     <div class="w3-card">
         <div class="w3-cell-row w3-padding">
-            <div class="w3-container w3-center w3-xlarge">Follow Up</div>
+            <div class="w3-container w3-center w3-xlarge">Following Up</div>
         </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-            <div class="w3-left-align w3-small w3-opacity">Sent on</div>
-            <div id="lastAtt" class="w3-left-align w3-large"></div>
+        <div id="showIfNotSent" style="display:none">
+          <div class="w3-cell-row w3-padding">
+              <div class="w3-container w3-center w3-large">Person not sent yet</div>
+              <br>
+          </div>
         </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Referral type</div>
-          <div id="referraltype" class="w3-left-align w3-large"></div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Amount of times already followed up on</div>
-          <div id="followUpCount" class="w3-left-align w3-large"></div>
-        </div>
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Area they are in</div>
-          <div id="refLoc" class="w3-left-align w3-large"></div>
-        </div>
-        
-        <div class="w3-container w3-margin-top w3-margin-bottom">
-          <div class="w3-left-align w3-small w3-opacity">Team that sent the referral</div>
-          <div id="refSender" class="w3-left-align w3-large w3-margin-bottom"></div>
+        <div id="showIfSent" style="display:none">
+          <div class="w3-container w3-margin-top w3-margin-bottom">
+              <div class="w3-left-align w3-small w3-opacity">Sent on</div>
+              <div id="lastAtt" class="w3-left-align w3-large"></div>
+          </div>
+          <div class="w3-container w3-margin-top w3-margin-bottom">
+              <div class="w3-left-align w3-small w3-opacity">Next follow up</div>
+              <div id="nextFollowUp" class="w3-left-align w3-large"></div>
+          </div>
+          <div class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-left-align w3-small w3-opacity">Amount of times already followed up on</div>
+            <div id="followUpCount" class="w3-left-align w3-large"></div>
+          </div>
+          <div class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-left-align w3-small w3-opacity">Area they are in</div>
+            <div id="refLoc" class="w3-left-align w3-large"></div>
+          </div>
+          
+          <div class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-left-align w3-small w3-opacity">Team that sent the referral</div>
+            <div id="refSender" class="w3-left-align w3-large w3-margin-bottom"></div>
+          </div>
         </div>
     </div>
     <div style="height: 10px;"></div>
@@ -82,7 +95,7 @@ require_once('require_area.php');
   </div>
 
     <!-- Options to follow up -->
-    <div class="w3-container w3-cell-row" style="margin-top: 40px;">
+    <div id="iveContactedThemBox" class="w3-container w3-cell-row" style="margin-top: 40px; display:none">
       <div class="w3-container w3-cell w3-center">
         <a class="w3-button w3-xlarge w3-round-large w3-blue" href="follow_up_form.php">I've Sucessfully <br> Contacted <span id="refLoc2"></span></a>
       </div>
@@ -91,16 +104,22 @@ require_once('require_area.php');
    <!-- Bottom Nav Bar -->
     <?php
     require_once('make_bottom_nav.php');
-    make_bottom_nav(3);
+    make_bottom_nav(3, '100px');
     ?>
    <script>
 const teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
 const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` WHERE 1') )) ?>;
 async function fillInFollowUpInfo() {
   const person = await idToReferral(getCookie('linkPages'));
+  if (person[TableColumns['sent status']].toLowerCase() == 'sent') {
+    _('iveContactedThemBox').style.display = '';
+    _('showIfSent').style.display = '';
+  } else {
+    _('showIfNotSent').style.display = '';
+  }
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-  _('referraltype').innerHTML = person[TableColumns['type']].replaceAll('_', ' ');
   _('lastAtt').innerHTML = new Date(person[TableColumns['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  _('nextFollowUp').innerHTML = formatDateRelativeToToday( new Date(person[TableColumns['next follow up']]) );
   let fuTimes = person[TableColumns['amount of times followed up']];
   _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes) == 1) ? ' time' : ' times');
   _('refLoc').innerHTML = person[TableColumns['teaching area']];
@@ -116,6 +135,35 @@ async function fillInFollowUpInfo() {
       break;
     }
   }
+}
+function formatDateRelativeToToday(inputDate) {
+  var currentDate = new Date();
+  var tomorrowDate = new Date(currentDate);
+
+  var differenceMs = inputDate.getTime() - currentDate.getTime();
+  var differenceDays = Math.floor(differenceMs / (1000 * 60 * 60 * 24))+1;
+  let timeStr = '';
+  let color = 'grey';
+  if (differenceDays === 0) {
+    timeStr = "today";
+    color = 'var(--all-good-green)';
+  } else if (differenceDays == 1) {
+    timeStr = "tomorrow";
+  } else if (differenceDays == -1) {
+    timeStr = "yesterday";
+    color = 'var(--warning-orange)';
+  } else if (differenceDays > 1) {
+    timeStr = "in " + differenceDays + " days";
+  } else if (differenceDays < -1) {
+    timeStr = Math.abs(differenceDays) + " days ago";
+    color = 'var(--warning-orange)';
+  } else {
+    timeStr = "invalid date";
+  }
+  if (differenceDays < -4) {
+    color = 'var(--warning-red)';
+  }
+  return '<a style="color:' + color + '">' + timeStr + '</a>';
 }
 
 fillInFollowUpInfo();

@@ -37,16 +37,6 @@ unset($_SESSION['currentNotificationToken']);
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
-    <style>
-#signOutBtn {
-  border: none;
-  color: red;
-  border-radius: 4px;
-  padding: 4px 20px;
-  margin: 10px;
-  background-color: #f9f9f9;
-}
-    </style>
   </head>
   <body>
     <!-- Top Bar -->
@@ -69,7 +59,7 @@ unset($_SESSION['currentNotificationToken']);
     <form action="login.php" method="POST" id="subForm">
       <input type="hidden" name="teamId" id="teamId">
     </form>
-    <button id="signOutBtn" onclick="signOutOfMission()">Sign out of <?php echo($missionInfo->name) ?> Mission</button>
+    <button class="dangerBtn" onclick="signOutOfMission()">Sign out of <?php echo($missionInfo->name) ?> Mission</button>
     <script>
 let subForm = document.getElementById('subForm');
 let teamId = document.getElementById('teamId');

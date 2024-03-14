@@ -17,46 +17,17 @@ require_once('require_area.php');
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#462c6a">
-  <style>
-#tabsTable {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-#tabsTable tr td button {
-  width: 100%;
-  text-align: center;
-  background-color: inherit;
-  color: inherit;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-#tabsTable tr td {
-  width: 50%;
-  text-align: center;
-  color: white;
-  font-size: 20px;
-}
-#tabsTable tr td.active {
-  background-color: #462c6a;
-  border-bottom: 5px solid white;
-}
-  </style>
 </head>
 <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div style="padding-bottom: 2px !important">
+      <div style="padding-bottom: 6px !important">
         <a>Your Referrals</a>
       </div>
-      <table id="tabsTable" cellspacing=0>
-        <tr>
-          <td class="active">Action Needed</td>
-          <td><button onclick="location.href='contact_book_all.php'">All</button></td>
-        </tr>
-      </table>
+      <tabsheader>
+        <tab class="active">Action Needed</tab>
+        <tab><button onclick="location.href='contact_book_all.php'">All</button></tab>
+      </tabsheader>
     </div>
     <div style="height: 100px;"></div>
      
@@ -109,7 +80,7 @@ function makeListFollowUpPeople(arr) {
   let output = '';
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
-    const elapsedTime = timeSince_formatted(new Date(per[TableColumns['next follow up']]));
+    const elapsedTime = formatDateRelativeToToday(new Date(per[TableColumns['next follow up']]));
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="follow_up_on.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
@@ -127,7 +98,35 @@ function makeListFollowUpPeople(arr) {
   }
   _('yourfollowups').innerHTML = output;
 }
+function formatDateRelativeToToday(inputDate) {
+  var currentDate = new Date();
+  var tomorrowDate = new Date(currentDate);
 
+  var differenceMs = inputDate.getTime() - currentDate.getTime();
+  var differenceDays = Math.floor(differenceMs / (1000 * 60 * 60 * 24))+1;
+  let timeStr = '';
+  let color = 'grey';
+  if (differenceDays === 0) {
+    timeStr = "today";
+    color = 'var(--all-good-green)';
+  } else if (differenceDays == 1) {
+    timeStr = "tomorrow";
+  } else if (differenceDays == -1) {
+    timeStr = "yesterday";
+    color = 'var(--warning-orange)';
+  } else if (differenceDays > 1) {
+    timeStr = "in " + differenceDays + " days";
+  } else if (differenceDays < -1) {
+    timeStr = Math.abs(differenceDays) + " days";
+    color = 'var(--warning-orange)';
+  } else {
+    timeStr = "invalid date";
+  }
+  if (differenceDays < -4) {
+    color = 'var(--warning-red)';
+  }
+  return '<a style="color:' + color + '"><i class="fa fa-info-circle"></i> ' + timeStr + '</a>';
+}
 function timeSince_formatted(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
   var interval = seconds / 31536000;

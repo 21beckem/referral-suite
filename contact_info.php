@@ -29,14 +29,16 @@ function pivo($toPaste, $ifNot='') {
   <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-padding-16">
-        <div class="contact_info" id="contactname"></div>
+      <div style="padding-bottom: 6px!important;text-align:left!important">
+        <a class="contact_info" id="contactname"></a>
       </div>
-      <div onclick="safeRedirect('decease.php')" class="w3-container w3-cell w3-xlarge w3-right-align" <?php pivo('style="display:none"'); ?>>
-        <i class="fa fa-trash-o w3-text-white" style="position: relative;"></i>
-      </div>
+      <tabsheader>
+        <tab class="active">Contact</tab>
+        <tab><button onclick="location.href='follow_up_on.php'">Follow Up</button></tab>
+        <tab><button onclick="location.href='#.php'">Timeline</button></tab>
+      </tabsheader>
     </div>
-    <div style="height: 80px;"></div>
+    <div style="height: 100px;"></div>
 
     <!-- viewOnly notice -->
     <div class="notice warning" <?php pivo('', 'style="display:none"'); ?>>
@@ -174,6 +176,8 @@ function pivo($toPaste, $ifNot='') {
   </div>
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
       <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')" <?php pivo('disabled'); ?>>Send referral</button>
+      <br>
+      <button onclick="safeRedirect('decease.php')" class="dangerBtn" <?php pivo('style="display:none"'); ?>>Stop Contacting</button>
     </div>
     
 

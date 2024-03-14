@@ -18,32 +18,6 @@ require_once('require_area.php');
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#462c6a">
   <style>
-#tabsTable {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-#tabsTable tr td button {
-  width: 100%;
-  text-align: center;
-  background-color: inherit;
-  color: inherit;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-#tabsTable tr td {
-  width: 50%;
-  text-align: center;
-  color: white;
-  font-size: 20px;
-}
-#tabsTable tr td.active {
-  background-color: #462c6a;
-  border-bottom: 5px solid white;
-}
-
 #yourreferrals div.header {
   width: 100%;
   margin-bottom: 15px;
@@ -71,15 +45,13 @@ require_once('require_area.php');
 <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div style="padding-bottom: 2px !important">
+      <div style="padding-bottom: 6px !important">
         <a>Your Referrals</a>
       </div>
-      <table id="tabsTable" cellspacing=0>
-        <tr>
-          <td><button onclick="location.href='contact_book_actionneeded.php'">Action Needed</button></td>
-          <td class="active">All</td>
-        </tr>
-      </table>
+      <tabsheader>
+        <tab><button onclick="location.href='contact_book_actionneeded.php'">Action Needed</button></tab>
+        <tab class="active">All</tab>
+      </tabsheader>
     </div>
     <div style="height: 95px;"></div>
      
