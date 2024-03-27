@@ -190,11 +190,11 @@ if (CLAIMED.length > 0) {
     if (dayDifference >= maxRefAge) {
         _("agebyday").classList.add('w3-text-red');
     }
+    setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 } else {
     _("agebyday").innerHTML = '0/' + maxRefAge;
 }
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
-setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
 
 function setBigToolButtonLink(elId, link) {

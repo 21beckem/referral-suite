@@ -28,7 +28,7 @@ require_once('require_area.php');
   box-shadow: 0px 3px 10px -8px black;
   clip-path: inset(0px 0px -10px 0px);
   position: sticky;
-  background-color: white;
+  background-color: var(--white);
   top: 95px;
 }
 #yourreferrals div.header div.contents {
@@ -36,9 +36,9 @@ require_once('require_area.php');
 }
 #yourreferrals div.header div.bar div.bar-line {
   width: 100%;
-  border-bottom: 2px solid #462c6a;
+  border-bottom: 2px solid var(--mainColor);
   font-size: 20px;
-  color: #462c6a;
+  color: var(--black);
 }
   </style>
 </head>

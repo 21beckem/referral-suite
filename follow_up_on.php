@@ -28,7 +28,7 @@ require_once('require_area.php');
       <tabsheader>
         <tab><button onclick="location.href='contact_info.php'">Contact</button></tab>
         <tab class="active">Follow Up</tab>
-        <tab><button onclick="location.href='#.php'">Timeline</button></tab>
+        <tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab>
       </tabsheader>
     </div>
     <div style="height: 100px;"></div>
@@ -37,6 +37,10 @@ require_once('require_area.php');
     <div class="w3-card">
         <div class="w3-cell-row w3-padding">
             <div class="w3-container w3-center w3-xlarge">Following Up</div>
+        </div>
+        <div class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-left-align w3-small w3-opacity">Status</div>
+            <div id="ABstatus" class="w3-left-align w3-large"></div>
         </div>
         <div id="showIfNotSent" style="display:none">
           <div class="w3-cell-row w3-padding">
@@ -109,17 +113,20 @@ require_once('require_area.php');
    <script>
 const teamInfos = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `teams` WHERE 1') )); ?>;
 const areas = <?php echo(json_encode( readSQL($__MISSIONINFO->mykey, 'SELECT * FROM `mission_areas` WHERE 1') )) ?>;
+const dotStyle = {
+  'green' : `<i class="fa-solid fa-circle" style="color:green"></i>`,
+  'yellow_ring' : `<i class="fa-regular fa-circle" style="color:#ffa514"></i>`,
+  'grey' : `<i class="fa-solid fa-circle" style="color:grey"></i>`,
+  'gray' : `<i class="fa-solid fa-circle" style="color:grey"></i>`,
+  'FU_ready' : `<i class="fa-solid fa-clock" style="color:#ffa514"></i>`,
+  'yellow' : `<i class="fa-solid fa-circle" style="color:#ffa514"></i>`,
+}
 async function fillInFollowUpInfo() {
   const person = await idToReferral(getCookie('linkPages'));
-  if (person[TableColumns['sent status']].toLowerCase() == 'sent') {
-    _('iveContactedThemBox').style.display = '';
-    _('showIfSent').style.display = '';
-  } else {
-    _('showIfNotSent').style.display = '';
-  }
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   _('lastAtt').innerHTML = new Date(person[TableColumns['sent date']]).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  _('nextFollowUp').innerHTML = formatDateRelativeToToday( new Date(person[TableColumns['next follow up']]) );
+  _('nextFollowUp').innerHTML = formatDateRelativeToToday( person[TableColumns['next follow up']] );
+  _('ABstatus').innerHTML = dotStyle[ person[TableColumns['AB status']].toLowerCase() ] + ' ' + person[TableColumns['AB status']];
   let fuTimes = person[TableColumns['amount of times followed up']];
   _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes) == 1) ? ' time' : ' times');
   _('refLoc').innerHTML = person[TableColumns['teaching area']];
@@ -135,13 +142,25 @@ async function fillInFollowUpInfo() {
       break;
     }
   }
+
+  if (person[TableColumns['sent status']].toLowerCase() == 'sent') {
+    _('iveContactedThemBox').style.display = '';
+    _('showIfSent').style.display = '';
+  } else {
+    _('showIfNotSent').style.display = '';
+    _('ABstatus').innerHTML = dotStyle['yellow_ring'] + ' Yellow';
+  }
 }
 function formatDateRelativeToToday(inputDate) {
-  var currentDate = new Date();
-  var tomorrowDate = new Date(currentDate);
+  if (inputDate == null) {
+    return '<a style="color:grey">No follow up scheduled</a>';
+  }
+  inputDate = new Date(inputDate);
+  let currentDate = new Date();
+  let tomorrowDate = new Date(currentDate);
 
-  var differenceMs = inputDate.getTime() - currentDate.getTime();
-  var differenceDays = Math.floor(differenceMs / (1000 * 60 * 60 * 24))+1;
+  let differenceMs = inputDate.getTime() - currentDate.getTime();
+  let differenceDays = Math.floor(differenceMs / (1000 * 60 * 60 * 24))+1;
   let timeStr = '';
   let color = 'grey';
   if (differenceDays === 0) {

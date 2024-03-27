@@ -35,7 +35,7 @@ function pivo($toPaste, $ifNot='') {
       <tabsheader>
         <tab class="active">Contact</tab>
         <tab><button onclick="location.href='follow_up_on.php'">Follow Up</button></tab>
-        <tab><button onclick="location.href='#.php'">Timeline</button></tab>
+        <tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab>
       </tabsheader>
     </div>
     <div style="height: 100px;"></div>

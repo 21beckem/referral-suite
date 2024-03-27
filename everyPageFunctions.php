@@ -104,7 +104,8 @@ const TableColumns = {
     "not interested reason" : 21,
     "attempt log" : 22,
     "help request" : 23,
-    "experience" : 24
+    "experience" : 24,
+    "timeline" : 25
 }
 function dateInFuture(dateStr) {
     if (!dateStr) { return null; }
