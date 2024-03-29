@@ -53,6 +53,20 @@
         setcookie('__CONFIG', $jsonStr, time() + (86400 * 1), "/"); // 86400 = 1 day
         return json_decode($jsonStr);
     }
+    function addTimelineEvent($perId, $type, $info, $author=null, $requireClaimed=true) {
+        global $__MISSIONINFO, $__TEAM;
+        if ($author == null) {
+            $author =$__TEAM->name;
+        }
+        $newEv = addslashes('{"date":"'.date('Y-m-d H:i:s', strtotime( 'now' )).'","author":"'.$author.'","type":"'.$type.'","info":"'.$info.'"}]');
+        $q1 =  'UPDATE `all_referrals` SET `timeline`=CONCAT(SUBSTRING(`timeline`,1,CHAR_LENGTH(`timeline`)-1), "'.$newEv.'") WHERE `id`="'.$perId.'" AND CHAR_LENGTH(`timeline`) < 4';
+        $q2 =  'UPDATE `all_referrals` SET `timeline`=CONCAT(SUBSTRING(`timeline`,1,CHAR_LENGTH(`timeline`)-1), ",'.$newEv.'") WHERE `id`="'.$perId.'" AND CHAR_LENGTH(`timeline`) > 4';
+        if ($requireClaimed) {
+            $q1 .= ' AND `Claimed`="'.$__TEAM->id.'"';
+            $q2 .= ' AND `Claimed`="'.$__TEAM->id.'"';
+        }
+        return writeSQL($__MISSIONINFO->mykey, $q1) || writeSQL($__MISSIONINFO->mykey, $q2);
+    }
 
     // usefull functions
     function getUnclaimed() {

@@ -101,13 +101,10 @@ async function sendToAnotherArea() {
   nextFU.setHours(3, 0, 0, 0);
   person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-  if (await savePerson(person)) {
+  if (await savePerson(person, 'sent', newArea)) {
     JSAlert.alert('Sent!', '', JSAlert.Icons.Success).then(()=> {
       safeRedirect('index.php');
     });
-
-    //givePoints
-    // setAddFoxPoints(10);               < - - come back to this later!
   }
 }
   </script>

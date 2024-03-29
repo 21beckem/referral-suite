@@ -72,13 +72,13 @@ async function saveFollowUpForm() {
   person[TableColumns['follow up status']] = status;
   person[TableColumns['amount of times followed up']] = parseInt(person[TableColumns['amount of times followed up']]) + 1;
 
-  if (await savePerson(person)) {
+  alert(JSON.stringify( Object.keys(CONFIG['Follow Ups']['status delays']) ));
+  // alert(JSON.stringify( parseInt(status) ));
+  let statusText = Object.keys(CONFIG['Follow Ups']['status delays'])[parseInt(status)];
+  if (await savePerson(person, 'follow up', statusText)) {
     JSAlert.alert('Saved!', '', JSAlert.Icons.Success).then(()=> {
       safeRedirect('index.php');
     });
-
-    //givePoints
-    // setAddFoxPoints(10);               < - - come back to this later!
   }
 }
 function fillInFollowUpOptions(el) {

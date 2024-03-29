@@ -170,7 +170,7 @@ async function logAttempt(y) {
         _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
     } catch (e) {}
     // save this change
-    return await savePerson(person);
+    return await savePerson(person, 'contact', y);
 }
 async function idToReferral(id) {
     let allDownloaded = [... CLAIMED.concat(FOLLOW_UPS) ];
@@ -182,10 +182,21 @@ async function idToReferral(id) {
     }
     return output;
 }
-async function savePerson(perArr) {
+async function savePerson(perArr, type, info) {
+    // create timeline event
+    let tmlnRaw = perArr[TableColumns['timeline']];
+    let tmln = JSON.parse(tmlnRaw);
+    tmln.push({
+        "date" : new Date().toISOString().slice(0, 19).replace('T', ' '),
+        "author" : "<?php echo($__TEAM->name); ?>",
+        "type" : type,
+        "info" : info
+    });
+    perArr[TableColumns['timeline']] = JSON.stringify(tmln);
+
+    // save to the cloud
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
     return (response.status == 200);
-    //return response.text();
 }
 async function PMGappReminder(action, person=null) {
     if (person == null) {

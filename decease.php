@@ -74,14 +74,9 @@ async function deceasePerson() {
   person[TableColumns['AB status']] = 'Grey';
   person[TableColumns['not interested reason']] = _('deceaseDropdown').value;
 
-  // add this person's number to list of pranked numbers
-  // if (_('deceaseDropdown').value.includes('prank')) {
-  //   if (!data.hasOwnProperty("new_pranked_numbers")) {
-  //     data.new_pranked_numbers = Array();
-  //   }
-  //   data.new_pranked_numbers.push( [ person[TableColumns['phone']] , new Date().toISOString().split('T')[0] ] );
-  // }
-  if (await savePerson(person)) {
+  let reasonText = CONFIG['Stop Contacting']['reasons'][_('deceaseDropdown').value];
+
+  if (await savePerson(person, 'marked as NI', reasonText)) {
     JSAlert.alert('Marked as not interested!', '', JSAlert.Icons.Success).then(()=> {
       safeRedirect('index.php');
     });
