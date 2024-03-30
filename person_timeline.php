@@ -112,7 +112,7 @@ async function fillInTimeline() {
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   let rawTimeline = person[TableColumns['timeline']];
   try {
-    tmln = JSON.parse(rawTimeline);
+    tmln = JSON.parse(rawTimeline).reverse();
   } catch (e) {
     JSAlert.alert("Looks like there's a problem with this person's timeline. Contact the developer or your team leader.", 'Oh No!', JSAlert.Icons.Failed);
     return;
@@ -130,18 +130,42 @@ async function fillInTimeline() {
         </div>
         <div class="rightside">
           <div class="box" onclick="viewEvent(` + i + `)">
-            <div class="title">` + event.title + `</div>
+            <div class="title">` + timelineTitle(event) + `</div>
             <div class="author">` + author + `</div>
           </div>
         </div>
       </event>`;
   }
 }
+function timelineTitle(ev) {
+  switch (ev.type) {
+    case 'contact':
+      let strSrt = '<i class="fa ';
+      strSrt += ['fa-phone-square w3-text-call-color"></i>', 'fa-comment w3-text-sms-color"></i>', 'fa-envelope w3-text-email-color"></i>'][parseInt(ev.info)];
+      return strSrt + ' Contact';
+      break;
+    
+    case 'marked as NI':
+      return 'Marked as Not Interested';
+      break;
+
+    case 'follow up':
+      return 'Follow up <a style="font-size: 10px">' + ev.info + '</a>';
+      break;
+  
+    default:
+      return ev.type.toTitleCase();
+      break;
+  }
+}
 fillInTimeline();
 
 function viewEvent(eventI) {
   let event = tmln[eventI];
-  JSAlert.alert('<pre style="text-align:left; text-wrap: wrap; font-size: small">'+JSON.stringify(event, null, 2)+'</pre>', event.title, JSAlert.Icons.Information);
+  let toShow = 'date: ' + event.date + '<br>';
+  toShow += 'author: ' + (event.author || 'Referral Panel') + '<br>';
+  toShow += 'info: ' + event.info;
+  JSAlert.alert(toShow, timelineTitle(event), JSAlert.Icons.Information);
 }
 
 </script>

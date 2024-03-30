@@ -92,6 +92,7 @@ async function sendToAnotherArea() {
   // set new area in data and save to cookie
   person[TableColumns['sent status']] = 'Sent';
   person[TableColumns['teaching area']] = newArea;
+  person[TableColumns['AB status']] = 'Yellow';
 
   // follow up
   let nextFU = new Date();

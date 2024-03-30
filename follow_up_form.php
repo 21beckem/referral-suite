@@ -72,7 +72,6 @@ async function saveFollowUpForm() {
   person[TableColumns['follow up status']] = status;
   person[TableColumns['amount of times followed up']] = parseInt(person[TableColumns['amount of times followed up']]) + 1;
 
-  alert(JSON.stringify( Object.keys(CONFIG['Follow Ups']['status delays']) ));
   // alert(JSON.stringify( parseInt(status) ));
   let statusText = Object.keys(CONFIG['Follow Ups']['status delays'])[parseInt(status)];
   if (await savePerson(person, 'follow up', statusText)) {

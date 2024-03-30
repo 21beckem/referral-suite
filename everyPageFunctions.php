@@ -160,15 +160,14 @@ async function logAttempt(y) {
     try {
         al = JSON.parse(person[TableColumns['attempt log']]);
     } catch(e) {}
-    if (x > al.length) {
-        return false; // person is older than the amount of days in attempt log
+    if (x <= al.length) { // if attempt is within the attempt log
+        al[x][y] = 1;
+        person[TableColumns['attempt log']] = JSON.stringify(al);
+    
+        try {
+            _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
+        } catch (e) {}
     }
-    al[x][y] = 1;
-    person[TableColumns['attempt log']] = JSON.stringify(al);
-
-    try {
-        _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
-    } catch (e) {}
     // save this change
     return await savePerson(person, 'contact', y);
 }
