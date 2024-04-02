@@ -175,9 +175,9 @@ function pivo($toPaste, $ifNot='') {
       </div>
   </div>
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
-      <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')" <?php pivo('disabled'); ?>>Send referral</button>
+      <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')" <?php pivo('disabled'); ?>>Confirm Sent</button>
       <br>
-      <button onclick="safeRedirect('decease.php')" class="dangerBtn" <?php pivo('style="display:none"'); ?>>Stop Contacting</button>
+      <button onclick="safeRedirect('decease.php')" class="dangerBtn" <?php pivo('style="display:none"'); ?>>Confirm Mark as not interested</button>
     </div>
     
 
@@ -280,7 +280,7 @@ function fillInContactInfo() {
   }
   if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('create_dot.php')");
-    _('sendReferralBtn').innerHTML = 'Create Dot and Send';
+    _('sendReferralBtn').innerHTML = 'Create Dot and Confirm Sent';
   }
   fillInAttemptLog();
 }

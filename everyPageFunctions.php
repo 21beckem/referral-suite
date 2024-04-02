@@ -197,13 +197,13 @@ async function savePerson(perArr, type, info) {
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
     return (response.status == 200);
 }
-async function PMGappReminder(action, person=null) {
+async function PMGappReminder(person=null) {
     if (person == null) {
         person = await idToReferral(getCookieJSON('linkPages'));
     }
     if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
         return '';
     } else {
-        return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
+        return "<p><strong>Do not confirm until action completed in the PMG App!</strong></p>";
     }
 }

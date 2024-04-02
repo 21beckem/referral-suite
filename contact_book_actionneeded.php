@@ -54,9 +54,11 @@ function makeListClaimedPeople(arr) {
   for (let i = 0; i < arr.length; i++) {
     const per = arr[i];
     let notifPoint = '';
+    <?php if (getConfig()->{'General'}->{'show attempt log'}) { ?>
     if (!hasPersonBeenContactedToday(per)) {
       notifPoint += `<div class="w3-left-align w3-circle" style="position:relative; color:red; right:-18px; top:-30px; font-size:25px; font-weight:bold; height:0;">!</div>`;
     }
+    <?php } ?>
     const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
     output += `<aa onclick="saveToLinkPagesThenRedirect(` + per[TableColumns['id']] + `, this)" href="contact_info.php" class="person-to-click">
       <div class="w3-bar" style="display: flex;">

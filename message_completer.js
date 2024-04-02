@@ -58,12 +58,11 @@
 			JSAlert.alert('Please fill out the required info 🙃');
 		}
 	}
-
 	// put in some values we know of
 	function trySetValue(el, val) {
 		try {
-			el.value = val;
-			updateField(el);
+			el.value = val.trim();
+			el.oninput();
 		} catch (e) {}
 	}
 	window.onload = () => {

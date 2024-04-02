@@ -62,6 +62,10 @@ require_once('require_area.php');
             <div id="followUpCount" class="w3-left-align w3-large"></div>
           </div>
           <div class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-left-align w3-small w3-opacity">Last follow up status</div>
+            <div id="lastFollowUpStatus" class="w3-left-align w3-large"></div>
+          </div>
+          <div class="w3-container w3-margin-top w3-margin-bottom">
             <div class="w3-left-align w3-small w3-opacity">Area they are in</div>
             <div id="refLoc" class="w3-left-align w3-large"></div>
           </div>
@@ -128,6 +132,7 @@ async function fillInFollowUpInfo() {
   _('nextFollowUp').innerHTML = formatDateRelativeToToday( person[TableColumns['next follow up']] );
   _('ABstatus').innerHTML = dotStyle[ person[TableColumns['AB status']].toLowerCase() ] + ' ' + person[TableColumns['AB status']];
   let fuTimes = person[TableColumns['amount of times followed up']];
+  _('lastFollowUpStatus').innerHTML = Object.keys(CONFIG['Follow Ups']['status delays'])[person[TableColumns['follow up status']]] || 'This is the first follow up';
   _('followUpCount').innerHTML = fuTimes + ((parseInt(fuTimes) == 1) ? ' time' : ' times');
   _('refLoc').innerHTML = person[TableColumns['teaching area']];
   _('refLoc2').innerHTML = person[TableColumns['teaching area']];

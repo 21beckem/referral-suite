@@ -7,7 +7,7 @@ require_once('require_area.php');
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stop Contacting</title>
+    <title>Confirm Disinterest</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
@@ -22,7 +22,7 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Stop Contacting</a>
+        <a>Confirm Disinterest</a>
       </div>
     </div>
     <div style="height: 80px;"></div>
@@ -36,7 +36,7 @@ require_once('require_area.php');
   </div>
 
   <div id="Sendbutton" class="w3-container w3-center" style="margin-top:110px; display: none;">
-    <button onclick="confirmDeceasePerson()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue">Mark as Not Interested</button>
+    <button onclick="confirmDeceasePerson()" href="index.html" class="w3-button w3-xlarge w3-round-large w3-blue">Confirm</button>
   </div>
 
     <!-- Bottom Nav Bar -->
@@ -56,7 +56,7 @@ function areaOptionChanged(el) {
   document.getElementById("Sendbutton").style.display = (el.value == "") ? "none" : "";
 }
 async function confirmDeceasePerson() {
-  JSAlert.confirm('Are you sure you want to mark this person as Not Interested?'+(await PMGappReminder('delete/decease')), '', JSAlert.Icons.Warning).then(res => {
+  JSAlert.confirm('Are you sure you want to confirm this referral as Not Interested?'+(await PMGappReminder()), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       deceasePerson();
     }

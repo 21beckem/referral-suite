@@ -24,14 +24,14 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Sending Referral</a>
+        <a>Confirm Sent</a>
       </div>
     </div>
     <div style="height: 80px;"></div>
 
 
 
-  <div class="w3-center" style="padding-top: 100px;">Which area is this person being sent to?</div>
+  <div class="w3-center" style="padding-top: 100px;">Which area was this referral sent to?</div>
   <div style="height:20px"></div>
   <div class="w3-center">  
     <input type="text" id="areaInput">
@@ -75,7 +75,7 @@ const autoCompleteJS = new autoComplete({
 });
 
 async function confirmSendReferral() {
-  JSAlert.confirm('Are you sure you want to send this person to ' + _('selectedArea').innerText + '?'+(await PMGappReminder('send')), '', JSAlert.Icons.Warning).then(res => {
+  JSAlert.confirm('Are you sure you want to confirm this referral as sent to ' + _('selectedArea').innerText + ' in the PMG app?'+(await PMGappReminder()), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       sendToAnotherArea();
     }
