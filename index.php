@@ -18,27 +18,12 @@ require_once('require_area.php');
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>for chart -->
     <style>
 #totReferralsBar, #oldReferralBar {
   background: linear-gradient(90deg, rgb(94 215 74) 50%, rgba(158,0,0,1) 100%);
   background-size: 80vw;
   background-repeat: no-repeat;
   background-color: rgba(158,0,0,1);
-}
-#inbucksValue {
-  color: #508d00;
-}
-#inbucksValue::before {
-  font-size: 15px;
-  content: "$";
-  color: #508d009c;
-}
-#inbucksValue::after {
-  font-size: 15px;
-  content: "$";
-  color: transparent;
 }
 #paintingWindow {
   position: fixed;
@@ -94,37 +79,7 @@ require_once('require_area.php');
     <div id="wholePageCard">
       <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
 
-      <!-- Progress bars -->
-      <!-- <canvas id="myChart1" style="width:100%;max-width:600px"></canvas> -->
-      <div class="w3-border-bottom">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 80%; padding-left: 10px;">
-              <div class="w3-light-gray w3-round-medium">
-                <div id="totReferralsBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-              </div>
-            </td>
-            <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-          </tr>
-        </table>
-        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Claimed referrals</div>
-      </div>
-
-      <div class="w3-border-bottom" style="padding-top: 10px">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 80%; padding-left: 10px;">
-              <div class="w3-light-gray w3-round-medium">
-                <div id="oldReferralBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-              </div>
-            </td>
-            <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-          </tr>
-        </table>
-        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
-      </div>
-
-      <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
+      <!-- <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div> -->
       <div class="full_width_home_btn">
         <a href="tutorial_links.php">
           <div class="bigTipBtn" style="background-image: url('img/TutorialsBtnInvert.png'); border: 1px solid #f2bfff;"></div>
@@ -162,38 +117,7 @@ require_once('require_area.php');
       make_bottom_nav(1);
       ?>
     <script>
-let maxRefsAllowed = 15;
-const currentRefCount = CLAIMED.length;
 
-
-let totReferralsBar = _("totReferralsBar");
-let totReferrals = _("totReferrals");
-
-totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
-
-totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
-
-if (currentRefCount >= maxRefsAllowed) {
-    totReferrals.classList.add('w3-text-red');
-}
-let maxRefAge = 7;
-if (CLAIMED.length > 0) {
-    let oldReferralBar = _("oldReferralBar");
-    let oldReferral = getOldestClaimedPerson()[2];
-    let today = new Date();
-    let oldDate = new Date(oldReferral);
-    let dayDifference = Math.round((today.getTime() - oldDate.getTime()) / (1000 * 60 * 60 * 24));
-    oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
-
-    _("agebyday").innerHTML = dayDifference + '/' + maxRefAge;
-
-    if (dayDifference >= maxRefAge) {
-        _("agebyday").classList.add('w3-text-red');
-    }
-    setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
-} else {
-    _("agebyday").innerHTML = '0/' + maxRefAge;
-}
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
 
@@ -205,16 +129,6 @@ function setBigToolButtonLink(elId, link) {
     return;
   }
   _(elId).href = link;
-}
-function getOldestClaimedPerson() {
-    let currentOldest = CLAIMED[0];
-    for (let i = 0; i < CLAIMED.length; i++) {
-        const per = CLAIMED[i];
-        if (new Date(per[2]).getTime() < new Date(currentOldest[2]).getTime()) {
-            currentOldest = per;
-        }
-    }
-    return currentOldest;
 }
 function doubleCheckLogout() {
   JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {

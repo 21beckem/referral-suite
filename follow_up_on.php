@@ -28,7 +28,7 @@ require_once('require_area.php');
       <tabsheader>
         <tab><button onclick="location.href='contact_info.php'">Contact</button></tab>
         <tab class="active">Follow Up</tab>
-        <tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab>
+        <?php if (getConfig()->{'General'}->{'show attempt log'}) { ?><tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab><?php } ?>
       </tabsheader>
     </div>
     <div style="height: 100px;"></div>

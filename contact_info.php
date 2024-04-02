@@ -35,7 +35,7 @@ function pivo($toPaste, $ifNot='') {
       <tabsheader>
         <tab class="active">Contact</tab>
         <tab><button onclick="location.href='follow_up_on.php'">Follow Up</button></tab>
-        <tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab>
+        <?php if (getConfig()->{'General'}->{'show attempt log'}) { ?><tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab><?php } ?>
       </tabsheader>
     </div>
     <div style="height: 100px;"></div>
@@ -81,7 +81,7 @@ function pivo($toPaste, $ifNot='') {
     <div style="height: 10px;"></div>
 
     <!-- Contact card list -->
-    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom" style="<?php if (!getConfig()->{'General'}->{'show attempt log'}) { echo('display:none;'); } ?>">
       <div class="w3-left-align w3-small w3-opacity">Attempt Tracker</div>
       <table id="attemptLog" cellspacing=0>
         <colgroup>
