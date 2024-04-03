@@ -64,7 +64,7 @@ function makeListClaimedPeople(arr) {
       <div class="w3-bar" style="display: flex;">
         <div class="w3-bar-item w3-circle">
           <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 22px; font-size:22px">
-            <i class="fa-solid fa-circle" style="color:#ffa514"></i>
+            <i class="fa-regular fa-circle" style="color:#ffa514"></i>
           </div>
           ` + notifPoint + `
         </div>
