@@ -87,6 +87,7 @@ require_once('require_area.php');
 }
 .splash-screen credit {
   z-index: 1;
+  color: white;
   position: absolute;
   width: 240px;
   font-size: 30px;
