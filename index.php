@@ -74,7 +74,7 @@ require_once('require_area.php');
   align-items: center;
   opacity: 1;
   transform: scale(1);
-  animation: splashAnimWhole 0.6s 1.2s ease forwards;
+  animation: splashAnimWhole 0.6s 1.6s ease forwards;
 }
 .splash-screen img {
   z-index: 2;
@@ -108,6 +108,54 @@ require_once('require_area.php');
   0% { opacity: 0; transform: translateY(0px); }
   100% { opacity: 0.7; transform: translateY(140px); }
 }
+#topHomeBtns homebtn {
+  width: calc(100% - 10px);
+  border-radius: 10px;
+  text-align: center;
+  padding: 30px 15px;
+}
+.bigNumBigIcon {
+  font-size: 70px;
+  position: absolute;
+  right: 10px;
+  top: -10px;
+  color: var(--very-light-purple);
+  z-index: 0;
+  opacity: 0.3;
+  filter: blur(1.5px);
+}
+#topHomeBtns {
+  width: calc(100% - 10px);
+  display: flex;
+  margin: 5px;
+  flex-wrap: wrap;
+}
+#homeBtns {
+  font-family: 'Advent Pro';
+  width: calc(100% - 10px);
+  display: flex;
+  margin: 5px;
+  flex-wrap: wrap;
+}
+homebtn {
+  flex: 1 0 34%;
+  background-color: var(--white);
+  box-shadow: 0 2px 10px -6px rgb(0 0 0 / 20%);
+  padding: 10px;
+  margin: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 3px;
+  min-height: 65px;
+}
+homebtn span {
+  font-weight: bold;
+}
+homebtn i {
+  padding: 5px;
+}
     </style>
   </head>
   <body>
@@ -117,7 +165,7 @@ require_once('require_area.php');
         sessionStorage.setItem("first_time","1");
         document.write(`
           <div class="splash-screen">
-            <credit id="dev-er">Developed By: Michael Becker</credit>
+            <credit id="dev-er"><span style="font-size:20px">Developed By:</span><br>Michael Becker</credit>
             <img src="logo.png" alt="App Icon">
           </div>
         `);
@@ -137,6 +185,49 @@ require_once('require_area.php');
 
     <div id="wholePageCard">
       <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
+
+      <div id="topHomeBtns">
+        <homebtn>
+          <i class="fa-regular fa-circle bigNumBigIcon" style="font-size:200px; left: -80px; top: -30px;"></i>
+          <a style="font-size: 50px;"><?php echo(count(getClaimed_stillContacting())); ?></a>
+          <span style="font-family: 'Advent Pro'; opacity:0.7">People still being contacted</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-clock bigNumBigIcon" style="font-size:200px; left: -80px; top: -30px;"></i>
+          <a style="font-size: 50px;"><?php echo(count(getFollowUps())); ?></a>
+          <span style="font-family: 'Advent Pro'; opacity:0.7">People to follow up with</span>
+        </homebtn>
+      </div>
+      
+      <hr style="margin:10px">
+      
+
+      <div id="homeBtns">
+        <homebtn>
+          <i class="fa-solid fa-circle-question bigNumBigIcon"></i>
+          <span>Tutorials</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-book bigNumBigIcon"></i>
+          <span>Book of Mormon Delivery Form</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-bullhorn bigNumBigIcon"></i>
+          <span>Current Ads</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-brands fa-square-facebook bigNumBigIcon"></i>
+          <span>Guide to Bisiness Suite</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-users bigNumBigIcon"></i>
+          <span>Referral Archive</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-circle-info bigNumBigIcon"></i>
+          <span>About</span>
+        </homebtn>
+      </div>
 
       <!-- <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div> -->
       <div class="full_width_home_btn">
@@ -196,24 +287,6 @@ function doubleCheckLogout() {
     }
   });
 }
-
-// // for chart
-// new Chart("myChart1", {
-//   type: "pie",
-//   data: {
-//     labels: ['Sent', 'In Contact', 'Dropped'],
-//     datasets: [{
-//       backgroundColor: barColors = ['#04A96D', '#E8C3B9','red'],
-//       data: <?php //echo(json_encode(getThisMonthsStats())) ?>
-//     }]
-//   },
-//   options: {
-//     title: {
-//       display: true,
-//       text: "Referrals This Month"
-//     }
-//   }
-// });
     </script>
     
   </body>

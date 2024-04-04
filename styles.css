@@ -10,7 +10,7 @@
     --all-good-green: #058d00;
     --light-blue: #462c6a;
     --dul-accent: #bca7da;
-    --toggle-accent: #b58af1;
+    --very-light-purple: #a05cff;
     --email-color: #ff6a6a;
     --sms-color: #2196F3;
     --call-color: #4CAF50;
@@ -71,7 +71,7 @@ tabsheader tab.active {
 .bottomNavBtnParent {
     text-align: center;
     float: left;
-    width: calc(100% / 4);
+    width: calc(100% / 5);
     font-size: 27px;
 }
 #BottomNavBar {
@@ -423,39 +423,6 @@ tr.spaceUnder>td {
       transform: rotate(360deg);
     }
 }
-.switch {
-    position: relative;
-    height: 1.5rem;
-    width: 3rem;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    border-radius: 9999px;
-    background-color: rgba(100, 116, 139, 0.377);
-    transition: background-color .3s ease;
-}
-.switch:checked {
-    background-color: var(--toggle-accent);
-}
-.switch::before {
-    position: absolute;
-    content: "";
-    left: calc(1.5rem - 1.6rem);
-    top: calc(1.5rem - 1.6rem);
-    display: block;
-    height: 1.6rem;
-    width: 1.6rem;
-    cursor: pointer;
-    border: 1px solid rgba(100, 116, 139, 0.527);
-    border-radius: 9999px;
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(100, 116, 139, 0.327);
-    transition: transform .3s ease;
-}
-.switch:checked:before {
-    transform: translateX(100%);
-    border-color: var(--toggle-accent);
-}
 
 
 @media (prefers-color-scheme: dark) {
@@ -464,6 +431,7 @@ tr.spaceUnder>td {
         --light-grey: #5f5f5f;
         --white: rgb(24, 24, 24);
         --black: white;
+        --very-light-purple: #58328f;
         --business-suite-defualt-icon: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(23deg) brightness(118%) contrast(118%);
         --business-suite-active-icon: brightness(0) saturate(100%) invert(63%) sepia(68%) saturate(2997%) hue-rotate(219deg) brightness(103%) contrast(98%);
     }
