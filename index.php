@@ -61,9 +61,67 @@ require_once('require_area.php');
   padding-bottom: 5px;
   clip-path: inset(-15px 0px 2px 0px);
 }
+.splash-screen {
+  position: fixed;
+  z-index: 9999999999;
+  top: -100px;
+  left: -100px;
+  width: calc(100% + 200px);
+  height: calc(100% + 200px);
+  background-color: #7347B2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transform: scale(1);
+  animation: splashAnimWhole 0.6s 1.2s ease forwards;
+}
+.splash-screen img {
+  z-index: 2;
+  width: 240px;
+  height: auto;
+  transform: translateY(0px);
+  border-radius: 0px;
+  box-shadow: 0 2px 5px 0 transparent;
+  animation: splashAnimImg 0.4s 0.4s ease forwards;
+}
+.splash-screen credit {
+  z-index: 1;
+  position: absolute;
+  width: 240px;
+  font-size: 30px;
+  text-align: center;
+  transform: translateY(0px);
+  animation: splashAnimDev 0.6s 0.2s ease forwards;
+}
+@keyframes splashAnimWhole {
+  0% { opacity: 1; transform: scale(1); }
+  99.999% { opacity: 0; transform: scale(1.5); pointer-events: auto; }
+  100% { opacity: 0; transform: scale(1.5); pointer-events: none; }
+}
+@keyframes splashAnimImg {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-20px); border-radius: 50px; box-shadow: 0 2px 20px -10px rgb(0 0 0 / 16%); }
+}
+@keyframes splashAnimDev {
+  0% { opacity: 0; transform: translateY(0px); }
+  100% { opacity: 0.7; transform: translateY(140px); }
+}
     </style>
   </head>
   <body>
+    <script>
+      let firstTime = sessionStorage.getItem("first_time");
+      if (!firstTime) {
+        sessionStorage.setItem("first_time","1");
+        document.write(`
+          <div class="splash-screen">
+            <credit id="dev-er">Developed By: Michael Becker</credit>
+            <img src="logo.png" alt="App Icon">
+          </div>
+        `);
+      }
+    </script>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
