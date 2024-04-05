@@ -113,16 +113,17 @@ require_once('require_area.php');
   border-radius: 10px;
   text-align: center;
   padding: 30px 15px;
+  cursor: default;
 }
 .bigNumBigIcon {
   font-size: 70px;
   position: absolute;
-  right: 10px;
-  top: -10px;
+  right: -5px;
+  bottom: -10px;
   color: var(--very-light-purple);
   z-index: 0;
   opacity: 0.3;
-  filter: blur(1.5px);
+  filter: blur(0px);
 }
 #topHomeBtns {
   width: calc(100% - 10px);
@@ -149,6 +150,7 @@ homebtn {
   overflow: hidden;
   border-radius: 3px;
   min-height: 65px;
+  cursor: pointer;
 }
 homebtn span {
   font-weight: bold;
@@ -203,34 +205,34 @@ homebtn i {
       
 
       <div id="homeBtns">
-        <homebtn>
+        <homebtn href="tutorial_links.php">
           <i class="fa-solid fa-circle-question bigNumBigIcon"></i>
           <span>Tutorials</span>
         </homebtn>
-        <homebtn>
+        <homebtn id="MB_deliverLink" target="_blank" href="">
           <i class="fa-solid fa-book bigNumBigIcon"></i>
           <span>Book of Mormon Delivery Form</span>
         </homebtn>
-        <homebtn>
+        <homebtn id="adDeck" target="_blank" href="">
           <i class="fa-solid fa-bullhorn bigNumBigIcon"></i>
           <span>Current Ads</span>
         </homebtn>
-        <homebtn>
-          <i class="fa-brands fa-square-facebook bigNumBigIcon"></i>
+        <homebtn id="gToBusSuite" target="_blank" href="">
+          <i class="fa-brands fa-meta bigNumBigIcon"></i>
           <span>Guide to Bisiness Suite</span>
         </homebtn>
-        <homebtn>
-          <i class="fa-solid fa-users bigNumBigIcon"></i>
+        <homebtn href="referral_archive.php">
+          <i class="fa-solid fa-box-open bigNumBigIcon"></i>
           <span>Referral Archive</span>
         </homebtn>
-        <homebtn>
+        <homebtn href="about.php">
           <i class="fa-solid fa-circle-info bigNumBigIcon"></i>
           <span>About</span>
         </homebtn>
       </div>
 
       <!-- <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div> -->
-      <div class="full_width_home_btn">
+      <!-- <div class="full_width_home_btn">
         <a href="tutorial_links.php">
           <div class="bigTipBtn" style="background-image: url('img/TutorialsBtnInvert.png'); border: 1px solid #f2bfff;"></div>
         </a>
@@ -254,7 +256,7 @@ homebtn i {
         <a href="referral_archive.php">
           <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
         </a>
-      </div>
+      </div> -->
 
       <!-- Logout Button -->
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
@@ -275,11 +277,12 @@ function setBigToolButtonLink(elId, link) {
   // if id doesnt exist or blank, hide button
   //console.log(link);
   if (link==undefined || link.trim()=="") {
-    _(elId).parentElement.style.display = 'none';
+    _(elId).style.display = 'none';
     return;
   }
   _(elId).href = link;
 }
+document.querySelectorAll('#homeBtns homebtn').forEach(x => x.onclick = function() { location.href = x.getAttribute('href') });
 function doubleCheckLogout() {
   JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {
     if (res) {
