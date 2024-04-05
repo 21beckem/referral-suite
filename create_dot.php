@@ -13,11 +13,8 @@ require_once('require_area.php');
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -104,15 +101,16 @@ require_once('require_area.php');
     make_bottom_nav(3);
     ?>
    <script>
-
-const person = idToReferral(getCookieJSON('linkPages'));
-_('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
-//_('contactname').innerHTML = _('personName').innerHTML;
-_('email').innerHTML = person[TableColumns['email']];
-_('findingSource').innerHTML = CONFIG['Dot Creation']['finding source'];
-_('address').innerHTML = person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
-_('FH_lang').innerHTML = CONFIG['Dot Creation']['most common language in mission'];
-_('FH_message').innerHTML = CONFIG['Dot Creation']['message'];
+(async () => {
+  const person = await idToReferral(getCookieJSON('linkPages'));
+  _('personName').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
+  //_('contactname').innerHTML = _('personName').innerHTML;
+  _('email').innerHTML = person[TableColumns['email']];
+  _('findingSource').innerHTML = CONFIG['Dot Creation']['finding source'];
+  _('address').innerHTML = person[TableColumns['city']] + ' ' + person[TableColumns['zip']];
+  _('FH_lang').innerHTML = CONFIG['Dot Creation']['most common language in mission'];
+  _('FH_message').innerHTML = CONFIG['Dot Creation']['message'];
+})();
 
    </script>
 

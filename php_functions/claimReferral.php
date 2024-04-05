@@ -7,6 +7,7 @@ if (!isset($_GET['perId'])) {
 }
 
 if (writeSQL($__MISSIONINFO->mykey, 'UPDATE `all_referrals` SET `Claimed`="'.$__TEAM->id.'" WHERE `id`="'.$_GET['perId'].'"')) {
+    addTimelineEvent($_GET['perId'], 'claimed', '', null, false);
     header('location: ../unclaimed_referrals.php');
 } else {
     die('Oj då! Something went wrong when writing to the SQL table'); 

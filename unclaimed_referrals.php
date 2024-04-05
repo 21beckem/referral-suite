@@ -12,11 +12,8 @@ require_once('require_area.php');
   <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
   <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-  <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
   <script src="jsalert.js"></script>
   <script src="everyPageFunctions.php"></script>
-  <script src="fox.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#462c6a">
@@ -33,20 +30,7 @@ require_once('require_area.php');
 
   <!-- List of items -->
   <div class="w3-container">
-    <div id="unclaimedlist">
-      <!--<a onclick="redirectAfterFunction(this)" href="claim_the_referral.html">
-            <div class="w3-bar" style="display: flex;">
-              <div class="w3-bar-item w3-circle">
-                <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-              </div>
-              <div class="w3-bar-item">
-                <span class="w3-large"></span><br>
-                <span></span><br>
-                <span></span>
-              </div>
-            </div>
-          </a>-->
-    </div>
+    <div id="unclaimedlist"></div>
   </div>
 
   <!-- Bottom Nav Bar -->
@@ -58,12 +42,14 @@ require_once('require_area.php');
 let output = '';
 for (let i = 0; i < UNCLAIMED.length; i++) {
   const per = UNCLAIMED[i];
-  let dotStyle = `<div class="w3-bar-item w3-circle">
-      <div class="w3-dot w3-left-align w3-circle" style="width:20px;height:20px; margin-top: 27px;"></div>
-  </div>`;
   const elapsedTime = timeSince_formatted(new Date(per[TableColumns['date']]));
-  output += `<aa onclick="claimThisReferral(` + per[TableColumns['id']] + `, '`+per[TableColumns['first name']]+`', '`+per[TableColumns['last name']]+`')" class="person-to-click">
-    <div class="w3-bar" style="display: flex;">` + dotStyle + `
+  output += `<aa onclick="claimThisReferral(` + per[TableColumns['id']] + `, '`+per[TableColumns['first name']].addSlashes()+`', '`+per[TableColumns['last name']].addSlashes()+`')" class="person-to-click">
+    <div class="w3-bar" style="display: flex;">
+      <div class="w3-bar-item w3-circle">
+        <div class="w3-left-align follow_up_person" style="width:20px;height:20px; margin-top: 22px; font-size:22px">
+          <i class="fa-regular fa-circle" style="color:#ffa514"></i>
+        </div>
+      </div>
       <div class="w3-bar-item">
         <span class="w3-large">` + per[TableColumns['first name']] + ' ' + per[TableColumns['last name']] + `</span><br>
         <span>` + elapsedTime + `</span><br>

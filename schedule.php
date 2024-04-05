@@ -12,11 +12,8 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <link rel="stylesheet" href="schedule/schedule.css">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
@@ -31,7 +28,7 @@ require_once('require_area.php');
     </div>
     <div style="height: 68px;"></div>
     
-    <div id="scheduleParent" style="height: calc(100% - 126px);">
+    <div id="scheduleParent" style="height: calc(100% - 143px); clip-path:inset(0 0 0 0);">
       <div id="timesContainer">
         <div id="timesMarginBox"></div>
       </div>

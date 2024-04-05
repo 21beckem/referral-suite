@@ -5,6 +5,7 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
 ?>
 
 <div style="height: <?php echo($bottomSpacingPX); ?>;"></div>
+<div id="bottomNavGradient"></div>
 <div id="BottomNavBar">
     <div class="bottomNavBtnParent <?php if ($pageNum==1) { echo('w3-text-area-blue'); } ?>">
         <a href="index.php">
@@ -21,7 +22,7 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
     </div>
 
     <div class="bottomNavBtnParent <?php if ($pageNum==3) { echo('w3-text-area-blue'); } ?>">
-        <a href="contact_book.php">
+        <a href="contact_book_actionneeded.php">
             <i class="fa fa-address-book"></i>
             <div class="w3-tiny w3-opacity" style="height: 0;">Referrals</div>
         </a>

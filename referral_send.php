@@ -12,11 +12,8 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
@@ -27,14 +24,14 @@ require_once('require_area.php');
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
-        <a>Sending Referral</a>
+        <a>Confirm Sent</a>
       </div>
     </div>
     <div style="height: 80px;"></div>
 
 
 
-  <div class="w3-center" style="padding-top: 100px;">Which area is this person being sent to?</div>
+  <div class="w3-center" style="padding-top: 100px;">Which area was this referral sent to?</div>
   <div style="height:20px"></div>
   <div class="w3-center">  
     <input type="text" id="areaInput">
@@ -77,15 +74,15 @@ const autoCompleteJS = new autoComplete({
   }
 });
 
-function confirmSendReferral() {
-  JSAlert.confirm('Are you sure you want to send this person to ' + _('selectedArea').innerText + '?'+PMGappReminder('send'), '', JSAlert.Icons.Warning).then(res => {
+async function confirmSendReferral() {
+  JSAlert.confirm('Are you sure you want to confirm this referral as sent to ' + _('selectedArea').innerText + ' in the PMG app?'+(await PMGappReminder()), '', JSAlert.Icons.Warning).then(res => {
     if (res) {
       sendToAnotherArea();
     }
   });
 }
 async function sendToAnotherArea() {
-  let person = idToReferral(getCookieJSON('linkPages'));
+  let person = await idToReferral(getCookieJSON('linkPages'));
   if (person == null) {
     JSAlert.alert('something went wrong. Try again');
     safeRedirect('index.html');
@@ -95,6 +92,7 @@ async function sendToAnotherArea() {
   // set new area in data and save to cookie
   person[TableColumns['sent status']] = 'Sent';
   person[TableColumns['teaching area']] = newArea;
+  person[TableColumns['AB status']] = 'Yellow';
 
   // follow up
   let nextFU = new Date();
@@ -104,13 +102,10 @@ async function sendToAnotherArea() {
   nextFU.setHours(3, 0, 0, 0);
   person[TableColumns['next follow up']] = nextFU.toISOString().slice(0, 19).replace('T', ' ');
 
-  if (await savePerson(person)) {
+  if (await savePerson(person, 'sent', newArea)) {
     JSAlert.alert('Sent!', '', JSAlert.Icons.Success).then(()=> {
       safeRedirect('index.php');
     });
-
-    //givePoints
-    // setAddFoxPoints(10);               < - - come back to this later!
   }
 }
   </script>

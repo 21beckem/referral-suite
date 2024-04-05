@@ -9,17 +9,14 @@ require_once('require_area.php');
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Complete SMS</title>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
-    <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
-    <script src="jsalert.js"></script>
-    <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#462c6a">
+        <link rel="stylesheet" href="styles.css">
+        <script src="jsalert.js"></script>
+        <script src="everyPageFunctions.php"></script>
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="manifest" href="manifest.webmanifest">
+        <meta name="theme-color" content="#462c6a">
         <style>
 #selectRefType {
     width: 100%;
@@ -78,7 +75,7 @@ input[type="text"] {
 	</div>
     <div class="w3-panel w3-card-subtle w3-light-gray w3-padding-16">
 		<div id="MessageOutput" class="googleMessage"></div>
-		<button onclick="sendTheMessage()" class="useThisTemplateBtn">Send</button>
+		<button id="sendTheMessageBtn" class="useThisTemplateBtn">Send</button>
     </div>
 	<a id="fakeLinkToClickToSend" href="" style="display: none;" target="_parent"></a>
 

@@ -1,12 +1,13 @@
 <?php
+$doNotRedirectForRequireArea_JustReturnBlank = true;
 require_once('require_area.php');
 header('Content-Type: application/javascript');
-?>;
+?>
 const MISSIONINFO = <?php echo(json_encode( $__MISSIONINFO )) ?>;
 const TEAM = <?php echo(json_encode( $__TEAM )) ?>;
 const CONFIG = <?php echo(json_encode( getConfig() )) ?>;
 const UNCLAIMED = <?php echo(json_encode( getUnclaimed() )) ?>;
-const CLAIMED = <?php echo(json_encode( getClaimed() )) ?>;
+const CLAIMED = <?php echo(json_encode( getClaimed_stillContacting() )) ?>;
 const FOLLOW_UPS = <?php echo(json_encode( getFollowUps() )) ?>;
 const REF_TYPES = <?php echo(json_encode( getReferralTypes() )); ?>;
 
@@ -25,6 +26,16 @@ String.prototype.toTitleCase = function() {
     }
     // Directly return the joined string
     return splitStr.join(' '); 
+}
+String.prototype.addSlashes = function() {
+    return this.replace(/\\/g, '\\\\').
+        replace(/\u0008/g, '\\b').
+        replace(/\t/g, '\\t').
+        replace(/\n/g, '\\n').
+        replace(/\f/g, '\\f').
+        replace(/\r/g, '\\r').
+        replace(/'/g, '\\\'').
+        replace(/"/g, '\\"');
 }
 Array.prototype.indexOfAll = function (searchItem) {
     let i = this.indexOf(searchItem);
@@ -68,27 +79,6 @@ document.addEventListener('click', e => {
         safeRedirect(origin.href);
     }
 });
-function setCookie(cname, cvalue) {
-    localStorage.setItem(cname, cvalue);
-}
-function getCookie(cname) {
-    return localStorage.getItem(cname);
-}
-function getCookieJSON(x) {
-    let out = null;
-    try {
-        out = JSON.parse(getCookie(x));
-    } catch (e) { }
-    return out;
-}
-function setCookieJSON(x, y) {
-    return setCookie(x, JSON.stringify(y));
-}
-function _(x) { return document.getElementById(x); }
-function saveToLinkPagesThenRedirect(person, el) {
-    setCookieJSON('linkPages', person);
-    safeRedirect(el.getAttribute('href'));
-}
 const TableColumns = {
     "type" : 0,
     "id" : 1,
@@ -114,7 +104,37 @@ const TableColumns = {
     "not interested reason" : 21,
     "attempt log" : 22,
     "help request" : 23,
-    "experience" : 24
+    "experience" : 24,
+    "timeline" : 25
+}
+function dateInFuture(dateStr) {
+    if (!dateStr) { return null; }
+    return new Date().getTime() < new Date(dateStr).getTime();
+}
+function dateInPast(dateStr) {
+    if (!dateStr) { return null; }
+    return new Date().getTime() > new Date(dateStr).getTime();
+}
+function setCookie(cname, cvalue) {
+    localStorage.setItem(cname, cvalue);
+}
+function getCookie(cname) {
+    return localStorage.getItem(cname);
+}
+function getCookieJSON(x) {
+    let out = null;
+    try {
+        out = JSON.parse(getCookie(x));
+    } catch (e) { }
+    return out;
+}
+function setCookieJSON(x, y) {
+    return setCookie(x, JSON.stringify(y));
+}
+function _(x) { return document.getElementById(x); }
+function saveToLinkPagesThenRedirect(person, el) {
+    setCookieJSON('linkPages', person);
+    safeRedirect(el.getAttribute('href'));
 }
 
 // not so EVERYpage functions but nice to have on every page
@@ -133,49 +153,57 @@ function getTodaysInxdexOfAttempts(per) {
     return Math.floor((new Date() - sentDate) / (1000 * 60 * 60 * 24));
 }
 async function logAttempt(y) {
-    let person = idToReferral(getCookieJSON('linkPages'));
+    let person = await idToReferral(getCookieJSON('linkPages'));
     let x = getTodaysInxdexOfAttempts(person);
     console.log(x);
     let al = [[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]];
     try {
         al = JSON.parse(person[TableColumns['attempt log']]);
     } catch(e) {}
-    if (x > al.length) {
-        return false; // person is older than the amount of days in attempt log
+    if (x <= al.length) { // if attempt is within the attempt log
+        al[x][y] = 1;
+        person[TableColumns['attempt log']] = JSON.stringify(al);
+    
+        try {
+            _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
+        } catch (e) {}
     }
-    al[x][y] = 1;
-    person[TableColumns['attempt log']] = JSON.stringify(al);
-
-    try {
-        _('attemptLogDot_'+y+','+x).classList.add('contactDotBeenAttempted');
-    } catch (e) {}
     // save this change
-    return await savePerson(person);
+    return await savePerson(person, 'contact', y);
 }
-function idToReferral(id) {
-    return [... CLAIMED.concat(FOLLOW_UPS).filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0] ];
+async function idToReferral(id) {
+    let allDownloaded = [... CLAIMED.concat(FOLLOW_UPS) ];
+    let output = allDownloaded.filter( x => parseInt(x[TableColumns['id']])==parseInt(id))[0];
+    if (output==undefined) {
+        // get from server. 
+        let res = await fetch('php_functions/idToReferral.php?q='+id);
+        output = await res.json();
+    }
+    return output;
 }
-async function savePerson(perArr) {
+async function savePerson(perArr, type, info) {
+    // create timeline event
+    let tmlnRaw = perArr[TableColumns['timeline']];
+    let tmln = JSON.parse(tmlnRaw);
+    tmln.push({
+        "date" : new Date().toISOString().slice(0, 19).replace('T', ' '),
+        "author" : "<?php echo($__TEAM->name); ?>",
+        "type" : type,
+        "info" : info
+    });
+    perArr[TableColumns['timeline']] = JSON.stringify(tmln);
+
+    // save to the cloud
     const response = await fetch('php_functions/updatePerson.php?per='+encodeURIComponent(JSON.stringify(perArr)));
     return (response.status == 200);
-    //return response.text();
 }
-function PMGappReminder(action, person=null) {
+async function PMGappReminder(person=null) {
     if (person == null) {
-        person = idToReferral(getCookieJSON('linkPages'));
+        person = await idToReferral(getCookieJSON('linkPages'));
     }
     if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
         return '';
     } else {
-        return "<p>Don't forget to "+action+" them in the PMG App too!</p>";
+        return "<p><strong>Do not confirm until action completed in the PMG App!</strong></p>";
     }
 }
-window.addEventListener("load", (e) => {
-    // if (DEBUG_MODE) {
-    //     document.body.innerHTML += `<div id="debug-table"></div>`;
-    // }
-    // if (FoxEnabled) {
-    //     setupInboxFox();
-    //     handleDailyAndShiftlyNotifications();
-    // }
-});

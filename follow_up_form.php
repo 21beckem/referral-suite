@@ -12,11 +12,8 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -51,7 +48,7 @@ require_once('require_area.php');
 
   <script>
 async function saveFollowUpForm() {
-  let person = idToReferral(getCookie('linkPages'));
+  let person = await idToReferral(getCookie('linkPages'));
   if (person == null) {
     JSAlert.alert('something went wrong. Try again');
     safeRedirect('index.php');
@@ -75,13 +72,12 @@ async function saveFollowUpForm() {
   person[TableColumns['follow up status']] = status;
   person[TableColumns['amount of times followed up']] = parseInt(person[TableColumns['amount of times followed up']]) + 1;
 
-  if (await savePerson(person)) {
+  // alert(JSON.stringify( parseInt(status) ));
+  let statusText = Object.keys(CONFIG['Follow Ups']['status delays'])[parseInt(status)];
+  if (await savePerson(person, 'follow up', statusText)) {
     JSAlert.alert('Saved!', '', JSAlert.Icons.Success).then(()=> {
       safeRedirect('index.php');
     });
-
-    //givePoints
-    // setAddFoxPoints(10);               < - - come back to this later!
   }
 }
 function fillInFollowUpOptions(el) {

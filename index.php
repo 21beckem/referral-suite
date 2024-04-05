@@ -12,8 +12,6 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
     <link rel="icon" type="image/png" href="/referral-suite/logo.png" />
@@ -27,27 +25,14 @@ require_once('require_area.php');
   background-repeat: no-repeat;
   background-color: rgba(158,0,0,1);
 }
-#inbucksValue {
-  color: #508d00;
-}
-#inbucksValue::before {
-  font-size: 15px;
-  content: "$";
-  color: #508d009c;
-}
-#inbucksValue::after {
-  font-size: 15px;
-  content: "$";
-  color: transparent;
-}
 #paintingWindow {
   position: fixed;
   width: 100%;
   height: 170px;
-  /* background-image: url('img/jesusAndLamb1.jpg'); */
-  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%);
+  background-image: url('img/jesusAndLamb1.jpg');
+  /* background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(228,227,227,1) 100%); */
   background-size: cover;
-  background-position-y: center;
+  background-position: center;
 }
 #paintingWindow img {
   position: relative;
@@ -73,11 +58,121 @@ require_once('require_area.php');
   margin-left: -1px;
   margin-top: 170px;
   box-shadow: 0px 11px 20px 3px black;
-  clip-path: inset(-15px 0px 0px 0px);
+  padding-bottom: 5px;
+  clip-path: inset(-15px 0px 2px 0px);
+}
+.splash-screen {
+  position: fixed;
+  z-index: 9999999999;
+  top: -100px;
+  left: -100px;
+  width: calc(100% + 200px);
+  height: calc(100% + 200px);
+  background-color: #7347B2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transform: scale(1);
+  animation: splashAnimWhole 0.6s 1.6s ease forwards;
+}
+.splash-screen img {
+  z-index: 2;
+  width: 240px;
+  height: auto;
+  transform: translateY(0px);
+  border-radius: 0px;
+  box-shadow: 0 2px 5px 0 transparent;
+  animation: splashAnimImg 0.4s 0.4s ease forwards;
+}
+.splash-screen credit {
+  z-index: 1;
+  color: white;
+  position: absolute;
+  width: 240px;
+  font-size: 30px;
+  text-align: center;
+  transform: translateY(0px);
+  animation: splashAnimDev 0.6s 0.2s ease forwards;
+}
+@keyframes splashAnimWhole {
+  0% { opacity: 1; transform: scale(1); }
+  99.999% { opacity: 0; transform: scale(1.5); pointer-events: auto; }
+  100% { opacity: 0; transform: scale(1.5); pointer-events: none; }
+}
+@keyframes splashAnimImg {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-20px); border-radius: 50px; box-shadow: 0 2px 20px -10px rgb(0 0 0 / 16%); }
+}
+@keyframes splashAnimDev {
+  0% { opacity: 0; transform: translateY(0px); }
+  100% { opacity: 0.7; transform: translateY(140px); }
+}
+#topHomeBtns homebtn {
+  width: calc(100% - 10px);
+  border-radius: 10px;
+  text-align: center;
+  padding: 30px 15px;
+  cursor: default;
+}
+.bigNumBigIcon {
+  font-size: 70px;
+  position: absolute;
+  right: -5px;
+  bottom: -10px;
+  color: var(--very-light-purple);
+  z-index: 0;
+  opacity: 0.3;
+  filter: blur(0px);
+}
+#topHomeBtns {
+  width: calc(100% - 10px);
+  display: flex;
+  margin: 5px;
+  flex-wrap: wrap;
+}
+#homeBtns {
+  font-family: 'Advent Pro';
+  width: calc(100% - 10px);
+  display: flex;
+  margin: 5px;
+  flex-wrap: wrap;
+}
+homebtn {
+  flex: 1 0 34%;
+  background-color: var(--white);
+  box-shadow: 0 2px 10px -6px rgb(0 0 0 / 20%);
+  padding: 10px;
+  margin: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 3px;
+  min-height: 65px;
+  cursor: pointer;
+}
+homebtn span {
+  font-weight: bold;
+}
+homebtn i {
+  padding: 5px;
 }
     </style>
   </head>
   <body>
+    <script>
+      let firstTime = sessionStorage.getItem("first_time");
+      if (!firstTime) {
+        sessionStorage.setItem("first_time","1");
+        document.write(`
+          <div class="splash-screen">
+            <credit id="dev-er"><span style="font-size:20px">Developed By:</span><br>Michael Becker</credit>
+            <img src="logo.png" alt="App Icon">
+          </div>
+        `);
+      }
+    </script>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
@@ -87,111 +182,67 @@ require_once('require_area.php');
     <div style="height: 60px;"></div>
 
     <div id="paintingWindow">
-      <img src="img/templeClipart.png" alt="">
+      <!-- <img src="img/templeClipart.png" alt=""> -->
     </div>
 
     <div id="wholePageCard">
       <h3 id="AreaName" style="margin: 20px 0px -5px 10px"><img src="img/fox_profile_pics/<?php echo($__TEAM->color); ?>.svg" alt=""> <?php echo($__TEAM->name); ?></h3>
 
-      <!-- Progress bars -->
-      <div class="w3-border-bottom">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 80%; padding-left: 10px;">
-              <div class="w3-light-gray w3-round-medium">
-                <div id="totReferralsBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-              </div>
-            </td>
-            <td id="totReferrals" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-          </tr>
-        </table>
-        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Claimed referrals</div>
+      <div id="topHomeBtns">
+        <homebtn>
+          <i class="fa-regular fa-circle bigNumBigIcon" style="font-size:200px; left: -80px; top: -30px;"></i>
+          <a style="font-size: 50px;"><?php echo(count(getClaimed_stillContacting())); ?></a>
+          <span style="font-family: 'Advent Pro'; opacity:0.7">People still being contacted</span>
+        </homebtn>
+        <homebtn>
+          <i class="fa-solid fa-clock bigNumBigIcon" style="font-size:200px; left: -80px; top: -30px;"></i>
+          <a style="font-size: 50px;"><?php echo(count(getFollowUps())); ?></a>
+          <span style="font-family: 'Advent Pro'; opacity:0.7">People to follow up with</span>
+        </homebtn>
       </div>
+      
+      <hr style="margin:10px">
+      
 
-      <div class="w3-border-bottom" style="padding-top: 10px">
-        <table style="width: 100%;">
-          <tr>
-            <td style="width: 80%; padding-left: 10px;">
-              <div class="w3-light-gray w3-round-medium">
-                <div id="oldReferralBar" class="w3-round-medium" style="height: 24px; width: 0;"></div>
-              </div>
-            </td>
-            <td id="agebyday" class="w3-center w3-large" style="width: 20px; padding-left: 10px; padding-right: 10px;"></td>
-          </tr>
-        </table>
-        <div class="w3-opacity" style="padding-left: 12px; padding-bottom: 5px">Oldest referral age (days)</div>
+      <div id="homeBtns">
+        <homebtn href="tutorial_links.php">
+          <i class="fa-solid fa-graduation-cap bigNumBigIcon"></i>
+          <span>Tutorials</span>
+        </homebtn>
+        <homebtn id="MB_deliverLink" target="_blank" href="">
+          <i class="fa-solid fa-book bigNumBigIcon"></i>
+          <span>Book of Mormon<br>Delivery Form</span>
+        </homebtn>
+        <homebtn id="adDeck" target="_blank" href="">
+          <i class="fa-solid fa-bullhorn bigNumBigIcon"></i>
+          <span>Current Ads</span>
+        </homebtn>
+        <homebtn id="gToBusSuite" target="_blank" href="">
+          <i class="fa-brands fa-meta bigNumBigIcon"></i>
+          <span>Guide to<br>Bisiness Suite</span>
+        </homebtn>
+        <homebtn href="referral_archive.php">
+          <i class="fa-solid fa-box-open bigNumBigIcon"></i>
+          <span>Referral<br>Archive</span>
+        </homebtn>
+        <homebtn href="about.php">
+          <i class="fa-solid fa-circle-info bigNumBigIcon"></i>
+          <span>About</span>
+        </homebtn>
       </div>
-
-      <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div>
-      <div class="full_width_home_btn">
-        <a href="tutorial_links.php">
-          <div class="bigTipBtn" style="background-image: url('img/TutorialsBtnInvert.png'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="MB_deliverLink" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="adDeck" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/CurrentAdsInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="gToBusSuite" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <!-- <div class="full_width_home_btn">
-        <a href="referral_archive.php">
-          <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div> -->
 
       <!-- Logout Button -->
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
 
 
+    </div>
       <!-- Bottom Nav Bar -->
       <?php
       require_once('make_bottom_nav.php');
       make_bottom_nav(1);
       ?>
-    </div>
     <script>
-const my_referrals = <?php echo(json_encode( getClaimed() )); ?>;
-let maxRefsAllowed = 15;
-const currentRefCount = my_referrals.length;
 
-
-let totReferralsBar = _("totReferralsBar");
-let totReferrals = _("totReferrals");
-
-totReferralsBar.style.width = Math.min(currentRefCount / maxRefsAllowed * 100, 100) + '%';
-
-totReferrals.innerHTML = currentRefCount + '/' + maxRefsAllowed;
-
-if (currentRefCount >= maxRefsAllowed) {
-    totReferrals.classList.add('w3-text-red');
-}
-let maxRefAge = 7;
-if (my_referrals.length > 0) {
-    let oldReferralBar = _("oldReferralBar");
-    let oldReferral = getOldestClaimedPerson()[2];
-    let today = new Date();
-    let oldDate = new Date(oldReferral);
-    let dayDifference = Math.round((today.getTime() - oldDate.getTime()) / (1000 * 60 * 60 * 24));
-    oldReferralBar.style.width = Math.min(dayDifference / maxRefAge * 100, 100) + '%';
-
-    _("agebyday").innerHTML = dayDifference + '/' + maxRefAge;
-
-    if (dayDifference >= maxRefAge) {
-        _("agebyday").classList.add('w3-text-red');
-    }
-} else {
-    _("agebyday").innerHTML = '0/' + maxRefAge;
-}
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
 setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
@@ -200,21 +251,16 @@ function setBigToolButtonLink(elId, link) {
   // if id doesnt exist or blank, hide button
   //console.log(link);
   if (link==undefined || link.trim()=="") {
-    _(elId).parentElement.style.display = 'none';
+    _(elId).style.display = 'none';
     return;
   }
-  _(elId).href = link;
+  _(elId).setAttribute('href', link);
 }
-function getOldestClaimedPerson() {
-    let currentOldest = my_referrals[0];
-    for (let i = 0; i < my_referrals.length; i++) {
-        const per = my_referrals[i];
-        if (new Date(per[2]).getTime() < new Date(currentOldest[2]).getTime()) {
-            currentOldest = per;
-        }
-    }
-    return currentOldest;
-}
+document.querySelectorAll('#homeBtns homebtn').forEach(x =>
+  x.onclick = function() {
+    window.open(x.getAttribute('href'), x.getAttribute('target') || '_self');
+  }
+);
 function doubleCheckLogout() {
   JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {
     if (res) {

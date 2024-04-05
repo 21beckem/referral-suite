@@ -12,11 +12,8 @@ require_once('require_area.php');
     <script src="https://kit.fontawesome.com/0bddc0a0f7.js" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -93,7 +90,7 @@ async function logAttemptBeforeSendingToLink(el, type) {
 
 async function fillMessageExamples(typ, pasteBox) {
   let areaEmail = "<?php echo($__TEAM->email); ?>";
-  const person = idToReferral(getCookieJSON('linkPages'));
+  const person = await idToReferral(getCookieJSON('linkPages'));
   let requestType = person[TableColumns['type']];
   const emailLink = 'https://docs.google.com/forms/d/e/1FAIpQLSefh5bdklMCAE-XKvq-eg1g7elYIA0Fudk-ypqLaDm0nO1EXA/viewform?usp=pp_url&entry.925114183=' + person[TableColumns['email']] + '&entry.873933093=' + areaEmail + '&entry.1947536680=';
   const link_beginning = (typ == 'sms') ? ('sms:' + encodeURI(String(person[TableColumns['phone']])) + '?body=') : emailLink;

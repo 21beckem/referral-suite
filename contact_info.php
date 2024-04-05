@@ -1,5 +1,12 @@
 <?php
 require_once('require_area.php');
+function pivo($toPaste, $ifNot='') {
+  if (isset($_GET['viewOnlyPerson'])) {
+    echo($toPaste);
+  } else {
+    echo($ifNot);
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,11 +20,8 @@ require_once('require_area.php');
     <link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-    <link rel="stylesheet" href="https://21beckem.github.io/WebPal/WebPal.css">
-    <script src="https://21beckem.github.io/WebPal/WebPal.js"></script>
     <script src="jsalert.js"></script>
     <script src="everyPageFunctions.php"></script>
-    <script src="fox.js"></script>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
@@ -25,14 +29,22 @@ require_once('require_area.php');
   <body>
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
-      <div class="w3-container w3-padding-16">
-        <div class="contact_info" id="contactname"></div>
+      <div style="padding-bottom: 6px!important;text-align:left!important">
+        <a class="contact_info" id="contactname"></a>
       </div>
-      <div onclick="safeRedirect('decease.php')" class="w3-container w3-cell w3-xlarge w3-right-align">
-        <i class="fa fa-trash-o w3-text-white" style="position: relative;"></i>
-      </div>
+      <tabsheader>
+        <tab class="active">Contact</tab>
+        <tab><button onclick="location.href='follow_up_on.php'">Follow Up</button></tab>
+        <?php if (getConfig()->{'General'}->{'show attempt log'}) { ?><tab><button onclick="location.href='person_timeline.php'">Timeline</button></tab><?php } ?>
+      </tabsheader>
     </div>
-    <div style="height: 80px;"></div>
+    <div style="height: 100px;"></div>
+
+    <!-- viewOnly notice -->
+    <div class="notice warning" <?php pivo('', 'style="display:none"'); ?>>
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Notice:</strong> This is a <strong>view-only</strong> page.
+    </div>
 
     <!-- Contact Card -->
     <div class="w3-card">
@@ -42,7 +54,7 @@ require_once('require_area.php');
 
         <div class="w3-cell-row w3-padding-16">
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="telnumber" onclick="logAttempt(0)" href="">
+                <a id="telnumber" <?php pivo('class="disabled"', 'onclick="logAttempt(0)"'); ?> href="">
                     <i class="fa fa-phone-square w3-text-call-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Call</div>
                     </i>
@@ -50,7 +62,7 @@ require_once('require_area.php');
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="smsnumber" href="sms_templates.php">
+                <a id="smsnumber" href="sms_templates.php" <?php pivo('class="disabled"'); ?>>
                     <i class="fa fa-comment w3-text-sms-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">SMS</div>
                     </i>
@@ -58,7 +70,7 @@ require_once('require_area.php');
             </div>
 
             <div class="w3-container w3-cell w3-xxlarge w3-center">
-                <a id="emailcontact" href="email_templates.php">
+                <a id="emailcontact" href="email_templates.php" <?php pivo('class="disabled"'); ?>>
                     <i class="fa fa-envelope w3-text-email-color">
                       <div class="w3-tiny w3-opacity" style="height: 0;">Email</div>
                     </i>
@@ -69,7 +81,7 @@ require_once('require_area.php');
     <div style="height: 10px;"></div>
 
     <!-- Contact card list -->
-    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom">
+    <div class="w3-container w3-margin-top w3-margin-bottom w3-border-bottom" style="<?php if (!getConfig()->{'General'}->{'show attempt log'}) { echo('display:none;'); } ?>">
       <div class="w3-left-align w3-small w3-opacity">Attempt Tracker</div>
       <table id="attemptLog" cellspacing=0>
         <colgroup>
@@ -163,7 +175,9 @@ require_once('require_area.php');
       </div>
   </div>
     <div class="w3-container w3-cell-row" style="margin-top: 40px;">
-      <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')">Send referral</button>
+      <button id="sendReferralBtn" class="w3-button w3-xlarge w3-round-large w3-blue" onclick="safeRedirect('referral_send.php')" <?php pivo('disabled'); ?>>Confirm Sent</button>
+      <br>
+      <button onclick="safeRedirect('decease.php')" class="dangerBtn" <?php pivo('style="display:none"'); ?>>Confirm Mark as not interested</button>
     </div>
     
 
@@ -176,8 +190,18 @@ require_once('require_area.php');
   make_bottom_nav(3);
   ?>
   <script>
+let person;
+(async () => {
+  <?php
+  pivo(
+    "person = getCookieJSON('personJSON'); ",
+    "person = await idToReferral(getCookie('linkPages')); "
+  );
+
+  ?>
+  fillInContactInfo();
+})();
 function fillInAttemptLog() {
-  let person = idToReferral(getCookie('linkPages'));
   let al = Array(7).fill([0, 0, 0]);
   try {
     al = JSON.parse(person[TableColumns['attempt log']]);
@@ -207,15 +231,9 @@ function fillInAttemptLog() {
   try {
     let todaysI = getTodaysInxdexOfAttempts(person);
     _('attemptLog_dayIndex' + todaysI).style.backgroundColor = 'var(--light-grey)';
-    for (let i = 0; i < 7; i++) {
-      _('attemptLogDot_0,' + i).disabled = (i!=todaysI);
-      _('attemptLogDot_1,' + i).disabled = (i!=todaysI);
-      _('attemptLogDot_2,' + i).disabled = (i!=todaysI);
-    }
   } catch (e) {}
 }
 function fillInContactInfo() {
-  const person = idToReferral(getCookie('linkPages'));
   _('contactname').innerHTML = person[TableColumns['first name']] + ' ' + person[TableColumns['last name']];
   _('telnumber').href = 'tel:' + person[ TableColumns['phone'] ];
   //_('smsnumber').href = 'sms:+' + person[ TableColumns['phone'] ];
@@ -262,7 +280,7 @@ function fillInContactInfo() {
   }
   if (REF_TYPES[ person[TableColumns['type']] ] != 'automatic') {
     _('sendReferralBtn').setAttribute('onclick', "safeRedirect('create_dot.php')");
-    _('sendReferralBtn').innerHTML = 'Create Dot and Send';
+    _('sendReferralBtn').innerHTML = 'Create Dot and Confirm Sent';
   }
   fillInAttemptLog();
 }
@@ -282,8 +300,6 @@ function prettyPrintRefOrigin(x) {
             return x.trim();
     }
 }
-
-fillInContactInfo();
   </script>
 
   </body>
