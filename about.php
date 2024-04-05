@@ -51,6 +51,10 @@ hr {
     height: auto;
     margin-bottom: -10px;
 }
+.contactMethods a {
+    color: #007bff;
+    text-decoration: underline;
+}
     </style>
   </head>
   <body>
@@ -70,15 +74,12 @@ hr {
         </div>
 
         <hr>
-        <h2>About Referral Suite</h2>
-        <p>A simple web-app for managing referrals on missionary devices.</p>
-
-        <hr>
         <h2>Contact Information</h2>
         <p>If you encounter any issues or have feedback, please don't hesitate to contact me:</p>
-        <ul style="list-style-type: none; padding-left: 0;">
-            <li>Email: <a style="color: #007bff" href="mailto:michael.grant.becker@gmail.com">michael.grant.becker@gmail.com</a></li>
-            <li>Facebook: <a style="color: #007bff" href="https://www.facebook.com/21mbecker">Michael Becker</a></li>
+        <ul class="contactMethods" style="list-style-type: none; padding-left: 0;">
+            <li>Email: <a href="mailto:michael.grant.becker@gmail.com">michael.grant.becker@gmail.com</a></li>
+            <li>Facebook: <a href="https://www.facebook.com/21mbecker">Michael Becker</a></li>
+            <li>Feedback Form: <a href="https://forms.gle/CGbcNi7bKUi28Ltb7">open in Google Forms</a></li>
         </ul>
 
         <hr>
@@ -96,18 +97,6 @@ hr {
             <li>TarekRaafat/autoComplete.js</li>
             <li>jjv360/js-alert</li>
         </ul>
-
-        <!-- <hr>
-        <div class="feedback-section">
-            <h2>Feedback</h2>
-            <div class="feedback-form">
-            <form>
-                <label for="feedback">Share your feedback:</label>
-                <textarea id="feedback" name="feedback" required></textarea>
-                <button type="submit">Submit Feedback</button>
-            </form>
-            </div>
-        </div> -->
         <br>
         <center>
             <p>&copy; 2024 Referral Suite. All rights reserved.</p>
@@ -119,11 +108,7 @@ hr {
     <!-- Bottom Nav Bar -->
     <?php
       require_once('make_bottom_nav.php');
-      make_bottom_nav(5);
+      make_bottom_nav(0);
     ?>
-    <script>
-
-    </script>
-
   </body>
 </html>

@@ -206,12 +206,12 @@ homebtn i {
 
       <div id="homeBtns">
         <homebtn href="tutorial_links.php">
-          <i class="fa-solid fa-circle-question bigNumBigIcon"></i>
+          <i class="fa-solid fa-graduation-cap bigNumBigIcon"></i>
           <span>Tutorials</span>
         </homebtn>
         <homebtn id="MB_deliverLink" target="_blank" href="">
           <i class="fa-solid fa-book bigNumBigIcon"></i>
-          <span>Book of Mormon Delivery Form</span>
+          <span>Book of Mormon<br>Delivery Form</span>
         </homebtn>
         <homebtn id="adDeck" target="_blank" href="">
           <i class="fa-solid fa-bullhorn bigNumBigIcon"></i>
@@ -219,44 +219,17 @@ homebtn i {
         </homebtn>
         <homebtn id="gToBusSuite" target="_blank" href="">
           <i class="fa-brands fa-meta bigNumBigIcon"></i>
-          <span>Guide to Bisiness Suite</span>
+          <span>Guide to<br>Bisiness Suite</span>
         </homebtn>
         <homebtn href="referral_archive.php">
           <i class="fa-solid fa-box-open bigNumBigIcon"></i>
-          <span>Referral Archive</span>
+          <span>Referral<br>Archive</span>
         </homebtn>
         <homebtn href="about.php">
           <i class="fa-solid fa-circle-info bigNumBigIcon"></i>
           <span>About</span>
         </homebtn>
       </div>
-
-      <!-- <div class="w3-xlarge" style="margin-top: 15px; margin-left: 20px;">Tools</div> -->
-      <!-- <div class="full_width_home_btn">
-        <a href="tutorial_links.php">
-          <div class="bigTipBtn" style="background-image: url('img/TutorialsBtnInvert.png'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="MB_deliverLink" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/BookofMormonDeliverInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="adDeck" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/CurrentAdsInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a id="gToBusSuite" target="_blank" href="">
-          <div class="bigTipBtn" style="background-image: url('img/GuideToBusinessSuite.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div>
-      <div class="full_width_home_btn">
-        <a href="referral_archive.php">
-          <div class="bigTipBtn" style="background-image: url('img/ArchiveInvert.jpg'); border: 1px solid #f2bfff;"></div>
-        </a>
-      </div> -->
 
       <!-- Logout Button -->
       <button onclick="doubleCheckLogout()" class="w3-button w3-blue w3-xlarge w3-round-large" style="margin-left:10px; margin-top: 50px;">Sign Out</button>
@@ -271,6 +244,7 @@ homebtn i {
     <script>
 
 setBigToolButtonLink('MB_deliverLink', CONFIG['Home Page']['book of mormon delivery form link']);
+setBigToolButtonLink('adDeck', CONFIG['Home Page']['ad deck link']);
 setBigToolButtonLink('gToBusSuite', CONFIG['Home Page']['business suite guidance link']);
 
 function setBigToolButtonLink(elId, link) {
@@ -280,9 +254,13 @@ function setBigToolButtonLink(elId, link) {
     _(elId).style.display = 'none';
     return;
   }
-  _(elId).href = link;
+  _(elId).setAttribute('href', link);
 }
-document.querySelectorAll('#homeBtns homebtn').forEach(x => x.onclick = function() { location.href = x.getAttribute('href') });
+document.querySelectorAll('#homeBtns homebtn').forEach(x =>
+  x.onclick = function() {
+    window.open(x.getAttribute('href'), x.getAttribute('target') || '_self');
+  }
+);
 function doubleCheckLogout() {
   JSAlert.confirm('Are you sure you want to sign out of <?php echo($__TEAM->name) ?>\'s Referral Suite?', '', JSAlert.Icons.Warning).then(res => {
     if (res) {

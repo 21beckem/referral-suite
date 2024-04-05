@@ -41,13 +41,6 @@ function make_bottom_nav($pageNum, $bottomSpacingPX='80px') {
         </div>
     </div>
 
-    <div class="bottomNavBtnParent <?php if ($pageNum==5) { echo('w3-text-area-blue'); } ?>">
-        <a href="about.php">
-            <i class="fa-solid fa-circle-info"></i>
-            <div class="w3-tiny w3-opacity" style="height: 0;">About</div>
-        </a>
-    </div>
-
 </div>
 <script type="module">
     // Import the functions you need from the SDKs you need

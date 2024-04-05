@@ -19,7 +19,7 @@ require_once('require_area.php');
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#462c6a">
   </head>
-  <body>
+  <body style="overflow:hidden">
     <!-- Top Bar -->
     <div id="topHeaderBar" class="w3-top w3-cell-row w3-area-blue">
       <div>
@@ -32,6 +32,16 @@ require_once('require_area.php');
       <div class="lds-dual-ring"></div>
     </div>
     <iframe id="google_slides_import" loading="lazy" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <!-- black box -->
+    <div style="
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      height: 76px;
+      background-color: black;
+      z-index: 3;
+    "></div>
     
     <!-- Bottom Nav Bar -->
     <?php
