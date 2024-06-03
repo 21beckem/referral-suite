@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installer</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="default">
+    <style>
+:root {
+    --background-color: none;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+.splash-screen {
+    position: fixed;
+    z-index: 9999999999;
+    top: -100px;
+    width: calc(100%);
+    height: calc(100% + 200px);
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.splash-screen .content img {
+    z-index: 2;
+    width: 240px;
+    height: auto;
+    border-radius: 50px;
+    box-shadow: 0 2px 30px -10px rgb(0 0 0 / 10%);
+    transform: translateY(30px);
+}
+.splash-screen .content {
+    z-index: 1;
+    color: white;
+    position: absolute;
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+}
+    </style>
+</head>
+<body>
+    <div class="splash-screen">
+        <div class="content">
+            <img id="logoImg" src="" alt="">
+            <h4 id="appName"></h4>
+            <div style="font-size: 27px;">
+                Click the 3 dots at the top right corner,
+                <br>
+                <div style="margin-top: 10px;" id="installInsctructions"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+function isPwa() {
+    return ["fullscreen", "standalone", "minimal-ui"].some(
+        (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
+    );
+}
+function _(x) { return document.getElementById(x); }
+async function autoFill() {
+    let res = await fetch( document.querySelector('link[rel=manifest]').getAttribute('href') );
+    let manifest = await res.json();
+
+    if (isPwa()) {
+        location.href = manifest.start_url;
+    }
+
+    _('appName').innerHTML = manifest.name;
+    if (manifest.display === 'standalone') {
+        _('installInsctructions').innerHTML = 'Then click Install App!';
+    } else {
+        _('installInsctructions').innerHTML = 'Then click Add to Home Screen!';
+    }
+    document.title = manifest.name + ' Installer';
+    document.querySelector('meta[name=theme-color]').content = manifest.theme_color || 'default';
+    document.documentElement.style.setProperty('--background-color', manifest.background_color || 'gray');
+    _('logoImg').src = manifest.icons[0].src;
+}
+autoFill();
+    </script>
+</body>
+</html>
